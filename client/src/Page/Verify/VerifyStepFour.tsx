@@ -21,11 +21,11 @@ const VerifyStepFour: React.FC = () => {
 
   useEffect(() => {
     setResearchFileNameList([
-      'Thu Jun 17 2021 06:08:51 GMT+0800 (Malaysia Time)_SAMPLE 1.pdf',
-      'Thu Jun 17 2021 06:09:08 GMT+0800 (Malaysia Time)_SAMPLE 2.pdf',
-      'Thu Jun 17 2021 06:09:16 GMT+0800 (Malaysia Time)_SAMPLE 3.pdf',
-      'Thu Jun 17 2021 06:09:25 GMT+0800 (Malaysia Time)_SAMPLE 4.pdf',
-      'Thu Jun 17 2021 06:09:32 GMT+0800 (Malaysia Time)_SAMPLE 5.pdf',
+      'Mon Jun 28 2021 22:15:57 GMT+0800 (Malaysia Time)_SampleInvestigation_1.pdf',
+      'Mon Jun 28 2021 22:16:06 GMT+0800 (Malaysia Time)_SampleInvestigation_2.pdf',
+      'Mon Jun 28 2021 22:16:12 GMT+0800 (Malaysia Time)_SampleInvestigation_3.pdf',
+      'Mon Jun 28 2021 22:16:19 GMT+0800 (Malaysia Time)_SampleInvestigation_4.pdf',
+      'Mon Jun 28 2021 22:16:27 GMT+0800 (Malaysia Time)_SampleInvestigation_5.pdf',
     ]);
   }, []);
 
