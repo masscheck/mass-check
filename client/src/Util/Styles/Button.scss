@@ -72,3 +72,14 @@
   color: $text-color;
   font-size: 1rem;
 }
+
+@mixin wallet-button {
+  border-radius: 0.5rem;
+  border-style: hidden;
+  height: 100%;
+  width: 100%;
+  color: white;
+  background-color: $button-primary-color;
+  font-size: 1rem;
+  font-weight: bold;
+}

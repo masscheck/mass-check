@@ -2,37 +2,42 @@
 
 .tweet {
   @include body-text;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.07);
+  border-radius: 0.2rem;
   text-align: left;
   max-width: 43.75rem;
-  padding: 1.5rem;
+  padding: 1rem;
   background-color: #ffffff;
   color: black;
 
-  &__name {
-    font-size: 1.25rem;
-    font-weight: 800;
-  }
+  &__handle {
+    &__name {
+      font-size: 1rem;
+      font-weight: 800;
+    }
 
-  &__tag {
-    font-style: italic;
+    &__tag {
+      font-size: 1rem;
+      font-style: italic;
+    }
   }
 
   &__content {
-    font-size: 1.25rem;
+    font-size: 1rem;
+    margin-top: 0.7rem;
+    margin-bottom: 1rem;
   }
 
-  &__submit-by,
-  &__submit-time {
-    font-size: 0.935rem;
-  }
+  &__detail {
+    font-size: 0.8rem;
 
-  &__authenticity-score {
-    font-size: 0.935rem;
-    color: #78c71d;
-  }
+    &__authenticity-score {
+      color: #78c71d;
+    }
 
-  &__stage {
-    @include body-text;
-    font-size: 0.935rem;
+    &__submit-by,
+    &__stage {
+      color: #66757f;
+    }
   }
 }

@@ -15,21 +15,24 @@ interface TweetInfo {
 const Tweet: React.FC<TweetInfo> = (props: any) => {
   return (
     <div className='tweet'>
-      <p>
-        <span className='tweet__name'>{props.name}</span>{' '}
-        <span className='tweet__tag'>{props.tag}</span>
-      </p>
-      <p className='tweet__content'>{props.content}</p>
-      <br />
-      <p className='tweet__submit-by'>
-        Submitted by {props.submitBy} {props.submitTime.toString()}
-      </p>
-      <p>
-        <span className='tweet__authenticity-score'>
-          {props.authenticityScore}% Real
-        </span>{' '}
-        | <span className='tweet__stage'>{props.stage}</span>
-      </p>
+      <div className='tweet__handle'>
+        <text>
+          <span className='tweet__handle__name'>{props.name}</span>{' '}
+          <span className='tweet__handle__tag'>{props.tag}</span>
+        </text>
+      </div>
+      <div className='tweet__content'>{props.content}</div>
+      <div className='tweet__detail'>
+        <div className='tweet__detail__submit-by'>
+          Submitted by {props.submitBy} {props.submitTime.toString()}
+        </div>
+        <div>
+          <span className='tweet__detail__authenticity-score'>
+            {props.authenticityScore}% Real
+          </span>{' '}
+          <span className='tweet__detail__stage'>| {props.stage}</span>
+        </div>
+      </div>
     </div>
   );
 };

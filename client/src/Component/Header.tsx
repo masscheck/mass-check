@@ -52,6 +52,9 @@ const Header: React.FC = () => {
       case '/verify-step-five':
         setTitle('Verify (5/5)');
         break;
+      case '/profile':
+          setTitle('Profile');
+          break;
       case '/':
         setTitle('Home');
         break;

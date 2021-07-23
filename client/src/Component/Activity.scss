@@ -1,0 +1,65 @@
+@import '../Util/Styles/Color.scss';
+@import '../Util/Styles/BodyText.scss';
+@import '../Util/Styles/FormLabel.scss';
+
+.activity-layout {
+  display: grid;
+  grid-template-areas: 'header' 'content';
+  margin-top: 2em;
+
+  .activity-title {
+    @include form-label;
+    margin-bottom: 0.5em;
+  }
+
+  .activity-header {
+    @include smaller-body-text;
+    margin-bottom: 0.3em;
+    display: grid;
+    grid-template-columns: 5fr 1fr 1fr 1fr;
+    width: 96%;
+    color: $light-text-color;
+    .details {
+      justify-self: center;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: lightsteelblue;
+    border-radius: 3px;
+  }
+
+  .activity-content {
+    height: 19em;
+    overflow: auto;
+    width: 96%;
+
+    .activity-item-container {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      display: flex;
+
+      .activity-tweet {
+        width: 64%;
+        padding-right: 5%;
+      }
+
+      .activity-details {
+        @include activity-detail-text;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        width: 36%;
+        place-items: center;
+
+        .activity-credibility,
+        .activity-xpx {
+          color: #78c71d;
+        }
+      }
+    }
+  }
+}

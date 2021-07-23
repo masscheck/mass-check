@@ -10,6 +10,7 @@ import SignIn from '../Page/SignIn';
 import SignUpSuccess from '../Page/SignUpSuccess';
 import ResetPassword from '../Page/ResetPassword';
 import Faq from '../Page/Faq';
+import Profile from '../Page/Profile';
 import Error404 from '../Page/Error404';
 import InvestigateStepOne from '../Page/Investigate/InvestigateStepOne';
 import InvestigateStepTwo from '../Page/Investigate/InvestigateStepTwo';
@@ -34,6 +35,7 @@ const Routing: React.FC = () => {
       <Route exact path='/sign-in' component={SignIn} />
       <Route exact path='/reset-password' component={ResetPassword} />
       <Route exact path='/faq' component={Faq} />
+      <Route exact path='/profile' component={Profile} />
       <PrivateRoute exact path='/' component={Home} />
       <PrivateRoute
         exact

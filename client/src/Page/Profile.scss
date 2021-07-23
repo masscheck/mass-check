@@ -1,0 +1,58 @@
+@import '../Util/Styles/Color.scss';
+@import '../Util/Styles/Button.scss';
+@import '../Util/Styles/BodyText.scss';
+@import '../Util/Styles/FormLabel.scss';
+
+.profile {
+  width: 100%;
+  &__top {
+    display: flex;
+    &__wallet {
+      @include form-label;
+      width: 55%;
+      &__title {
+        margin-bottom: 0.5em;
+      }
+      &__content {
+        @include body-text;
+        box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.07);
+        background-color: white;
+        border-radius: 0.2rem;
+        display: flex;
+        width: 80%;
+        &__left {
+          width: 50%;
+          padding: 1rem;
+          &__amount {
+            @include impact-text;
+          }
+        }
+        &__right {
+          width: 50%;
+          padding: 1rem;
+          &__button {
+            @include wallet-button;
+          }
+        }
+      }
+    }
+    &__credibility {
+      @include form-label;
+      width: 45%;
+      &__title {
+        margin-bottom: 0.5em;
+      }
+      &__score {
+        @include body-text;
+        box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.07);
+        padding: 1rem;
+        background-color: white;
+        border-radius: 0.2rem;
+        width: 80%;
+        &__value {
+          @include impact-text;
+        }
+      }
+    }
+  }
+}

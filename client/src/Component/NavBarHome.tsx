@@ -33,7 +33,16 @@ const NavBarHome: React.FC = (props: any) => {
   return (
     <div className='nav-bar-home-container'>
       <div className='flex-container'>
-        <h1>{username}</h1>
+        <h1>
+          <NavLink
+            className='nav-link'
+            activeClassName='nav-link-active'
+            exact
+            to='/profile'
+          >
+            {username}
+          </NavLink>
+          </h1>
         <div className='nav-link-list'>
           <NavLink
             className='nav-link'
