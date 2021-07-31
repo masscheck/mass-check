@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Joi from 'joi';
-
 import { useHistory } from 'react-router-dom';
+
 import { useAuth } from '../Context/AuthContext';
 import { useNotification } from '../Context/NotificationContext';
+import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
+
 import { postCreateAcc } from '../Util/API/SignUpAPI';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 
@@ -35,6 +37,7 @@ const SignUp: React.FC = () => {
   const history = useHistory();
   const { signUp } = useAuth();
   const { successToast, errorToast } = useNotification();
+  const { setIsLoading } = useLoadingSpinner();
 
   useEffect(() => {
     setHasNoError(!!(username && email && password && confirmPassword));
@@ -56,9 +59,7 @@ const SignUp: React.FC = () => {
     setConfirmPassword(e.target.value);
   };
 
-  const onEmailSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const hasFormContainsErrors = () => {
     const validated = signInSchema.validate(
       { username, email, password, confirmPassword },
       { abortEarly: false }
@@ -84,20 +85,30 @@ const SignUp: React.FC = () => {
 
       errorToast('Validation Error');
 
-      return;
+      return true;
     }
 
-    try {
-      const uid = await signUp(email, password, username);
+    return false;
+  };
 
+  const onEmailSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (hasFormContainsErrors()) return;
+
+    try {
+      setIsLoading(true);
+      const uid = await signUp(email, password, username);
       await postCreateAcc(uid, email, username);
-      setTimeout(() => {}, 5000);
+
       history.push('/sign-up-success');
       localStorage.setItem(LocalStorageEnum.IS_SIGN_IN, 'true');
 
       successToast('Sign Up Successfully');
     } catch (err) {
       errorToast(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 

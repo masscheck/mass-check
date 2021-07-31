@@ -1,9 +1,9 @@
 export enum LocalStorageEnum {
-  DISPLAY_NAME = 'mc_display_name',
-  UID = 'mc_uid',
-  ADDRESS = 'mc_address',
-  IS_NEW_USER = 'mc_is_new_user',
-  IS_FIRST_COUNTDOWN = 'mc_is_first_countdown',
-  IS_SIGN_IN = 'mc_is_sign_in',
-  STAGE = 'mc_stage',
+  DISPLAY_NAME = 'MC_DISPLAY_NAME',
+  UID = 'MC_UID',
+  ADDRESS = 'MC_ADDRESS',
+  IS_NEW_USER = 'MC_IS_NEW_USER',
+  IS_FIRST_COUNTDOWN = 'MC_IS_FIRST_COUNTDOWN',
+  IS_SIGN_IN = 'MC_IS_SIGN_IN',
+  STAGE = 'MC_STAGE',
 }

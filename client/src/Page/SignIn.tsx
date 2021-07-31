@@ -4,9 +4,13 @@ import Joi from 'joi';
 
 import { useAuth } from '../Context/AuthContext';
 import { useNotification } from '../Context/NotificationContext';
+import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
+
 import { postCreateAcc } from '../Util/API/SignUpAPI';
-import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
+import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
+import { SignInMethodEnum } from '../Util/Constant/SignInMethodEnum';
+import { SignUpStage } from '../Util/Constant/SignUpStage';
 
 import './SignIn.scss';
 
@@ -29,8 +33,10 @@ const SignIn: React.FC = () => {
   const [validationError, setValidationError] =
     useState<validationErrorInterface>({});
   const history = useHistory();
+
   const { googleSignIn, emailSignIn, currentUser, twitterSignIn } = useAuth();
   const { successToast, errorToast, warnToast } = useNotification();
+  const { setIsLoading } = useLoadingSpinner();
 
   useEffect(() => {
     setHasNoError(!!(email && password));
@@ -44,76 +50,62 @@ const SignIn: React.FC = () => {
     setPassword(e.target.value);
   };
 
-  const onGoogleSignIn = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  const onExternalCallback = async (signInMethod: SignInMethodEnum) => {
+    switch (signInMethod) {
+      case SignInMethodEnum.GOOGLE_SIGN_IN:
+        return await googleSignIn();
+
+      case SignInMethodEnum.TWITTER_SIGN_IN:
+        return await twitterSignIn();
+    }
+  };
+
+  const onExternalMethodSignIn = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    signInMethod: SignInMethodEnum
   ) => {
     e.preventDefault();
+    let curStage: SignUpStage;
 
+    setIsLoading(true);
     try {
-      const { uid, email, username, isNewUser } = await googleSignIn();
+      const { uid, email, username, isNewUser } = await onExternalCallback(
+        signInMethod
+      );
 
       if (isNewUser) {
         await postCreateAcc(uid, email, username);
 
+        curStage = SignUpStage.MASS_CHECK_ACC_CREATED;
         localStorage.setItem(LocalStorageEnum.STAGE, 'sign-up-success');
-        history.push('/sign-up-success');
+
         successToast('Sign Up Successfully');
       } else {
         const user = await getUserInfoByUid(uid);
         const { stage } = user.data.userInfo;
+        curStage = stage;
+
         localStorage.setItem(LocalStorageEnum.STAGE, stage);
-
-        setTimeout(() => {
-          if (stage === 'sign-up-success') {
-            history.push('/sign-up-success');
-          } else {
-            history.push('/');
-            successToast('Sign In Successfully');
-          }
-        }, 500);
       }
-    } catch (err) {
-      console.log(err);
-      errorToast(err.message);
-    }
-  };
 
-  const onTwitterSignIn = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-
-    try {
-      const { uid, email, username, isNewUser } = await twitterSignIn();
-
-      if (isNewUser) {
-        await postCreateAcc(uid, email, username);
-        localStorage.setItem(LocalStorageEnum.STAGE, 'sign-up-success');
+      if (curStage === SignUpStage.MASS_CHECK_ACC_CREATED) {
         history.push('/sign-up-success');
-        successToast('Sign Up Successfully');
       } else {
-        const user = await getUserInfoByUid(uid);
-        const { stage } = user.data.userInfo;
-        localStorage.setItem(LocalStorageEnum.STAGE, stage);
-
-        setTimeout(() => {
-          if (stage === 'sign-up-success') {
-            history.push('/sign-up-success');
-          } else {
-            history.push('/');
-            successToast('Sign In Successfully');
-          }
-        }, 500);
+        history.push('/');
+        successToast('Sign In Successfully');
       }
     } catch (err) {
-      console.log(err);
-      errorToast(err.message);
+      if (err.code === 'auth/popup-closed-by-user') {
+        warnToast('Sign in pop up browser has closed. Please try again.');
+      } else {
+        errorToast(err.message);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const onEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const hasFormContainsErrors = () => {
     const validated = signInSchema.validate(
       { email, password },
       { abortEarly: false }
@@ -139,13 +131,25 @@ const SignIn: React.FC = () => {
 
       errorToast('Validation Error');
 
-      return;
+      return true;
     }
 
+    return false;
+  };
+
+  const onEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (hasFormContainsErrors()) return;
+
     try {
+      setIsLoading(true);
       await emailSignIn(email, password);
 
-      if (localStorage.getItem(LocalStorageEnum.STAGE) === 'sign-up-success') {
+      if (
+        localStorage.getItem(LocalStorageEnum.STAGE) ===
+        SignUpStage.MASS_CHECK_ACC_CREATED
+      ) {
         history.push('/sign-up-success');
       } else {
         history.push('/');
@@ -154,6 +158,8 @@ const SignIn: React.FC = () => {
       successToast('Sign In Successfully');
     } catch (err) {
       errorToast(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -209,13 +215,17 @@ const SignIn: React.FC = () => {
       </form>
       <button
         className='sign-in__google-button'
-        onClick={(e) => onGoogleSignIn(e)}
+        onClick={(e) =>
+          onExternalMethodSignIn(e, SignInMethodEnum.GOOGLE_SIGN_IN)
+        }
       >
         Sign In with <strong>Google</strong>
       </button>
       <button
         className='sign-in__twitter-button'
-        onClick={(e) => onTwitterSignIn(e)}
+        onClick={(e) =>
+          onExternalMethodSignIn(e, SignInMethodEnum.TWITTER_SIGN_IN)
+        }
       >
         Sign In with <strong>Twitter</strong>
       </button>

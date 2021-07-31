@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation, useHistory } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 
 import { useAuth } from '../Context/AuthContext';
@@ -7,7 +7,7 @@ import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
 
 import './NavBarHome.scss';
 
-const NavBarHome: React.FC = (props: any) => {
+const NavBarHome: React.FC = () => {
   const { signOut, currentUser } = useAuth();
   const [username, setUsername] = useState('LOADING...');
   const { pathname } = useLocation();
@@ -22,8 +22,6 @@ const NavBarHome: React.FC = (props: any) => {
       setUsername(localStorage.getItem(LocalStorageEnum.DISPLAY_NAME));
     }, 500);
   };
-
-  const history = useHistory();
 
   useEffect(() => {
     loadUsername();
@@ -42,7 +40,7 @@ const NavBarHome: React.FC = (props: any) => {
           >
             {username}
           </NavLink>
-          </h1>
+        </h1>
         <div className='nav-link-list'>
           <NavLink
             className='nav-link'

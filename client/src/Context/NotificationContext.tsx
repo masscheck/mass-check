@@ -19,7 +19,7 @@ const useNotification = () => {
 
 const NotificationProvider: React.FC = ({ children }) => {
   const toastConfig = {
-    autoClose: 2500,
+    autoClose: 5000,
   };
 
   const successToast = (msg: string) => {

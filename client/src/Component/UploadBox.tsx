@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useNotification } from '../Context/NotificationContext';
@@ -9,17 +9,11 @@ const UploadBox = ({ onSetFile }) => {
   const { warnToast } = useNotification();
   const [files, setFiles] = useState([]);
 
-  const {
-    acceptedFiles,
-    fileRejections,
-    getRootProps,
-    getInputProps,
-    isDragAccept,
-    isDragReject,
-  } = useDropzone({
-    maxFiles: 1,
-    accept: '.pdf',
-  });
+  const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
+    useDropzone({
+      maxFiles: 1,
+      accept: '.pdf',
+    });
 
   const remove = (file) => {
     const newFiles = [...files];

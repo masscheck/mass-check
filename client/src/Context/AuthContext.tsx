@@ -51,34 +51,35 @@ const AuthProvider: React.FC = ({ children }) => {
 
       return result.user.uid;
     } catch (err) {
-      console.log(err);
       throw err;
     }
   };
 
   const emailSignIn = async (email: string, password: string) => {
-    const result = await auth.signInWithEmailAndPassword(email, password);
-    setLocalStorageUser(result);
+    try {
+      const result = await auth.signInWithEmailAndPassword(email, password);
+      const user = await getUserInfoByUid(result.user.uid);
 
-    const user = await getUserInfoByUid(result.user.uid);
-    console.log(user);
+      const { username, stage } = user.data.userInfo;
 
-    const { username, stage } = user.data.userInfo;
-
-    localStorage.setItem(LocalStorageEnum.DISPLAY_NAME, username);
-    localStorage.setItem(LocalStorageEnum.STAGE, stage);
+      setLocalStorageUser(result);
+      localStorage.setItem(LocalStorageEnum.DISPLAY_NAME, username);
+      localStorage.setItem(LocalStorageEnum.STAGE, stage);
+    } catch (err) {
+      throw err;
+    }
   };
 
   const googleSignIn = async () => {
     googleProvider.setCustomParameters({ prompt: 'select_account' });
-    return await externalSignIn(googleProvider);
+    return await externalMethodSignIn(googleProvider);
   };
 
   const twitterSignIn = async () => {
-    return await externalSignIn(twitterProvider);
+    return await externalMethodSignIn(twitterProvider);
   };
 
-  const externalSignIn = async (provider: any) => {
+  const externalMethodSignIn = async (provider: any) => {
     try {
       const result = await auth.signInWithPopup(provider);
 
@@ -91,7 +92,7 @@ const AuthProvider: React.FC = ({ children }) => {
         isNewUser: result.additionalUserInfo.isNewUser,
       };
     } catch (err) {
-      console.log(err);
+      throw err;
     }
   };
 
@@ -104,12 +105,9 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const resetPassword = async (email: string) => {
     try {
-      const result = await auth.sendPasswordResetEmail(email);
-      return true;
-    } catch (error) {
-      console.log(error);
-
-      return false;
+      await auth.sendPasswordResetEmail(email);
+    } catch (err) {
+      throw err;
     }
   };
 

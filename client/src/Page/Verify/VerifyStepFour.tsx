@@ -136,7 +136,7 @@ const VerifyStepFour: React.FC = () => {
                 <button
                   key={x}
                   className={
-                    researchIndex == x
+                    researchIndex === x
                       ? `verify-step-four__container__left__active`
                       : ''
                   }

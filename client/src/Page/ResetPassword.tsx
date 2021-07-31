@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Joi from 'joi';
+
+import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
 import { useNotification } from '../Context/NotificationContext';
 import { useAuth } from '../Context/AuthContext';
 
@@ -24,6 +26,7 @@ const ResetPassword: React.FC = () => {
     useState<validationErrorInterface>({});
   const { resetPassword } = useAuth();
   const history = useHistory();
+  const { setIsLoading } = useLoadingSpinner();
 
   useEffect(() => {
     setHasNoError(!!email);
@@ -33,9 +36,7 @@ const ResetPassword: React.FC = () => {
     setEmail(e.target.value);
   };
 
-  const onEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const hasFormContainsErrors = () => {
     const validated = emailSchema.validate({ email }, { abortEarly: false });
 
     // Check if the validation got error
@@ -58,16 +59,31 @@ const ResetPassword: React.FC = () => {
 
       errorToast('Validation Error');
 
-      return;
+      return true;
     }
 
-    const result: boolean = resetPassword(email);
+    return false;
+  };
 
-    if (result) {
+  const onEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (hasFormContainsErrors()) return;
+
+    try {
+      setIsLoading(true);
+      await resetPassword(email);
+
       successToast('Reset Password Succesfully. Please check your inbox.');
       history.push('/sign-in');
-    } else {
-      errorToast('Reset Password Failed. Please try again later.');
+    } catch (err) {
+      if (err.code === 'auth/user-not-found') {
+        errorToast('Reset Password Failed. Email not found.');
+      } else {
+        errorToast('Reset Password Failed. Please try again later.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 

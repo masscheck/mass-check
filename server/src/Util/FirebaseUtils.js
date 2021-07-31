@@ -18,7 +18,7 @@ const createAcc = async (uid, username, email) => {
     .set({
       username: username,
       email: email,
-      stage: 'sign-up-success',
+      stage: 'MASS_CHECK_ACC_CREATED',
     })
     .then(() => {
       console.log('Acc successfully created!');
@@ -35,7 +35,7 @@ const addAccAddress = async (uid, address) => {
   try {
     const res = await accRef.update({
       xpx_address: address,
-      stage: 'home',
+      stage: 'PROXIMAX_ACC_CREATED',
     });
     console.log(res);
   } catch (error) {

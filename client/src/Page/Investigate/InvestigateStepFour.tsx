@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
@@ -7,7 +7,6 @@ import UploadBox from '../../Component/UploadBox';
 import CountDownTimer from '../../Component/CountdownTimer';
 import { storage } from '../../Util/Firebase/FirebaseConfig';
 import { useNotification } from '../../Context/NotificationContext';
-import downloadFile from '../../Util/Useful/DownloadFile';
 
 import './InvestigateStepFour.scss';
 
