@@ -1,9 +1,10 @@
 import axios from 'axios';
-import API_URL from './EndPoint';
+
+import SERVER_URL from './ServerUrl';
 
 const getUserInfoByUid = async (uid: string) => {
   return await axios.post(
-    `${API_URL}/api/get-userinfo`,
+    `${SERVER_URL}/api/get-userinfo`,
     {
       uid: uid,
     },

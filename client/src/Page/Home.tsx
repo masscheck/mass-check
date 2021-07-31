@@ -1,8 +1,24 @@
 import React from 'react';
-import NavBar from '../Component/NavBar';
+
+import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
 
 const Home: React.FC = () => {
-  return <h1>HOME PAGE</h1>;
+  const { setIsLoading } = useLoadingSpinner();
+
+  const isLoading = () => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
+  };
+
+  return (
+    <div>
+      <h1>HOME PAGE</h1>
+      <button onClick={() => isLoading()}>Test Loading Button</button>
+    </div>
+  );
 };
 
 export default Home;

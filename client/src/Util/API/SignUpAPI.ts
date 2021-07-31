@@ -1,5 +1,5 @@
 import axios from 'axios';
-import API_URL from './EndPoint';
+import API_URL from './ServerUrl';
 
 const postCreateAcc = async (uid: string, email: string, username: string) => {
   await axios.post(
