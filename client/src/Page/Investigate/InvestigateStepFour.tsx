@@ -9,6 +9,7 @@ import { storage } from '../../Util/Firebase/FirebaseConfig';
 import { useNotification } from '../../Context/NotificationContext';
 
 import './InvestigateStepFour.scss';
+import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 const InvestigateStepFour: React.FC = () => {
   const history = useHistory();
@@ -24,7 +25,7 @@ const InvestigateStepFour: React.FC = () => {
     try {
       const res = await fileRef.put(file);
       console.log(res);
-      history.push('/investigate-step-five');
+      history.push(RouteConstant.SECURE_INVESTIGATE_STEP_FIVE);
     } catch (err) {
       console.log(err);
       errorToastPersistent('Upload Failed! Please Try Again.');

@@ -4,8 +4,9 @@ import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 
 import { useAuth } from '../Context/AuthContext';
 import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
+import { RouteConstant } from '../Util/Constant/RouteConstant';
 
-import './NavBarHome.scss';
+import './NavBarSecure.scss';
 
 const NavBarHome: React.FC = () => {
   const { signOut, currentUser } = useAuth();
@@ -25,7 +26,6 @@ const NavBarHome: React.FC = () => {
 
   useEffect(() => {
     loadUsername();
-    // history.push('/');
   }, []);
 
   return (
@@ -36,7 +36,7 @@ const NavBarHome: React.FC = () => {
             className='nav-link'
             activeClassName='nav-link-active'
             exact
-            to='/profile'
+            to={RouteConstant.SECURE_HOME}
           >
             {username}
           </NavLink>
@@ -46,7 +46,7 @@ const NavBarHome: React.FC = () => {
             className='nav-link'
             activeClassName='nav-link-active'
             exact
-            to='/'
+            to={RouteConstant.SECURE_HOME}
           >
             Home
           </NavLink>
@@ -55,14 +55,14 @@ const NavBarHome: React.FC = () => {
             activeClassName='nav-link-active'
             isActive={() =>
               [
-                '/investigate-step-one',
-                '/investigate-step-two',
-                '/investigate-step-three',
-                '/investigate-step-four',
-                '/investigate-step-five',
+                RouteConstant.SECURE_INVESTIGATE_STEP_ONE,
+                RouteConstant.SECURE_INVESTIGATE_STEP_TWO,
+                RouteConstant.SECURE_INVESTIGATE_STEP_THREE,
+                RouteConstant.SECURE_INVESTIGATE_STEP_FOUR,
+                RouteConstant.SECURE_INVESTIGATE_STEP_FIVE,
               ].includes(pathname)
             }
-            to='/investigate-step-one'
+            to={RouteConstant.SECURE_INVESTIGATE_STEP_ONE}
           >
             Investigate
           </NavLink>
@@ -71,14 +71,14 @@ const NavBarHome: React.FC = () => {
             activeClassName='nav-link-active'
             isActive={() =>
               [
-                '/verify-step-one',
-                '/verify-step-two',
-                '/verify-step-three',
-                '/verify-step-four',
-                '/verify-step-five',
+                RouteConstant.SECURE_VERIFTY_STEP_ONE,
+                RouteConstant.SECURE_VERIFTY_STEP_TWO,
+                RouteConstant.SECURE_VERIFTY_STEP_THREE,
+                RouteConstant.SECURE_VERIFTY_STEP_FOUR,
+                RouteConstant.SECURE_VERIFTY_STEP_FIVE,
               ].includes(pathname)
             }
-            to='/verify-step-one'
+            to={RouteConstant.SECURE_VERIFTY_STEP_ONE}
           >
             Verify
           </NavLink>
@@ -87,14 +87,14 @@ const NavBarHome: React.FC = () => {
           <NavLink
             className='nav-link'
             activeClassName='nav-link-active'
-            to='/faq'
+            to={RouteConstant.SECURE_FAQ}
           >
             FAQ
           </NavLink>
           <NavLink
             className='nav-link'
             activeClassName='nav-link-active'
-            to='/sign-in'
+            to={RouteConstant.PUBLIC_SIGN_IN}
             onClick={signOut}
           >
             Sign Out

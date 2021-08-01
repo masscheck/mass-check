@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { RouteConstant } from '../Util/Constant/RouteConstant';
+
 import './Header.scss';
 
 const Header: React.FC = () => {
@@ -9,53 +11,54 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     switch (location.pathname) {
-      case '/sign-in':
+      case RouteConstant.PUBLIC_SIGN_IN:
         setTitle('Sign In');
         break;
-      case '/sign-up':
-      case '/sign-up-success':
+      case RouteConstant.PUBLIC_SIGN_UP:
+      case RouteConstant.PUBLIC_SIGN_UP_SUCCESS:
         setTitle('Sign Up');
         break;
-      case '/reset-password':
+      case RouteConstant.PUBLIC_RESET_PASSWORD:
         setTitle('Reset Your Password');
         break;
-      case '/faq':
+      case RouteConstant.PUBLIC_FAQ:
+      case RouteConstant.SECURE_FAQ:
         setTitle('FAQ');
         break;
-      case '/investigate-step-one':
+      case RouteConstant.SECURE_INVESTIGATE_STEP_ONE:
         setTitle('Investigate (1/5)');
         break;
-      case '/investigate-step-two':
+      case RouteConstant.SECURE_INVESTIGATE_STEP_TWO:
         setTitle('Investigate (2/5)');
         break;
-      case '/investigate-step-three':
+      case RouteConstant.SECURE_INVESTIGATE_STEP_THREE:
         setTitle('Investigate (3/5)');
         break;
-      case '/investigate-step-four':
+      case RouteConstant.SECURE_INVESTIGATE_STEP_FOUR:
         setTitle('Investigate (4/5)');
         break;
-      case '/investigate-step-five':
+      case RouteConstant.SECURE_INVESTIGATE_STEP_FIVE:
         setTitle('Investigate (5/5)');
         break;
-      case '/verify-step-one':
+      case RouteConstant.SECURE_VERIFTY_STEP_ONE:
         setTitle('Verify (1/5)');
         break;
-      case '/verify-step-two':
+      case RouteConstant.SECURE_VERIFTY_STEP_TWO:
         setTitle('Verify (2/5)');
         break;
-      case '/verify-step-three':
+      case RouteConstant.SECURE_VERIFTY_STEP_THREE:
         setTitle('Verify (3/5)');
         break;
-      case '/verify-step-four':
+      case RouteConstant.SECURE_VERIFTY_STEP_FOUR:
         setTitle('Verify (4/5)');
         break;
-      case '/verify-step-five':
+      case RouteConstant.SECURE_VERIFTY_STEP_FIVE:
         setTitle('Verify (5/5)');
         break;
-      case '/profile':
-          setTitle('Profile');
-          break;
-      case '/':
+      case RouteConstant.SECURE_PROFILE:
+        setTitle('Profile');
+        break;
+      case RouteConstant.SECURE_HOME:
         setTitle('Home');
         break;
       default:

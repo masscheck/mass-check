@@ -5,6 +5,7 @@ import Joi from 'joi';
 import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
 import { useNotification } from '../Context/NotificationContext';
 import { useAuth } from '../Context/AuthContext';
+import { RouteConstant } from '../Util/Constant/RouteConstant'
 
 import './ResetPassword.scss';
 
@@ -75,7 +76,7 @@ const ResetPassword: React.FC = () => {
       await resetPassword(email);
 
       successToast('Reset Password Succesfully. Please check your inbox.');
-      history.push('/sign-in');
+      history.push(RouteConstant.PUBLIC_SIGN_IN);
     } catch (err) {
       if (err.code === 'auth/user-not-found') {
         errorToast('Reset Password Failed. Email not found.');

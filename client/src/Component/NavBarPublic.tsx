@@ -1,16 +1,21 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
+import { RouteConstant } from '../Util/Constant/RouteConstant';
 import { useNotification } from '../Context/NotificationContext';
 
-import './NavBar.scss';
+import './NavBarPublic.scss';
 
 const NavBar: React.FC = (props: any) => {
   const { pathname } = useLocation();
   const { warnToast } = useNotification();
 
   const onNext = (event) => {
-    if (localStorage.getItem(LocalStorageEnum.STAGE) === 'sign-up-success') {
+    if (
+      localStorage.getItem(LocalStorageEnum.STAGE) ===
+      RouteConstant.PUBLIC_SIGN_UP_SUCCESS
+    ) {
       event.preventDefault();
       warnToast('Please Complete Sign-Up Application Before Proceeding');
     }
@@ -24,8 +29,13 @@ const NavBar: React.FC = (props: any) => {
           <NavLink
             className='nav-link'
             activeClassName='nav-link-active'
-            isActive={() => ['/sign-in', '/reset-password'].includes(pathname)}
-            to='/sign-in'
+            isActive={() =>
+              [
+                RouteConstant.PUBLIC_SIGN_IN,
+                RouteConstant.PUBLIC_RESET_PASSWORD,
+              ].includes(pathname)
+            }
+            to={RouteConstant.PUBLIC_SIGN_IN}
             onClick={onNext}
           >
             Sign In
@@ -33,8 +43,13 @@ const NavBar: React.FC = (props: any) => {
           <NavLink
             className={'nav-link'}
             activeClassName='nav-link-active'
-            isActive={() => ['/sign-up', '/sign-up-success'].includes(pathname)}
-            to='/sign-up'
+            isActive={() =>
+              [
+                RouteConstant.PUBLIC_SIGN_UP,
+                RouteConstant.PUBLIC_SIGN_UP_SUCCESS,
+              ].includes(pathname)
+            }
+            to={RouteConstant.PUBLIC_SIGN_UP_SUCCESS}
             onClick={onNext}
           >
             Sign Up
@@ -42,7 +57,7 @@ const NavBar: React.FC = (props: any) => {
           <NavLink
             className='nav-link'
             activeClassName='nav-link-active'
-            to='/faq'
+            to={RouteConstant.PUBLIC_FAQ}
             onClick={onNext}
           >
             FAQ

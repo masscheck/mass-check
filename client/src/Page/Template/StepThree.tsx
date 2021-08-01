@@ -1,6 +1,7 @@
 import { useHistory } from 'react-router-dom';
 
 import CountdownTimer from '../../Component/CountdownTimer';
+import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './StepThree.scss';
 
@@ -12,7 +13,7 @@ const StepThree = ({ nextUrl, role }) => {
   };
 
   const onClickNo = () => {
-    history.push('/');
+    history.push(RouteConstant.SECURE_HOME);
   };
 
   return (

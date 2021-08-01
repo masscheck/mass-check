@@ -11,6 +11,7 @@ import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 import { SignInMethodEnum } from '../Util/Constant/SignInMethodEnum';
 import { SignUpStage } from '../Util/Constant/SignUpStage';
+import { RouteConstant } from '../Util/Constant/RouteConstant'
 
 import './SignIn.scss';
 
@@ -89,9 +90,9 @@ const SignIn: React.FC = () => {
       }
 
       if (curStage === SignUpStage.MASS_CHECK_ACC_CREATED) {
-        history.push('/sign-up-success');
+        history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
       } else {
-        history.push('/');
+        history.push(RouteConstant.SECURE_HOME);
         successToast('Sign In Successfully');
       }
     } catch (err) {
@@ -150,9 +151,9 @@ const SignIn: React.FC = () => {
         localStorage.getItem(LocalStorageEnum.STAGE) ===
         SignUpStage.MASS_CHECK_ACC_CREATED
       ) {
-        history.push('/sign-up-success');
+        history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
       } else {
-        history.push('/');
+        history.push(RouteConstant.SECURE_HOME);
       }
 
       successToast('Sign In Successfully');

@@ -1,15 +1,16 @@
 import { useHistory } from 'react-router-dom';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+import { RouteConstant } from '../../Util/Constant/RouteConstant';
+
 import Gavel from '../../Asset/Gavel';
 import GavelBase from '../../Asset/GavelBase';
-
 import './StepTwo.scss';
 
 const StepTwo = ({ nextUrl }) => {
   const history = useHistory();
 
   const onCancel = () => {
-    history.push('/');
+    history.push(RouteConstant.SECURE_HOME);
   };
 
   // TODO Match tweet

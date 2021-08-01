@@ -10,6 +10,7 @@ import { postCreateAcc } from '../Util/API/SignUpAPI';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 
 import './SignUp.scss';
+import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 const signInSchema = Joi.object({
   username: Joi.string().alphanum().required(),
@@ -101,7 +102,7 @@ const SignUp: React.FC = () => {
       const uid = await signUp(email, password, username);
       await postCreateAcc(uid, email, username);
 
-      history.push('/sign-up-success');
+      history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
       localStorage.setItem(LocalStorageEnum.IS_SIGN_IN, 'true');
 
       successToast('Sign Up Successfully');

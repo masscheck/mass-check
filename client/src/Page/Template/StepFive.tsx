@@ -1,11 +1,13 @@
-import React from 'react';
 import { useHistory } from 'react-router-dom';
+
+import { RouteConstant } from '../../Util/Constant/RouteConstant';
+
 import './StepFive.scss';
 
 const StepFive = ({ tqStatement, feedbackStatement }) => {
   const history = useHistory();
   const onHome = () => {
-    history.push('/');
+    history.push(RouteConstant.SECURE_HOME);
   };
 
   return (

@@ -2,17 +2,20 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
+import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import './Error404.scss';
 
 const Error404: React.FC = () => {
   const history = useHistory();
 
+  const isSignedIn = localStorage.getItem(LocalStorageEnum.STAGE) === 'home';
+
   const onNext = () => {
-    if (localStorage.getItem(LocalStorageEnum.STAGE) === 'home') {
-      history.push('/');
+    if (isSignedIn) {
+      history.push(RouteConstant.SECURE_HOME);
     } else {
-      history.push('/sign-in');
+      history.push(RouteConstant.PUBLIC_SIGN_IN);
     }
   };
 
@@ -27,7 +30,7 @@ const Error404: React.FC = () => {
         know your problem.
       </p>
       <button className='error-404__btn' onClick={onNext}>
-        Home
+        {isSignedIn ? 'Home' : 'Sign In'}
       </button>
     </div>
   );

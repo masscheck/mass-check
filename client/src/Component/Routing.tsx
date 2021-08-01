@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 
 import { useAuth } from '../Context/AuthContext';
+import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import Home from '../Page/Home';
 import SignUp from '../Page/SignUp';
@@ -29,50 +30,50 @@ const Routing: React.FC = () => {
   return (
     <Switch>
       {!hasXpxAcc && (
-        <PrivateRoute exact path='/sign-up-success' component={SignUpSuccess} />
+        <PrivateRoute exact path={RouteConstant.PUBLIC_SIGN_UP_SUCCESS} component={SignUpSuccess} />
       )}
-      <Route exact path='/sign-up' component={SignUp} />
-      <Route exact path='/sign-in' component={SignIn} />
-      <Route exact path='/reset-password' component={ResetPassword} />
-      <Route exact path='/faq' component={Faq} />
-      <Route exact path='/profile' component={Profile} />
-      <PrivateRoute exact path='/' component={Home} />
+      <Route exact path={RouteConstant.PUBLIC_SIGN_UP} component={SignUp} />
+      <Route exact path={RouteConstant.PUBLIC_SIGN_IN} component={SignIn} />
+      <Route exact path={RouteConstant.PUBLIC_RESET_PASSWORD} component={ResetPassword} />
+      <Route exact path={RouteConstant.PUBLIC_FAQ} component={Faq} />
+      <Route exact path={RouteConstant.SECURE_FAQ} component={Faq} />
+      <Route exact path={RouteConstant.SECURE_PROFILE} component={Profile} />
+      <PrivateRoute exact path={RouteConstant.SECURE_HOME} component={Home} />
       <PrivateRoute
         exact
-        path='/investigate-step-one'
+        path={RouteConstant.SECURE_INVESTIGATE_STEP_ONE}
         component={InvestigateStepOne}
       />
       <PrivateRoute
         exact
-        path='/investigate-step-two'
+        path={RouteConstant.SECURE_INVESTIGATE_STEP_TWO}
         component={InvestigateStepTwo}
       />
       <PrivateRoute
         exact
-        path='/investigate-step-three'
+        path={RouteConstant.SECURE_INVESTIGATE_STEP_THREE}
         component={InvestigateStepThree}
       />
       <PrivateRoute
         exact
-        path='/investigate-step-four'
+        path={RouteConstant.SECURE_INVESTIGATE_STEP_FOUR}
         component={InvestigateStepFour}
       />
       <PrivateRoute
         exact
-        path='/investigate-step-five'
+        path={RouteConstant.SECURE_INVESTIGATE_STEP_FIVE}
         component={InvestigateStepFive}
       />
 
-      <PrivateRoute exact path='/verify-step-one' component={VerifyStepOne} />
-      <PrivateRoute exact path='/verify-step-two' component={VerifyStepTwo} />
+      <PrivateRoute exact path={RouteConstant.SECURE_VERIFTY_STEP_ONE} component={VerifyStepOne} />
+      <PrivateRoute exact path={RouteConstant.SECURE_VERIFTY_STEP_TWO} component={VerifyStepTwo} />
       <PrivateRoute
         exact
-        path='/verify-step-three'
+        path={RouteConstant.SECURE_VERIFTY_STEP_THREE}
         component={VerifyStepThree}
       />
-      <PrivateRoute exact path='/verify-step-four' component={VerifyStepFour} />
-      <PrivateRoute exact path='/verify-step-five' component={VerifyStepFive} />
-      <Route path='/error' component={Error404} />
+      <PrivateRoute exact path={RouteConstant.SECURE_VERIFTY_STEP_FOUR} component={VerifyStepFour} />
+      <PrivateRoute exact path={RouteConstant.SECURE_VERIFTY_STEP_FIVE} component={VerifyStepFive} />
       <Route component={Error404} />
     </Switch>
   );

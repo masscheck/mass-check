@@ -5,6 +5,7 @@ import Tweet from '../../Component/Tweet';
 import CountDownTimer from '../../Component/CountdownTimer';
 import { storage } from '../../Util/Firebase/FirebaseConfig';
 import PDFViewer from '../../Component/PDFViewer';
+import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './VerifyStepFour.scss';
 
@@ -115,7 +116,7 @@ const VerifyStepFour: React.FC = () => {
   };
 
   const onNext = () => {
-    history.push('/verify-step-five');
+    history.push(RouteConstant.SECURE_VERIFTY_STEP_FIVE);
   };
 
   return (

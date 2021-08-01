@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
 import { useNotification } from '../Context/NotificationContext';
 import { downloadPrivateKey, storeXpxAddress } from '../Util/API/SignUpAPI';
+import { RouteConstant } from '../Util/Constant/RouteConstant';
 import downloadFile from '../Util/Useful/DownloadFile';
 
 import './SignUpSuccess.scss';
@@ -61,7 +62,7 @@ const SignUpSuccess: React.FC = () => {
       console.log(err);
     }
 
-    history.push('/');
+    history.push(RouteConstant.SECURE_HOME);
   };
 
   return (

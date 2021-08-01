@@ -1,12 +1,11 @@
 import { useLocation } from 'react-router-dom';
 
 import { useAuth } from '../Context/AuthContext';
-import NavBarHome from './NavBarHome';
-import NavBar from './NavBar';
-
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
+import NavBarHome from './NavBarSecure';
+import NavBar from './NavBarPublic';
 
-import './NavBar.scss';
+import './NavBarPublic.scss';
 
 const NavBarSelection: React.FC = () => {
   const { currentUser } = useAuth();
