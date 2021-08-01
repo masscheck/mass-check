@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import NavBarSelection from '../Component/NavBarSelection';
+import NavBarSelection from '../Component/NavBar/NavBarSelection';
 import Header from '../Component/Header';
 import RoutingPath from '../Component/Routing';
 

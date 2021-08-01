@@ -1,6 +1,7 @@
 const express = require('express');
-const { generateXpxAcc } = require('../Blockchain/CreateXpxAcc');
-const { addAccAddress } = require('../Util/FirebaseUtils');
+
+const { generateXpxAcc } = require('../blockchain/create-xpx-acc');
+const { updateXpxAccAddress } = require('../firebase-cloud-firestore/update-data');
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.post('/store-xpx-address', async (req, res, next) => {
   const { uid, address } = req.body;
 
   try {
-    await addAccAddress(uid, address);
+    await updateXpxAccAddress(uid, address);
   } catch (error) {
     console.log(error);
   }

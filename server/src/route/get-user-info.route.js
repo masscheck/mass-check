@@ -1,5 +1,6 @@
 const express = require('express');
-const { getUserInfo } = require('../Util/FirebaseUtils');
+
+const { getUserInfo } = require('../firebase-cloud-firestore/get-data');
 
 const router = express.Router();
 

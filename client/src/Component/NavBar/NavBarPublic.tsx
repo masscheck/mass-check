@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
-import { RouteConstant } from '../Util/Constant/RouteConstant';
-import { useNotification } from '../Context/NotificationContext';
+import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+import { RouteConstant } from '../../Util/Constant/RouteConstant';
+import { useNotification } from '../../Context/NotificationContext';
 
 import './NavBarPublic.scss';
 
@@ -49,7 +49,7 @@ const NavBar: React.FC = (props: any) => {
                 RouteConstant.PUBLIC_SIGN_UP_SUCCESS,
               ].includes(pathname)
             }
-            to={RouteConstant.PUBLIC_SIGN_UP_SUCCESS}
+            to={RouteConstant.PUBLIC_SIGN_UP}
             onClick={onNext}
           >
             Sign Up

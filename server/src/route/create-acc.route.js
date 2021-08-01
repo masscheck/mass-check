@@ -1,11 +1,10 @@
 const express = require('express');
-const { createAcc } = require('../Util/FirebaseUtils');
+const { createAcc } = require('../firebase-cloud-firestore/create-data');
 
 const router = express.Router();
 
 router.post('/create-acc', async (req, res, next) => {
   let { uid, username, email } = req.body;
-  console.log(req.body);
 
   try {
     await createAcc(uid, username, email);

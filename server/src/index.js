@@ -4,20 +4,12 @@ const cors = require('cors');
 // const enforce = require('express-sslify')
 
 // Route
-const downloadPrivateKeyRoute = require('./Route/DownloadPrivateKey');
-const createAcc = require('./Route/CreateAcc');
-const getUserInfo = require('./Route/GetUserInfo');
+const downloadPrivateKeyRoute = require('./route/download-pk.route');
+const createAcc = require('./route/create-acc.route');
+const getUserInfo = require('./route/get-user-info.route');
+const auth = require('./route/auth.route');
 
 const app = express();
-
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(enforce.HTTPS({ trustProtoHeader: true }));
-//   app.use(express.static(path.join(__dirname, 'client/build')));
-
-//   app.get('*', function (req, res) {
-//     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-//   });
-// }
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -29,9 +21,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// Validate Authenticated User to Access the API only
+app.use('/api', (req, res, next) => {
+  console.log('hi');
+  next();
+});
+
 app.use('/api', downloadPrivateKeyRoute);
 app.use('/api', createAcc);
 app.use('/api', getUserInfo);
+app.use('/api', auth);
 
 app.use('/', (req, res, next) => {
   res.send('MassCheck API');
