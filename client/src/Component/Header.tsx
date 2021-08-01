@@ -59,6 +59,7 @@ const Header: React.FC = () => {
         setTitle('Profile');
         break;
       case RouteConstant.SECURE_HOME:
+      case '/':
         setTitle('Home');
         break;
       default:

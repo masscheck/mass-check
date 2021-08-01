@@ -7,6 +7,7 @@ import {
 } from '../Util/Firebase/FirebaseConfig';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
+import { postCreateToken } from '../Util/API/AuthUser';
 
 type AuthContextType = {
   signUp: (email: string, password: string, username: string) => any;
@@ -82,14 +83,20 @@ const AuthProvider: React.FC = ({ children }) => {
   const externalMethodSignIn = async (provider: any) => {
     try {
       const result = await auth.signInWithPopup(provider);
-
       setLocalStorageUser(result);
 
+      const {
+        user: { uid, email, displayName },
+        additionalUserInfo: { isNewUser },
+      } = result;
+
+      await postCreateToken(uid, displayName);
+
       return {
-        uid: result.user.uid,
-        email: result.user.email,
+        uid,
+        email,
+        isNewUser,
         username: result.user.displayName,
-        isNewUser: result.additionalUserInfo.isNewUser,
       };
     } catch (err) {
       throw err;

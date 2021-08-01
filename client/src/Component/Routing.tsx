@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from './ProtectedRoute';
 
 import { useAuth } from '../Context/AuthContext';
 import { RouteConstant } from '../Util/Constant/RouteConstant';

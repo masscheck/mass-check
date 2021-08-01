@@ -12,9 +12,21 @@ const getUserInfo = async (uid) => {
       address,
       stage,
     };
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    throw err;
   }
 };
 
-module.exports = { getUserInfo };
+const isTokenInDb = async (token) => {
+  const accRef = db.collection('jwt').doc(token);
+
+  try {
+    await accRef.get();
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+module.exports = { getUserInfo, isTokenInDb };

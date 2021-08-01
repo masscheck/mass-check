@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const ProtectedRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
@@ -18,4 +18,4 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export default PrivateRoute;
+export default ProtectedRoute;

@@ -17,6 +17,19 @@ const createAcc = async (uid, username, email) => {
     });
 };
 
+const storeJwt = async (token) => {
+  db.collection('jwt')
+    .doc(token)
+    .set({
+      placeholder: 'JWT placeholder',
+    })
+    .then(() => {
+      console.log('JWT Stored success created!');
+    })
+    .catch((err) => {
+      console.err('Error store jwt: ', err);
+      throw err;
+    });
+};
 
-
-module.exports = { createAcc };
+module.exports = { createAcc, storeJwt };

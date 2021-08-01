@@ -6,6 +6,8 @@ const Home: React.FC = () => {
   const { setIsLoading } = useLoadingSpinner();
 
   const isLoading = () => {
+    localStorage.setItem('userInfo', '{x: 3}');
+
     setIsLoading(true);
 
     setTimeout(() => {

@@ -3,6 +3,7 @@ import { NavLink, useLocation, useHistory } from 'react-router-dom';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 
 import { useAuth } from '../../Context/AuthContext';
+import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
 import { getUserInfoByUid } from '../../Util/API/NavBarHomeAPI';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
@@ -11,28 +12,12 @@ import './NavBarSecure.scss';
 const NavBarHome: React.FC = () => {
   const { signOut, currentUser } = useAuth();
   const [username, setUsername] = useState('LOADING...');
+  const { setIsLoading } = useLoadingSpinner();
   const { pathname } = useLocation();
   const history = useHistory();
 
-  const loadUsername = () => {
-    console.log(currentUser);
-
-    if (!currentUser) {
-      history.push(RouteConstant.PUBLIC_SIGN_IN);
-    }
-
-    setTimeout(async () => {
-      const result = await getUserInfoByUid(currentUser.uid);
-
-      const { address } = result.data.userInfo;
-      localStorage.setItem(LocalStorageEnum.ADDRESS, address);
-
-      setUsername(localStorage.getItem(LocalStorageEnum.DISPLAY_NAME));
-    }, 500);
-  };
-
   useEffect(() => {
-    loadUsername();
+    setUsername(localStorage.getItem(LocalStorageEnum.DISPLAY_NAME));
   }, []);
 
   return (
