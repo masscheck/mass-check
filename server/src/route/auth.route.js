@@ -31,7 +31,9 @@ router.post('/is-authenticated', async (req, res, next) => {
 
     if (err) return res.sendStatus(403);
 
-    res.json({ ...decoded });
+    const { uid, username } = decoded;
+
+    res.json({ uid, username });
   });
 });
 
