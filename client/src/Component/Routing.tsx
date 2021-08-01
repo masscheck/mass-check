@@ -35,10 +35,9 @@ const Routing: React.FC = () => {
       <Route exact path={RouteConstant.PUBLIC_SIGN_UP} component={SignUp} />
       <Route exact path={RouteConstant.PUBLIC_SIGN_IN} component={SignIn} />
       <Route exact path={RouteConstant.PUBLIC_RESET_PASSWORD} component={ResetPassword} />
-      <Route exact path={RouteConstant.PUBLIC_FAQ} component={Faq} />
-      <Route exact path={RouteConstant.SECURE_FAQ} component={Faq} />
+      <Route exact path={[RouteConstant.PUBLIC_FAQ, RouteConstant.SECURE_FAQ]} component={Faq} />
       <Route exact path={RouteConstant.SECURE_PROFILE} component={Profile} />
-      <PrivateRoute exact path={RouteConstant.SECURE_HOME} component={Home} />
+      <PrivateRoute exact path={[RouteConstant.SECURE_HOME, ""]} component={Home} />
       <PrivateRoute
         exact
         path={RouteConstant.SECURE_INVESTIGATE_STEP_ONE}
