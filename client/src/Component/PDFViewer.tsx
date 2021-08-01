@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Document, Page } from 'react-pdf';
+import { Document, Page, pdfjs } from 'react-pdf';
 import './PDFViewer.scss';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 export default function AllPages(props) {
   const [numPages, setNumPages] = useState(null);
@@ -14,7 +16,6 @@ export default function AllPages(props) {
   return (
     <Document
       file={pdf}
-      options={{ workerSrc: '/pdf.worker.js' }}
       onLoadSuccess={onDocumentLoadSuccess}
     >
       {Array.from(new Array(numPages), (el, index) => (
