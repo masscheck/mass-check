@@ -7,6 +7,7 @@ import { useNotification } from '../Context/NotificationContext';
 import { downloadPrivateKey, storeXpxAddress } from '../Util/API/SignUpAPI';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 import downloadFile from '../Util/Useful/DownloadFile';
+import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
 
 import './SignUpSuccess.scss';
 
@@ -17,28 +18,30 @@ const SignUpSuccess: React.FC = () => {
   const history = useHistory();
   const { currentUser, setHasXpxAcc } = useAuth();
   const { warnToast } = useNotification();
+  const { setIsLoading } = useLoadingSpinner();
 
   // Disable existing user to future access this page
   useEffect(() => {
     return () => {
       setHasXpxAcc(true);
+      setPrivateKey(null);
     };
   }, []);
 
   const onDownload = async () => {
     if (!hasRemind) {
       try {
-        console.log(currentUser.uid);
+        setIsLoading(true);
 
         const res = await downloadPrivateKey();
 
         const { address, privateKey } = res.data;
 
-        console.log(res);
-
         downloadFile('xpx-private-key', privateKey);
         setPrivateKey(privateKey);
         setAddress(address);
+
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }

@@ -4,6 +4,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const { storeJwt } = require('../firebase-cloud-firestore/create-data');
 const { isTokenInDb } = require('../firebase-cloud-firestore/get-data');
+const { deleteToken } = require('../firebase-cloud-firestore/delete-data');
 
 const router = express.Router();
 
@@ -72,6 +73,14 @@ router.post('/create-token', async (req, res, next) => {
     refreshToken: refreshToken,
     expireTime: Date.now() + tokenActiveDuration,
   });
+});
+
+router.delete('/delete-token', async (req, res, next) => {
+  const { token } = req.body;
+
+  await deleteToken(token);
+
+  res.status(200).json('AccessToken Deleted');
 });
 
 module.exports = router;

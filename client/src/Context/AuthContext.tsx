@@ -107,6 +107,9 @@ const AuthProvider: React.FC = ({ children }) => {
     // Clear user info
     localStorage.clear();
 
+    // TODO Delete Refresh Token
+    
+
     return auth.signOut();
   };
 
