@@ -5,10 +5,10 @@ import { LocalStorageEnum } from '../Constant/LocalStorageEnum';
 import { hasTokenExpire } from '../Useful/CheckTokenExpiration';
 
 const token = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
-const refreshToken = localStorage.getItem(LocalStorageEnum.REFRESH_TOKEN);
 
 const renewAccessToken = async () => {
   console.log('Renew Token');
+  const refreshToken = localStorage.getItem(LocalStorageEnum.REFRESH_TOKEN);
 
   const res = await axios.post(`${API_URL}/refresh-token`, {
     token: refreshToken,
@@ -21,6 +21,7 @@ const renewAccessToken = async () => {
 };
 
 const postAPIModel = async (url, body = {}, header = {}) => {
+  console.log(token);
   if (hasTokenExpire()) {
     await renewAccessToken();
   }

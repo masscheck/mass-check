@@ -9,7 +9,7 @@ const postValidateAuthUser = async () => {
 const postCreateToken = async (uid, username) => {
   const res = await postAPIModel('/api/create-token', {
     payload: { uid, username },
-  })
+  });
 
   const { accessToken, refreshToken, expireTime } = res.data;
 

@@ -5,6 +5,7 @@ import { useNotification } from '../../Context/NotificationContext';
 import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
 import { hasValidTokenAccess } from '../../Util/Useful/AuthUser';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
+import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 
 import NavBarSecure from './NavBarSecure';
 import NavBarPublic from './NavBarPublic';
@@ -19,21 +20,25 @@ const NavBarSelection: React.FC = () => {
   const { errorToastPersistent } = useNotification();
 
   useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const [hasValidToken, hasSignOut] = await hasValidTokenAccess();
-      setIsLoading(false);
+    const isSignIn = localStorage.getItem(LocalStorageEnum.IS_SIGN_IN);
 
-      if (hasValidToken) {
-        history.push(RouteConstant.SECURE_HOME);
-      } else {
-        if (!hasSignOut) {
-          errorToastPersistent('Session Timeout. Please Sign In Again.');
+    if (isSignIn) {
+      (async () => {
+        setIsLoading(true);
+        const [hasValidToken, hasSignOut] = await hasValidTokenAccess();
+        setIsLoading(false);
+
+        if (hasValidToken) {
+          history.push(RouteConstant.SECURE_HOME);
+        } else {
+          if (!hasSignOut) {
+            errorToastPersistent('Session Timeout. Please Sign In Again.');
+          }
+
+          history.push(RouteConstant.PUBLIC_SIGN_IN);
         }
-
-        history.push(RouteConstant.PUBLIC_SIGN_IN);
-      }
-    })();
+      })();
+    }
   }, []);
 
   return location.pathname.includes('secure') ? (

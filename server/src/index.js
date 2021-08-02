@@ -27,21 +27,21 @@ app.use('/api', auth);
 
 // Validate Authenticated User to Access the API only
 // TODO activate back
-app.use('/api', (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+// app.use('/api', (req, res, next) => {
+//   const authHeader = req.headers['authorization'];
+//   const token = authHeader && authHeader.split(' ')[1];
 
-  if (!token) return res.sendStatus(401);
+//   if (!token) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-    console.log('Decoded: ', decoded);
+//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+//     console.log('Decoded: ', decoded);
 
-    if (err) return res.sendStatus(403);
+//     if (err) return res.sendStatus(403);
 
-    req.decoded = decoded;
-    next();
-  });
-});
+//     req.decoded = decoded;
+//     next();
+//   });
+// });
 
 app.use('/api', downloadPrivateKeyRoute);
 app.use('/api', createAcc);

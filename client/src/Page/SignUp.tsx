@@ -103,7 +103,6 @@ const SignUp: React.FC = () => {
       await postCreateAcc(uid, email, username);
 
       history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
-      localStorage.setItem(LocalStorageEnum.IS_SIGN_IN, 'true');
 
       successToast('Sign Up Successfully');
     } catch (err) {

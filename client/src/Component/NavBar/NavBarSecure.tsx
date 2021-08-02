@@ -3,8 +3,6 @@ import { NavLink, useLocation, useHistory } from 'react-router-dom';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 
 import { useAuth } from '../../Context/AuthContext';
-import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
-import { getUserInfoByUid } from '../../Util/API/NavBarHomeAPI';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './NavBarSecure.scss';
@@ -12,9 +10,7 @@ import './NavBarSecure.scss';
 const NavBarHome: React.FC = () => {
   const { signOut, currentUser } = useAuth();
   const [username, setUsername] = useState('LOADING...');
-  const { setIsLoading } = useLoadingSpinner();
   const { pathname } = useLocation();
-  const history = useHistory();
 
   useEffect(() => {
     setUsername(localStorage.getItem(LocalStorageEnum.DISPLAY_NAME));
@@ -28,7 +24,7 @@ const NavBarHome: React.FC = () => {
             className='nav-link'
             activeClassName='nav-link-active'
             exact
-            to={RouteConstant.SECURE_HOME}
+            to={RouteConstant.SECURE_PROFILE}
           >
             {username}
           </NavLink>
