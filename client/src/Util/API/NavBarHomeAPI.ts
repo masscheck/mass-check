@@ -1,15 +1,7 @@
-import axios from 'axios';
-
-import SERVER_URL from './ServerUrl';
+import { postAPIModel } from './ReqAPIModel';
 
 const getUserInfoByUid = async (uid: string) => {
-  return await axios.post(
-    `${SERVER_URL}/api/get-userinfo`,
-    {
-      uid: uid,
-    },
-    { headers: { 'Access-Control-Allow-Origin': '*' } }
-  );
+  return await postAPIModel('/api/get-userinfo', { uid });
 };
 
 export { getUserInfoByUid };

@@ -1,18 +1,6 @@
-import { postValidateAuthUser } from '../API/AuthUser';
+import { postValidateAuthUser } from '../API/AuthAPI';
 import { LocalStorageEnum } from '../Constant/LocalStorageEnum';
-
-const hasTokenExpire = () => {
-  const expireTime = parseInt(
-    localStorage.getItem(LocalStorageEnum.EXPIRE_TIME_TOKEN)
-  );
-  const hasExpire = expireTime - Date.now();
-
-  // unit in milliseconds
-  const fiveMinutes = 5 * 60 * 1000;
-
-  // If less than 5 minutes, require user to sign in again
-  return hasExpire <= fiveMinutes;
-};
+import { hasTokenExpire } from './CheckTokenExpiration';
 
 // return first boolean type: hasValidToken
 // return second boolean type: userHasSignOut
@@ -30,7 +18,7 @@ export const hasValidTokenAccess = async () => {
   // Validate token with server to ensure the token haven't been tampered
   // getting uid and displayName back
   try {
-    const res = await postValidateAuthUser(accessToken);
+    const res = await postValidateAuthUser();
 
     // store uid, username
     const { uid, username } = res.data;

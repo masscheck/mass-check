@@ -1,32 +1,24 @@
-import axios from 'axios';
-import API_URL from './ServerUrl';
+import { postAPIModel } from './ReqAPIModel';
 
 const postCreateAcc = async (uid: string, email: string, username: string) => {
-  await axios.post(
-    `${API_URL}/api/create-acc`,
-    {
-      uid: uid,
-      email: email,
-      username: username,
-    },
-    { headers: { 'Access-Control-Allow-Origin': '*' } }
-  );
+  await postAPIModel('/api/create-acc', {
+    uid: uid,
+    email: email,
+    username: username,
+  });
 };
 
 const downloadPrivateKey = async () => {
-  const res = await axios.post(`${API_URL}/api/download-private-key`, {
-    headers: { 'Access-Control-Allow-Origin': '*' },
-  });
+  const res = await postAPIModel('/api/download-private-key');
 
   return res;
 };
 
 const storeXpxAddress = async (uid: string, address: string) => {
-  const res = await axios.post(
-    `${API_URL}/api/store-xpx-address`,
-    { uid: uid, address: address },
-    { headers: { 'Access-Control-Allow-Origin': '*' } }
-  );
+  const res = await postAPIModel('/api/store-xpx-address', {
+    uid,
+    address,
+  });
 
   return res;
 };

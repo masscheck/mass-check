@@ -8,13 +8,12 @@ const { deleteToken } = require('../firebase-cloud-firestore/delete-data');
 
 const router = express.Router();
 
-// 1 hrs 45 minutes, units in milliseconds
-const tokenActiveDuration = (60 + 45) * 60 * 1000;
+// 2 hrs, units in milliseconds
+const tokenActiveDuration = 60 * 60 * 1000;
 
 const generateAccessToken = (userInfo) => {
   return jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: '2 hrs',
-    // expiresIn: '10s',
   });
 };
 

@@ -1,25 +1,15 @@
-import axios from 'axios';
-
-import API_URL from './ServerUrl';
 import { LocalStorageEnum } from '../Constant/LocalStorageEnum';
 
-const postValidateAuthUser = async (token) => {
-  return await axios.post(
-    `${API_URL}/api/is-authenticated`,
-    {},
-    {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+import { postAPIModel } from './ReqAPIModel';
+
+const postValidateAuthUser = async () => {
+  return await postAPIModel('/api/is-authenticated');
 };
 
 const postCreateToken = async (uid, username) => {
-  const res = await axios.post(`${API_URL}/api/create-token`, {
+  const res = await postAPIModel('/api/create-token', {
     payload: { uid, username },
-  });
+  })
 
   const { accessToken, refreshToken, expireTime } = res.data;
 
