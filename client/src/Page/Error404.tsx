@@ -9,10 +9,10 @@ import './Error404.scss';
 const Error404: React.FC = () => {
   const history = useHistory();
 
-  const isSignedIn = localStorage.getItem(LocalStorageEnum.STAGE) === 'home';
+  const hasToken = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
 
   const onNext = () => {
-    if (isSignedIn) {
+    if (hasToken) {
       history.push(RouteConstant.SECURE_HOME);
     } else {
       history.push(RouteConstant.PUBLIC_SIGN_IN);
@@ -30,7 +30,7 @@ const Error404: React.FC = () => {
         know your problem.
       </p>
       <button className='error-404__btn' onClick={onNext}>
-        {isSignedIn ? 'Home' : 'Sign In'}
+        {hasToken ? 'Home' : 'Sign In'}
       </button>
     </div>
   );

@@ -76,9 +76,9 @@ router.post('/create-token', async (req, res, next) => {
   });
 });
 
-router.delete('/delete-token', async (req, res, next) => {
+router.post('/delete-token', async (req, res, next) => {
   const { token } = req.body;
-
+  console.log('refresh token', token);
   await deleteToken(token);
 
   res.status(200).json('AccessToken Deleted');

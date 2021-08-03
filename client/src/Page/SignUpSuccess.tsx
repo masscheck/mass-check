@@ -58,9 +58,10 @@ const SignUpSuccess: React.FC = () => {
       return;
     }
     try {
+      setIsLoading(true);
       const res = await storeXpxAddress(currentUser.uid, address);
-
-      console.log(res);
+      setIsLoading(false);
+      
     } catch (err) {
       console.log(err);
     }

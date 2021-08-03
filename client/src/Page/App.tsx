@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import { AuthProvider } from '../Context/AuthContext';
 import { NotificationProvider } from '../Context/NotificationContext';
@@ -14,7 +15,9 @@ const App: React.FC = () => {
       <LoadingSpinnerProvider>
         <NotificationProvider>
           <AuthProvider>
-            <BaseLayoutPage />
+            <Router>
+              <BaseLayoutPage />
+            </Router>
           </AuthProvider>
         </NotificationProvider>
       </LoadingSpinnerProvider>

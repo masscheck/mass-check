@@ -7,7 +7,7 @@ import {
 } from '../Util/Firebase/FirebaseConfig';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
-import { postCreateToken } from '../Util/API/AuthAPI';
+import { postCreateToken, deleteRefreshToken } from '../Util/API/AuthAPI';
 
 type AuthContextType = {
   signUp: (email: string, password: string, username: string) => any;
@@ -46,7 +46,7 @@ const AuthProvider: React.FC = ({ children }) => {
   const signUp = async (email: string, password: string, username: string) => {
     try {
       const result = await auth.createUserWithEmailAndPassword(email, password);
-      
+
       await postCreateToken(result.user.uid, username);
 
       setLocalStorageUser(result);
@@ -62,7 +62,7 @@ const AuthProvider: React.FC = ({ children }) => {
     try {
       const result = await auth.signInWithEmailAndPassword(email, password);
       const user = await getUserInfoByUid(result.user.uid);
-      
+
       const { username, stage } = user.data.userInfo;
       await postCreateToken(result.user.uid, username);
 
@@ -106,12 +106,13 @@ const AuthProvider: React.FC = ({ children }) => {
     }
   };
 
-  const signOut = () => {
+  const signOut = async () => {
+    // TODO Delete Refresh Token
+    const refreshToken = localStorage.getItem(LocalStorageEnum.REFRESH_TOKEN);
+    await deleteRefreshToken(refreshToken);
+
     // Clear user info
     localStorage.clear();
-
-    // TODO Delete Refresh Token
-    
 
     return auth.signOut();
   };

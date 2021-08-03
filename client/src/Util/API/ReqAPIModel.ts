@@ -4,8 +4,6 @@ import API_URL from '../Constant/ServerUrlConstant';
 import { LocalStorageEnum } from '../Constant/LocalStorageEnum';
 import { hasTokenExpire } from '../Useful/CheckTokenExpiration';
 
-const token = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
-
 const renewAccessToken = async () => {
   console.log('Renew Token');
   const refreshToken = localStorage.getItem(LocalStorageEnum.REFRESH_TOKEN);
@@ -21,7 +19,10 @@ const renewAccessToken = async () => {
 };
 
 const postAPIModel = async (url, body = {}, header = {}) => {
-  console.log(token);
+  const token = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
+
+  console.log('Token', token);
+
   if (hasTokenExpire()) {
     await renewAccessToken();
   }
@@ -36,6 +37,14 @@ const postAPIModel = async (url, body = {}, header = {}) => {
 };
 
 const getAPIModel = async (url, header = {}) => {
+  const token = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
+
+  console.log('Token', token);
+
+  if (hasTokenExpire()) {
+    await renewAccessToken();
+  }
+
   return await axios.get(`${API_URL}${url}`, {
     headers: {
       // 'Access-Control-Allow-Origin': '*',
@@ -45,14 +54,4 @@ const getAPIModel = async (url, header = {}) => {
   });
 };
 
-const deleteAPIModel = async (url, header = {}) => {
-  return await axios.delete(`${API_URL}${url}`, {
-    headers: {
-      // 'Access-Control-Allow-Origin': '*',
-      Authorization: `Bearer ${token}`,
-      ...header,
-    },
-  });
-};
-
-export { postAPIModel, getAPIModel, deleteAPIModel };
+export { postAPIModel, getAPIModel };

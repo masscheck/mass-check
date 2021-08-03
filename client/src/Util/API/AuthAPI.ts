@@ -19,4 +19,10 @@ const postCreateToken = async (uid, username) => {
   localStorage.setItem(LocalStorageEnum.IS_SIGN_IN, 'true');
 };
 
-export { postValidateAuthUser, postCreateToken };
+const deleteRefreshToken = async (refreshToken) => {
+  const res = await postAPIModel('/api/delete-token', { token: refreshToken });
+
+  return res;
+};
+
+export { postValidateAuthUser, postCreateToken, deleteRefreshToken };
