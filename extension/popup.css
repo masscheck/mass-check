@@ -1,0 +1,32 @@
+body {
+  height: 190px;
+  width: 180px;
+  overflow: auto;
+}
+
+.button {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  padding-bottom: 25px;
+}
+
+.loginB {
+  background-color: white;
+  color: #4caf50;
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  left: 50%;
+}
+
+p,
+h3 {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.highlight {
+  color: red;
+}
