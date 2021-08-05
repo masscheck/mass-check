@@ -1,0 +1,47 @@
+@import '../Util/Styles/Color.scss';
+@import '../Util/Styles/Button.scss';
+@import '../Util/Styles/BodyText.scss';
+@import '../Util/Styles/FormLabel.scss';
+
+.home {
+  width: 70%;
+  &__header {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.5em;
+
+    button {
+      @include form-label;
+      padding: 0;
+      border-width: 0;
+      background-color: transparent;
+    }
+
+    &__active {
+      color: button-primary-color;
+    }
+
+    &__unverified {
+      margin-left: 3em;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: lightsteelblue;
+    border-radius: 3px;
+  }
+
+  &__view-area {
+    height: 68vh;
+    overflow: auto;
+    &__tweet {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      margin-right: 10%;
+    }
+  }
+}
