@@ -7,6 +7,20 @@ import './Home.scss';
 
 const Home: React.FC = () => {
   
+  const [homeState, setHomeState] = useState('verified');
+
+  const onVerifiedSelected = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    setHomeState('verified');
+  };
+
+  const onUnverifiedSelected = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    setHomeState('unverified');
+  };
+
   const { setIsLoading } = useLoadingSpinner();
 
   const isLoading = () => {
@@ -22,10 +36,16 @@ const Home: React.FC = () => {
   return (
     <div className='home'>
       <div className='home__header'>
-        <button className='home__header__verified'>
+        <button 
+          className={homeState === 'verified' ? 'selected-verified' : 'deselected-verified'}
+          onClick={(e) => onVerifiedSelected(e)}
+        >
           Verified Posts
         </button>
-        <button className='home__header__unverified'>
+        <button
+          className={homeState === 'unverified' ? 'selected-unverified' : 'deselected-unverified'}
+          onClick={(e) => onUnverifiedSelected(e)}
+        >
           Unverified Posts
         </button>
 

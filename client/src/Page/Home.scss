@@ -11,18 +11,10 @@
     margin-bottom: 0.5em;
 
     button {
-      @include form-label;
+      @include subtitle;
       padding: 0;
       border-width: 0;
       background-color: transparent;
-    }
-
-    &__active {
-      color: button-primary-color;
-    }
-
-    &__unverified {
-      margin-left: 3em;
     }
   }
 
@@ -44,4 +36,19 @@
       margin-right: 10%;
     }
   }
+}
+
+.selected-verified {
+  color: $button-primary-color;
+}
+.selected-unverified {
+  color: $button-primary-color;
+  margin-left: 2em;
+}
+.deselected-verified {
+  color: $light-text-color;
+}
+.deselected-unverified {
+  color: $light-text-color;
+  margin-left: 2em;
 }
