@@ -10,7 +10,8 @@ const Profile: React.FC = () => {
           <div className='profile__top__wallet__title'>My Wallet</div>
           <div className='profile__top__wallet__content'>
             <div className='profile__top__wallet__content__left'>
-              <text>XPX Balance</text>
+              <text>XPX Balance </text>
+              <img src={require(`../Asset/proximax.png`).default} />
               <br/>
               <text className='profile__top__wallet__content__left__amount'>100</text>
             </div>

@@ -23,6 +23,9 @@
         &__left {
           width: 50%;
           padding: 1rem;
+          img {
+            width: 20px;
+          }
           &__amount {
             @include impact-text;
           }
