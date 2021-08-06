@@ -1,0 +1,39 @@
+h3 {
+  text-align: center;
+}
+
+body {
+  height: 190px;
+  width: 180px;
+}
+
+.login {
+  color: white;
+  background-color: #2a9df4;
+  border: 2px solid #2a9df4;
+  border-radius: 10px;
+  padding: 0px 57px;
+}
+
+.signup {
+  color: #4caf50;
+  margin-bottom: 50px;
+  position: absolute;
+}
+
+.container {
+  position: absolute;
+  left: 20px;
+}
+
+.uname {
+  border: 2px solid #c9ddec41;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.psw {
+  border: 2px solid #c9ddec41;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
