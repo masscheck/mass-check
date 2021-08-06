@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+import { SignUpStage } from '../../Util/Constant/SignUpStage';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import { useNotification } from '../../Context/NotificationContext';
 
@@ -14,7 +15,7 @@ const NavBar: React.FC = (props: any) => {
   const onNext = (event) => {
     if (
       localStorage.getItem(LocalStorageEnum.STAGE) ===
-      RouteConstant.PUBLIC_SIGN_UP_SUCCESS
+      SignUpStage.MASS_CHECK_ACC_CREATED
     ) {
       event.preventDefault();
       warnToast('Please Complete Sign-Up Application Before Proceeding');
