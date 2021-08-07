@@ -8,6 +8,7 @@ import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
 
 import { postCreateAcc } from '../Util/API/SignUpAPI';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
+import { SignUpStage } from '../Util/Constant/SignUpStage'
 
 import './SignUp.scss';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
@@ -101,6 +102,8 @@ const SignUp: React.FC = () => {
       setIsLoading(true);
       const uid = await signUp(email, password, username);
       await postCreateAcc(uid, email, username);
+
+      localStorage.setItem(LocalStorageEnum.STAGE, SignUpStage.MASS_CHECK_ACC_CREATED)
 
       history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
 

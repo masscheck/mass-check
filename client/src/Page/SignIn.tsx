@@ -11,7 +11,7 @@ import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 import { SignInMethodEnum } from '../Util/Constant/SignInMethodEnum';
 import { SignUpStage } from '../Util/Constant/SignUpStage';
-import { RouteConstant } from '../Util/Constant/RouteConstant'
+import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import './SignIn.scss';
 
@@ -78,7 +78,10 @@ const SignIn: React.FC = () => {
         await postCreateAcc(uid, email, username);
 
         curStage = SignUpStage.MASS_CHECK_ACC_CREATED;
-        localStorage.setItem(LocalStorageEnum.STAGE, 'sign-up-success');
+        localStorage.setItem(
+          LocalStorageEnum.STAGE,
+          SignUpStage.MASS_CHECK_ACC_CREATED
+        );
 
         successToast('Sign Up Successfully');
       } else {

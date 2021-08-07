@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
+import io from 'socket.io-client';
 
 import Gavel from '../../Asset/Gavel';
 import GavelBase from '../../Asset/GavelBase';
@@ -8,6 +10,14 @@ import './StepTwo.scss';
 
 const StepTwo = ({ nextUrl }) => {
   const history = useHistory();
+
+  useEffect(() => {
+    const newSocket = io('http://localhost:5000');
+
+    return () => {
+      newSocket.close();
+    };
+  }, []);
 
   const onCancel = () => {
     history.push(RouteConstant.SECURE_HOME);

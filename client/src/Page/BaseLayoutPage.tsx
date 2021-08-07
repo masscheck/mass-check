@@ -34,6 +34,9 @@ const BaseLayoutPage: React.FC = () => {
         } else {
           if (!hasSignOut) {
             errorToastPersistent('Session Timeout. Please Sign In Again.');
+
+            // Avoid printing out the error multiple times
+            localStorage.clear();
           }
           history.push(RouteConstant.PUBLIC_SIGN_IN);
         }

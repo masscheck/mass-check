@@ -1,11 +1,7 @@
-import { useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-import { useNotification } from '../../Context/NotificationContext';
-import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
-import { hasValidTokenAccess } from '../../Util/Useful/AuthUser';
-import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+import { hasTokenExpire } from '../../Util/Useful/CheckTokenExpiration';
 
 import NavBarSecure from './NavBarSecure';
 import NavBarPublic from './NavBarPublic';
@@ -17,7 +13,9 @@ const NavBarSelection: React.FC = () => {
 
   const hasAccessToken = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
 
-  return location.pathname.includes('secure') && hasAccessToken ? (
+  return location.pathname.includes('secure') &&
+    hasAccessToken &&
+    !hasTokenExpire() ? (
     <NavBarSecure />
   ) : (
     <NavBarPublic />

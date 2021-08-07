@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const socket = require('socket.io');
 
 // Initialise the express app
 const app = express();
@@ -53,6 +54,15 @@ app.use('/', (req, res, next) => {
 
 // Listen to specific port
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log('Local server port number:', port);
 });
+
+// * Socket IO Section
+// * Real Time Connection
+// const io = socket(server);
+
+// io.on('connection', (socket) => {
+//   console.log(socket);
+//   console.log('testing 1234');
+// });
