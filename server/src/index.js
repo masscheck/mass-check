@@ -7,6 +7,9 @@ const cors = require('cors');
 const downloadPrivateKeyRoute = require('./Route/DownloadPrivateKey');
 const createAcc = require('./Route/CreateAcc');
 const getUserInfo = require('./Route/GetUserInfo');
+const predict = require('./AI/BERTModel');
+const tf = require('@tensorflow/tfjs-node');
+
 
 const app = express();
 
@@ -41,3 +44,6 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log('Local server port number:', port);
 });
+
+input = 'Politically Correct Woman ( Almost ) Uses Pandemic Excuse Not Reuse Plastic Bag # coronavirus # nashville'
+predict(input)
