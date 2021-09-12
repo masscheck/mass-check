@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const socket = require('socket.io');
 
 // Initialise the express app
 const app = express();
@@ -11,6 +10,7 @@ const downloadPrivateKeyRoute = require('./route/download-pk.route');
 const createAcc = require('./route/create-acc.route');
 const getUserInfo = require('./route/get-user-info.route');
 const auth = require('./route/auth.route');
+const investigation = require('./route/investigation.route');
 
 // Config
 app.use(express.json());
@@ -47,6 +47,7 @@ app.use('/api', auth);
 app.use('/api', downloadPrivateKeyRoute);
 app.use('/api', createAcc);
 app.use('/api', getUserInfo);
+app.use('/api', investigation);
 
 app.use('/', (req, res, next) => {
   res.send('MassCheck API');
@@ -54,15 +55,6 @@ app.use('/', (req, res, next) => {
 
 // Listen to specific port
 const port = process.env.PORT || 5000;
-const server = app.listen(port, () => {
+app.listen(port, () => {
   console.log('Local server port number:', port);
 });
-
-// * Socket IO Section
-// * Real Time Connection
-// const io = socket(server);
-
-// io.on('connection', (socket) => {
-//   console.log(socket);
-//   console.log('testing 1234');
-// });

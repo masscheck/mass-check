@@ -10,20 +10,56 @@ import { useNotification } from '../../Context/NotificationContext';
 
 import './InvestigateStepFour.scss';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
+import { useInvestigation } from '../../Context/InvestigationContext';
+import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+import { submitReport } from '../../Util/API/InvestigationAPI';
+
+window.onbeforeunload = function () {
+  return window.alert('you can not refresh the page');
+};
 
 const InvestigateStepFour: React.FC = () => {
   const history = useHistory();
   const [file, setFile] = useState<File>();
   const { errorToastPersistent } = useNotification();
+  const uid = localStorage.getItem(LocalStorageEnum.UID);
+  const {
+    tweetModel: {
+      tweetId,
+      stage,
+      submitBy,
+      submitTime,
+      aiScore,
+      authorName,
+      authorTag,
+      content,
+    },
+  } = useInvestigation();
+
+  const genUploadDateTime = () => {
+    const date = new Date();
+    const day = date.toLocaleString('en-US', { day: 'numeric' });
+    const month = date.toLocaleString('en-US', { month: 'long' });
+    const year = date.toLocaleString('en-US', { year: 'numeric' });
+    const hour = date.toLocaleString('en-US', { hour: 'numeric' });
+    const minute = date.toLocaleString('en-US', { minute: 'numeric' });
+    const seconds = date.toLocaleString('en-US', { second: 'numeric' });
+
+    return `${day}_${month}_${year}_${hour}${minute}${seconds}`;
+  };
 
   const onNext = async () => {
     const storageRef = storage.ref();
 
-    // FileName: Tweet ID_DateTime_File Name
-    const fileRef = storageRef.child(`${new Date().toString()}_${file.name}`);
+    // FileName: UID_Tweet ID_DateTime_File Name
+    const fileName = `${uid}_${tweetId}_${genUploadDateTime()}_${file.name}`;
+    const fileRef = storageRef.child(fileName);
 
     try {
       const res = await fileRef.put(file);
+
+      await submitReport(uid, tweetId, fileName);
+
       console.log(res);
       history.push(RouteConstant.SECURE_INVESTIGATE_STEP_FIVE);
     } catch (err) {
@@ -44,13 +80,13 @@ const InvestigateStepFour: React.FC = () => {
 
       <div className='investigate-step-four__tweet'>
         <Tweet
-          name='Jam Celiac'
-          tag='@jamceliac21'
-          content='#Malaysia recorded a total of 2,875 new #Covid19 cases on Thursday. This is the eighth consecutive day with the number of cases above 2,000. Read more at https://bit.ly/3neKgcD'
-          submitBy='Jackie Chan'
-          submitTime={new Date()}
-          authenticityScore={67}
-          stage='Investigating'
+          name={authorName}
+          tag={authorTag}
+          content={content}
+          submitBy={submitBy}
+          submitTime={submitTime}
+          authenticityScore={aiScore}
+          stage={stage}
         />
       </div>
 

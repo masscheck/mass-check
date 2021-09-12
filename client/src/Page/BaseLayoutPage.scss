@@ -7,6 +7,8 @@
   grid-template-rows: 1fr 8fr;
   height: 100vh;
   max-height: 100vh;
+  width: 100vw;
+  max-width: 100vw;
 
   .nav-bar {
     grid-area: navbar;
@@ -17,15 +19,15 @@
   }
 
   .header {
-    padding: 1rem;
-    padding-left: 5rem;
+    padding: 1vh;
+    padding-left: 5vw;
     grid-area: appbar;
     background-color: $content-background-color;
   }
 
   .content {
     padding: 1rem;
-    padding-left: 5rem;
+    padding-left: 5vw;
     grid-area: pagecontent;
     background-color: $content-background-color;
   }

@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from '../Context/AuthContext';
 import { NotificationProvider } from '../Context/NotificationContext';
 import { LoadingSpinnerProvider } from '../Context/LoadingSpinnerContext';
+import { InvestigationProvider } from '../Context/InvestigationContext';
 
 import BaseLayoutPage from './BaseLayoutPage';
 
@@ -15,9 +16,11 @@ const App: React.FC = () => {
       <LoadingSpinnerProvider>
         <NotificationProvider>
           <AuthProvider>
-            <Router>
-              <BaseLayoutPage />
-            </Router>
+            <InvestigationProvider>
+              <Router>
+                <BaseLayoutPage />
+              </Router>
+            </InvestigationProvider>
           </AuthProvider>
         </NotificationProvider>
       </LoadingSpinnerProvider>

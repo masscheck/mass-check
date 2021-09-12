@@ -8,7 +8,13 @@
 }
 
 .faq {
-  height: 32em;
-  width: 70%;
+  height: 70vh;
+  width: 100%;
+  max-width: 100vw;
+  max-height: 90vh;
   overflow: auto;
+}
+
+.faq-container {
+  margin-bottom: 1rem;
 }

@@ -1,9 +1,18 @@
 // Import Library
 const fs = require('fs');
 const firebase = require('firebase');
+const { v4: genBatchNo } = require('uuid');
+const { StageConstant } = require('../constant/stage-constant');
 
 // TODO Rmb to put the config
-firebase.initializeApp({});
+firebase.initializeApp({
+  apiKey: 'AIzaSyAqs2Nx9kg_MEGvfjMla7ZpoSCsWtw3dNw',
+  authDomain: 'masscheck-d8ece.firebaseapp.com',
+  projectId: 'masscheck-d8ece',
+  storageBucket: 'masscheck-d8ece.appspot.com',
+  messagingSenderId: '845650642906',
+  appId: '1:845650642906:web:2cf7c0bcf6b3d12aeba2e3',
+});
 
 const db = firebase.firestore();
 
@@ -65,8 +74,15 @@ let submitUser = [
 
 // Combine Data Together into Array
 let arr = [];
-
+let batchList = [];
+let batchNo;
+const batchSize = 10;
 for (let i = 0; i < 50; i++) {
+  if (i % batchSize === 0) {
+    batchNo = genBatchNo();
+    batchList.push(batchNo);
+  }
+
   let curAuthor = randomItem(author);
 
   let obj = {
@@ -75,7 +91,7 @@ for (let i = 0; i < 50; i++) {
     content: data['tweet'][i],
     submit_by: randomItem(submitUser),
     submit_time: Date(),
-    stage: 'queueing',
+    stage: StageConstant.QUEUEING,
     ai_score: null,
     trust_index: null,
     crowd_voted_result: null,
@@ -83,22 +99,53 @@ for (let i = 0; i < 50; i++) {
     num_user_participated: 0,
     investigators: [],
     jurors: [],
+    batch_no: batchNo,
+    investigated_report_id_list: [],
   };
 
   arr.push(obj);
 }
 
-// Batch upload to firebase
-const batch = db.batch();
+// Batch Tweet upload to firebase
+const batch_tweet = db.batch();
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < arr.length; i++) {
   documentData = arr[i];
 
   const ref = db.collection('tweets').doc(`${i + 1}`);
-  batch.set(ref, documentData);
+  batch_tweet.set(ref, documentData);
 }
 
-// Commit the batch
-batch.commit().then(() => {
-  console.log('Uploading...');
+batch_tweet.commit().then(() => {
+  console.log('Uploading tweets...');
+});
+
+// Batch Batch Number to firebase
+const batch_batch_no = db.batch();
+
+for (let i = 0; i < batchList.length; i++) {
+  documentId = batchList[i];
+  prefixDigit = i * 10;
+
+  documentData = [];
+  for (let n = 1; n <= 10; n++) {
+    documentData.push(prefixDigit + n);
+  }
+
+  const ref = db.collection('batch').doc(documentId);
+  batch_batch_no.set(ref, { tweet_id: documentData });
+}
+
+batch_batch_no.commit().then(() => {
+  console.log('Uploading batch...');
+});
+
+// Batch Batch Number List to fire base
+const batch_batch_list = db.batch();
+
+const ref = db.collection('batch_list').doc('list');
+batch_batch_list.set(ref, { list: batchList });
+
+batch_batch_list.commit().then(() => {
+  console.log('Uploading batch list...');
 });

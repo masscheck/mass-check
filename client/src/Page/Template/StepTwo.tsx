@@ -1,32 +1,35 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+
+import { useInvestigation } from '../../Context/InvestigationContext';
+
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
-import io from 'socket.io-client';
+import { TweetModel } from '../../Model/TweetModel';
 
 import Gavel from '../../Asset/Gavel';
 import GavelBase from '../../Asset/GavelBase';
 import './StepTwo.scss';
 
-const StepTwo = ({ nextUrl }) => {
+const StepTwo = ({ nextUrl, onMatchTweet }) => {
   const history = useHistory();
+  const { setTweetModel } = useInvestigation();
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5000');
+    setTimeout(() => {
+      onMatchTweet().then((res) => {
+        const { tweetId } = res.data;
 
-    return () => {
-      newSocket.close();
-    };
+        const tweetModel = new TweetModel();
+        tweetModel.tweetId = tweetId;
+        setTweetModel(tweetModel);
+
+        history.push(nextUrl);
+      });
+    }, 1000);
   }, []);
 
   const onCancel = () => {
     history.push(RouteConstant.SECURE_HOME);
-  };
-
-  // TODO Match tweet
-  const matchTweet = () => {
-    localStorage.setItem(LocalStorageEnum.IS_FIRST_COUNTDOWN, 'true');
-    history.push(nextUrl);
   };
 
   return (
@@ -41,9 +44,6 @@ const StepTwo = ({ nextUrl }) => {
       </div>
       <button className='step-two__button' onClick={onCancel}>
         Cancel
-      </button>
-      <button className='step-two__button' onClick={matchTweet}>
-        Next
       </button>
     </div>
   );

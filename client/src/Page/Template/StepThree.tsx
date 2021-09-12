@@ -1,15 +1,24 @@
 import { useHistory } from 'react-router-dom';
 
 import CountdownTimer from '../../Component/CountdownTimer';
+import { useInvestigation } from '../../Context/InvestigationContext';
+import { TweetModel } from '../../Model/TweetModel';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './StepThree.scss';
 
-const StepThree = ({ nextUrl, role }) => {
+const StepThree = ({ nextUrl, role, onRetrieveTweetInfo }) => {
   const history = useHistory();
+  const { tweetModel, setTweetModel } = useInvestigation();
 
   const onClickYes = () => {
-    history.push(nextUrl);
+    onRetrieveTweetInfo().then((res) => {
+      if (role === 'investigating') {
+        setTweetModel({ ...tweetModel, ...res.data });
+      }
+
+      history.push(nextUrl);
+    });
   };
 
   const onClickNo = () => {
