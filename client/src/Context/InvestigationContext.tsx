@@ -1,20 +1,20 @@
 import React, { useContext, useState } from 'react';
 import { TweetModel } from '../Model/TweetModel';
 
-type InvestigationContextType = {
+type TweetModelContextType = {
   tweetModel: TweetModel;
   setTweetModel: (model: TweetModel) => void;
 };
 
-const InvestigationContext = React.createContext<
-  Partial<InvestigationContextType>
+const TweetModelContext = React.createContext<
+  Partial<TweetModelContextType>
 >({});
 
-const useInvestigation = () => {
-  return useContext(InvestigationContext);
+const useTweetModel = () => {
+  return useContext(TweetModelContext);
 };
 
-const InvestigationProvider: React.FC = ({ children }) => {
+const TweetProvider: React.FC = ({ children }) => {
   const [tweetModel, setTweetModel] = useState<TweetModel>(null);
 
   const value = {
@@ -23,10 +23,10 @@ const InvestigationProvider: React.FC = ({ children }) => {
   };
 
   return (
-    <InvestigationContext.Provider value={value}>
+    <TweetModelContext.Provider value={value}>
       {children}
-    </InvestigationContext.Provider>
+    </TweetModelContext.Provider>
   );
 };
 
-export { useInvestigation, InvestigationProvider };
+export { useTweetModel, TweetProvider };

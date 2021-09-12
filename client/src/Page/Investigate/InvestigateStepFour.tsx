@@ -10,7 +10,7 @@ import { useNotification } from '../../Context/NotificationContext';
 
 import './InvestigateStepFour.scss';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
-import { useInvestigation } from '../../Context/InvestigationContext';
+import { useTweetModel } from '../../Context/InvestigationContext';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 import { submitReport } from '../../Util/API/InvestigationAPI';
 
@@ -34,7 +34,7 @@ const InvestigateStepFour: React.FC = () => {
       authorTag,
       content,
     },
-  } = useInvestigation();
+  } = useTweetModel();
 
   const genUploadDateTime = () => {
     const date = new Date();

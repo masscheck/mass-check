@@ -6,8 +6,9 @@ import './Faq.scss';
 const Faq: React.FC = () => {
   return (
     <div className='faq'>
-      {FaqQuestionAnswers.map((datum) => (
+      {FaqQuestionAnswers.map((datum, index) => (
         <CustomizedAccordions
+          key={index}
           question={datum.question}
           answer={datum.answer}
         />

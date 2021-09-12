@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useInvestigation } from '../../Context/InvestigationContext';
+import { useTweetModel } from '../../Context/InvestigationContext';
 
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import { TweetModel } from '../../Model/TweetModel';
@@ -12,7 +12,7 @@ import './StepTwo.scss';
 
 const StepTwo = ({ nextUrl, onMatchTweet }) => {
   const history = useHistory();
-  const { setTweetModel } = useInvestigation();
+  const { setTweetModel } = useTweetModel();
 
   useEffect(() => {
     setTimeout(() => {

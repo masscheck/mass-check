@@ -69,10 +69,28 @@ const getTweetInfo = async (tweetId) => {
   }
 };
 
+const getTweetToBeVerify = async () => {
+  const tweetRef = db.collection('tweets');
+  const query = tweetRef.where('num_user_participated', '>=', 5);
+  const queryResult = [];
+
+  try {
+    const querySnapshot = await query.get();
+    querySnapshot.forEach((doc) => {
+      queryResult.push(doc.data());
+    });
+
+    return queryResult;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   getUserInfo,
   isTokenInDb,
   getBatchList,
   getTweetIdList,
   getTweetInfo,
+  getTweetToBeVerify,
 };

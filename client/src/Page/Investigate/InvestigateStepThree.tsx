@@ -2,13 +2,13 @@ import React from 'react';
 
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import { retrieveTweetInfo } from '../../Util/API/InvestigationAPI';
-import { useInvestigation } from '../../Context/InvestigationContext';
+import { useTweetModel } from '../../Context/InvestigationContext';
 
 import StepThree from '../Template/StepThree';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 
 const InvestigateStepThree: React.FC = () => {
-  const { tweetModel } = useInvestigation();
+  const { tweetModel } = useTweetModel();
   const handleRetrieveTweetInfo = async () => {
     const uid = localStorage.getItem(LocalStorageEnum.UID);
     const { tweetId } = tweetModel;

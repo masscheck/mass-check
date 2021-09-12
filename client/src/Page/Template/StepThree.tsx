@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 
 import CountdownTimer from '../../Component/CountdownTimer';
-import { useInvestigation } from '../../Context/InvestigationContext';
+import { useTweetModel } from '../../Context/InvestigationContext';
 import { TweetModel } from '../../Model/TweetModel';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
@@ -9,7 +9,7 @@ import './StepThree.scss';
 
 const StepThree = ({ nextUrl, role, onRetrieveTweetInfo }) => {
   const history = useHistory();
-  const { tweetModel, setTweetModel } = useInvestigation();
+  const { tweetModel, setTweetModel } = useTweetModel();
 
   const onClickYes = () => {
     onRetrieveTweetInfo().then((res) => {
