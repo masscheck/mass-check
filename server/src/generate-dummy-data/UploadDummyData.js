@@ -140,7 +140,7 @@ batch_batch_no.commit().then(() => {
   console.log('Uploading batch...');
 });
 
-// Batch Batch Number List to fire base
+// Batch Batch Number List to firebase
 const batch_batch_list = db.batch();
 
 const ref = db.collection('batch_list').doc('list');
@@ -148,4 +148,21 @@ batch_batch_list.set(ref, { list: batchList });
 
 batch_batch_list.commit().then(() => {
   console.log('Uploading batch list...');
+});
+
+// Add unverified tweets to firebase
+const unverified_tweet_id_list = [];
+
+for (let i = 1; i <= arr.length; i++) {
+  unverified_tweet_id_list.push(i);
+}
+
+const unverified_tweet_id_ref = db
+  .collection('tweets_status')
+  .doc('unverified');
+
+unverified_tweet_id_ref.set({
+  tweet_id: unverified_tweet_id_list,
+}).then(res => {
+  console.log('Upload unverified tweets')
 });

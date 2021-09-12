@@ -27,12 +27,23 @@ const updateTweetStageToInvestigating = async (tweetId) => {
   }
 };
 
-const updateTweetUponSubmitDocument = async (uid, tweetId, reportId) => {
+const updateTweetThatUserAgreeToInvestigating = async (tweetId, uid) => {
   const tweetRef = db.collection('tweets').doc(`${tweetId}`);
 
   try {
     await tweetRef.update({
       investigators: admin.firestore.FieldValue.arrayUnion(uid),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateTweetUponSubmitDocument = async (uid, tweetId, reportId) => {
+  const tweetRef = db.collection('tweets').doc(`${tweetId}`);
+
+  try {
+    await tweetRef.update({
       investigated_report_id_list:
         admin.firestore.FieldValue.arrayUnion(reportId),
       stage: StageConstant.INVESTIGATING,
@@ -43,8 +54,32 @@ const updateTweetUponSubmitDocument = async (uid, tweetId, reportId) => {
   }
 };
 
+const updateUserProfileUponSubmitDocument = async (
+  uid,
+  tweetId,
+  xpxCoin,
+  crediblityScore
+) => {
+  const accRef = db.collection('accounts').doc(uid);
+
+  try {
+    await accRef.update({
+      user_credibility: admin.firestore.FieldValue.increment(crediblityScore),
+    });
+
+    await accRef.collection('investigated_tweets').doc(`${tweetId}`).set({
+      xpx_coin: xpxCoin,
+      user_credibility: crediblityScore,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   updateXpxAccAddress,
   updateTweetStageToInvestigating,
+  updateTweetThatUserAgreeToInvestigating,
   updateTweetUponSubmitDocument,
+  updateUserProfileUponSubmitDocument,
 };

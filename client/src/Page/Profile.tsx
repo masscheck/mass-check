@@ -10,10 +10,10 @@ const Profile: React.FC = () => {
           <div className='profile__top__wallet__title'>My Wallet</div>
           <div className='profile__top__wallet__content'>
             <div className='profile__top__wallet__content__left'>
-              <text>XPX Balance </text>
+              <div>XPX Balance </div>
               <img src={require(`../Asset/proximax.png`).default} />
               <br/>
-              <text className='profile__top__wallet__content__left__amount'>100</text>
+              <div className='profile__top__wallet__content__left__amount'>100</div>
             </div>
             <div className='profile__top__wallet__content__right'>
               <button className='profile__top__wallet__content__right__button'>View in Wallet</button>
@@ -23,9 +23,9 @@ const Profile: React.FC = () => {
         <div className='profile__top__credibility'>
           <div className='profile__top__credibility__title'>My Credibility</div>
           <div className='profile__top__credibility__score'>
-            <text >Credibility Score</text>
+            <div >Credibility Score</div>
               <br/>
-            <text className='profile__top__credibility__score__value'>25/100</text>
+            <div className='profile__top__credibility__score__value'>25/100</div>
           </div>
         </div>
       </div>

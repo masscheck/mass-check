@@ -7,13 +7,13 @@ const Activity: React.FC = () => {
     return (
         <div className='activity-layout'>
             <div className='activity-title'>    
-                <text>Activity</text>
+                <div>Activity</div>
             </div>
             <div className='activity-header'>
-                <text>News</text>
-                <text className='details'>Role</text>
-                <text className='details'>Credibility</text>
-                <text className='details'>XPX</text>
+                <div>News</div>
+                <div className='details'>Role</div>
+                <div className='details'>Credibility</div>
+                <div className='details'>XPX</div>
             </div>
             <div className='activity-content'>
                 <div className='activity-item-container'>
@@ -29,9 +29,9 @@ const Activity: React.FC = () => {
                             />
                     </div>
                     <div className='activity-details'>
-                        <text className='activity-role'>Investigator</text>
-                        <text className='activity-credibility'>+8</text>
-                        <text className='activity-xpx'>+0.2</text>
+                        <div className='activity-role'>Investigator</div>
+                        <div className='activity-credibility'>+8</div>
+                        <div className='activity-xpx'>+0.2</div>
                     </div>
                 </div>
                 <div className='activity-item-container'>
@@ -47,9 +47,9 @@ const Activity: React.FC = () => {
                             />
                     </div>
                     <div className='activity-details'>
-                        <text className='activity-role'>Investigator</text>
-                        <text className='activity-credibility'>+8</text>
-                        <text className='activity-xpx'>+0.2</text>
+                        <div className='activity-role'>Investigator</div>
+                        <div className='activity-credibility'>+8</div>
+                        <div className='activity-xpx'>+0.2</div>
                     </div>
                 </div>
                 <div className='activity-item-container'>
@@ -65,9 +65,9 @@ const Activity: React.FC = () => {
                             />
                     </div>
                     <div className='activity-details'>
-                        <text className='activity-role'>Investigator</text>
-                        <text className='activity-credibility'>+8</text>
-                        <text className='activity-xpx'>+0.2</text>
+                        <div className='activity-role'>Investigator</div>
+                        <div className='activity-credibility'>+8</div>
+                        <div className='activity-xpx'>+0.2</div>
                     </div>
                 </div>               
             </div>

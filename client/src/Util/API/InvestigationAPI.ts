@@ -5,7 +5,10 @@ const matchTweetInvestigation = async () => {
 };
 
 const retrieveTweetInfo = async (uid: string, tweetId: string) => {
-  return await postAPIModel('/api/retrieve-tweet-info', { uid, tweetId });
+  return await postAPIModel('/api/retrieve-tweet-info-for-investigating', {
+    uid,
+    tweetId,
+  });
 };
 
 const submitReport = async (uid: string, tweetId: string, reportId: string) => {

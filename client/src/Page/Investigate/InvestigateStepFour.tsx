@@ -41,7 +41,7 @@ const InvestigateStepFour: React.FC = () => {
     const day = date.toLocaleString('en-US', { day: 'numeric' });
     const month = date.toLocaleString('en-US', { month: 'long' });
     const year = date.toLocaleString('en-US', { year: 'numeric' });
-    const hour = date.toLocaleString('en-US', { hour: 'numeric' });
+    const hour = date.toLocaleString('en-US', { hour: '2-digit' });
     const minute = date.toLocaleString('en-US', { minute: 'numeric' });
     const seconds = date.toLocaleString('en-US', { second: 'numeric' });
 
@@ -50,9 +50,10 @@ const InvestigateStepFour: React.FC = () => {
 
   const onNext = async () => {
     const storageRef = storage.ref();
+    const sanitisedFileName = file.name.replace(/ /g, '_');
 
     // FileName: UID_Tweet ID_DateTime_File Name
-    const fileName = `${uid}_${tweetId}_${genUploadDateTime()}_${file.name}`;
+    const fileName = `${uid}_${tweetId}_${genUploadDateTime()}_${sanitisedFileName}`;
     const fileRef = storageRef.child(fileName);
 
     try {

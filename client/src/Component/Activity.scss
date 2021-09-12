@@ -6,6 +6,7 @@
   display: grid;
   grid-template-areas: 'header' 'content';
   margin-top: 2em;
+  height: 55vh;
 
   .activity-title {
     @include form-label;
@@ -34,7 +35,7 @@
   }
 
   .activity-content {
-    height: 19em;
+    height: 100%;
     overflow: auto;
     width: 96%;
 
