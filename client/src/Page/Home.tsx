@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
 import Tweet from '../Component/Tweet';
 
 import './Home.scss';
@@ -19,18 +18,6 @@ const Home: React.FC = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     setHomeState('unverified');
-  };
-
-  const { setIsLoading } = useLoadingSpinner();
-
-  const isLoading = () => {
-    localStorage.setItem('userInfo', '{x: 3}');
-
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 5000);
   };
 
   return (
@@ -95,9 +82,7 @@ const Home: React.FC = () => {
           stage='Verifying'
         />
        </div>
-      </div>
-      
-      <button onClick={() => isLoading()}>Test Loading Button</button>
+      </div>      
     </div>
   );
 };

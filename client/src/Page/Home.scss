@@ -5,6 +5,7 @@
 
 .home {
   width: 70%;
+
   &__header {
     display: flex;
     flex-direction: row;
@@ -15,6 +16,10 @@
       padding: 0;
       border-width: 0;
       background-color: transparent;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 
@@ -28,8 +33,10 @@
   }
 
   &__view-area {
-    height: 68vh;
+    height: 70vh;
+    width: 60vw;
     overflow: auto;
+
     &__tweet {
       margin-top: 0.5em;
       margin-bottom: 0.5em;
