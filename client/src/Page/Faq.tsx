@@ -1,7 +1,17 @@
 import React from 'react';
+import CustomizedAccordions from '../Component/FaqAccordion';
+import FaqQuestionAnswers from '../Asset/FaqQuestionAnswers';
+import './Faq.scss';
 
-const Error404: React.FC = () => {
-  return <h1>FAQ Development in Progress</h1>;
+const Faq: React.FC = () => {
+
+  return (
+    <div className = 'faq'>
+      {FaqQuestionAnswers.map(datum => (
+        <CustomizedAccordions question = {datum.question} answer = {datum.answer}/>
+      ))}
+    </div>
+  );
 };
 
-export default Error404;
+export default Faq;

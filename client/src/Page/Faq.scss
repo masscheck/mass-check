@@ -1,0 +1,14 @@
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: lightsteelblue;
+  border-radius: 3px;
+}
+
+.faq {
+  height: 32em;
+  width: 70%;
+  overflow: auto;
+}
