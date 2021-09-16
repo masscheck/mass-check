@@ -1,4 +1,6 @@
 const { db } = require('../util/firebase-config');
+const { firebaseTimestampToJsDate } = require('../util/helper-function');
+const { StageConstant } = require('../constant/stage-constant');
 
 const getUserInfo = async (uid) => {
   const accRef = db.collection('accounts').doc(uid);
@@ -63,7 +65,12 @@ const getTweetInfo = async (tweetId) => {
   try {
     const result = await tweetRef.get();
 
-    return result.data();
+    let res = result.data();
+    res = { ...res, submit_time: firebaseTimestampToJsDate(res.submit_time) };
+
+    console.log(res);
+
+    return res;
   } catch (err) {
     throw err;
   }
@@ -86,6 +93,44 @@ const getTweetToBeVerify = async () => {
   }
 };
 
+const getUnverifiedTweetIdList = async () => {
+  const tweetRef = db.collection('tweets');
+  const query = tweetRef
+    .where('stage', '!=', StageConstant.COMPLETE)
+    .limit(10)
+  const queryResult = [];
+
+  try {
+    const querySnapshot = await query.get();
+    querySnapshot.forEach((doc) => {
+      queryResult.push(doc.data());
+    });
+
+    return queryResult;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getVerifiedTweetIdList = async () => {
+  const tweetRef = db.collection('tweets');
+  const query = tweetRef
+    .where('stage', '==', StageConstant.COMPLETE)
+    .limit(10)
+  const queryResult = [];
+
+  try {
+    const querySnapshot = await query.get();
+    querySnapshot.forEach((doc) => {
+      queryResult.push(doc.data());
+    });
+
+    return queryResult;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   getUserInfo,
   isTokenInDb,
@@ -93,4 +138,6 @@ module.exports = {
   getTweetIdList,
   getTweetInfo,
   getTweetToBeVerify,
+  getUnverifiedTweetIdList,
+  getVerifiedTweetIdList
 };

@@ -90,7 +90,7 @@ for (let i = 0; i < 50; i++) {
     author_tag: `@${curAuthor.toLowerCase()}`,
     content: data['tweet'][i],
     submit_by: randomItem(submitUser),
-    submit_time: Date(),
+    submit_time: firebase.firestore.FieldValue.serverTimestamp(),
     stage: StageConstant.QUEUEING,
     ai_score: null,
     trust_index: null,

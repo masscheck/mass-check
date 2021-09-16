@@ -12,6 +12,8 @@ const getUserInfo = require('./route/get-user-info.route');
 const auth = require('./route/auth.route');
 const investigation = require('./route/investigation.route');
 const verification = require('./route/verification.route');
+const home = require('./route/home.route');
+const userProfile = require('./route/user-profile.route');
 
 // Config
 app.use(express.json());
@@ -50,6 +52,8 @@ app.use('/api', createAcc);
 app.use('/api', getUserInfo);
 app.use('/api', investigation);
 app.use('/api', verification);
+app.use('/api', home);
+app.use('/api', userProfile);
 
 app.use('/', (req, res, next) => {
   res.send('MassCheck API');
