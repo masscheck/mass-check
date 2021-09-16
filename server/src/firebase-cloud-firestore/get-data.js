@@ -3,16 +3,19 @@ const { firebaseTimestampToJsDate } = require('../util/helper-function');
 const { StageConstant } = require('../constant/stage-constant');
 
 const getUserInfo = async (uid) => {
-  const accRef = db.collection('accounts').doc(uid);
+  const accRef = db.collection('accounts').doc(`${uid}`);
 
   try {
     const result = await accRef.get();
-    const { username, address, stage } = result.data();
+    const { username, xpx_address, stage, user_credibility } = result.data();
+
+    console.log(result.data());
 
     return {
       username,
-      address,
+      address: xpx_address,
       stage,
+      credibilityScore: user_credibility,
     };
   } catch (err) {
     throw err;
@@ -95,9 +98,7 @@ const getTweetToBeVerify = async () => {
 
 const getUnverifiedTweetIdList = async () => {
   const tweetRef = db.collection('tweets');
-  const query = tweetRef
-    .where('stage', '!=', StageConstant.COMPLETE)
-    .limit(10)
+  const query = tweetRef.where('stage', '!=', StageConstant.COMPLETE).limit(10);
   const queryResult = [];
 
   try {
@@ -114,9 +115,7 @@ const getUnverifiedTweetIdList = async () => {
 
 const getVerifiedTweetIdList = async () => {
   const tweetRef = db.collection('tweets');
-  const query = tweetRef
-    .where('stage', '==', StageConstant.COMPLETE)
-    .limit(10)
+  const query = tweetRef.where('stage', '==', StageConstant.COMPLETE).limit(10);
   const queryResult = [];
 
   try {
@@ -139,5 +138,5 @@ module.exports = {
   getTweetInfo,
   getTweetToBeVerify,
   getUnverifiedTweetIdList,
-  getVerifiedTweetIdList
+  getVerifiedTweetIdList,
 };
