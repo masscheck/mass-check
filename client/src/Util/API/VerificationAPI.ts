@@ -5,16 +5,22 @@ const matchTweetVerification = async () => {
 };
 
 const retrieveTweetInfo = async (uid: string, tweetId: string) => {
-  return await postAPIModel('/api/retrieve-tweet-info-for-investigating', {
+  return await postAPIModel('/api/retrieve-tweet-info-for-verification', {
     uid,
     tweetId,
   });
 };
 
-const submitReport = async (uid: string, tweetId: string, reportId: string) => {
-  console.log({ fe: { uid, tweetId, reportId } });
-
-  return await postAPIModel('/api/submit-report', { uid, tweetId, reportId });
+const submitVerificationResult = async (
+  uid: string,
+  tweetId: string,
+  isTweetReal: boolean
+) => {
+  return await postAPIModel('/api/submit-verification-tweet', {
+    uid,
+    tweetId,
+    isTweetReal,
+  });
 };
 
-export { matchTweetVerification, retrieveTweetInfo, submitReport };
+export { matchTweetVerification, retrieveTweetInfo, submitVerificationResult };

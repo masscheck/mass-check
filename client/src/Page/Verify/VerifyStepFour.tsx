@@ -8,6 +8,9 @@ import PDFViewer from '../../Component/PDFViewer';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './VerifyStepFour.scss';
+import { useTweetModel } from '../../Context/InvestigationContext';
+import { submitVerificationResult } from '../../Util/API/VerificationAPI';
+import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 
 const VerifyStepFour: React.FC = () => {
   const [researchIndex, setResearchIndex] = useState(1);
@@ -19,15 +22,25 @@ const VerifyStepFour: React.FC = () => {
   const [researchFileNameList, setResearchFileNameList] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const history = useHistory();
+  const {
+    tweetModel: {
+      tweetId,
+      stage,
+      submitBy,
+      submitTime,
+      aiScore,
+      authorName,
+      authorTag,
+      content,
+      investigatedReportIdList,
+    },
+  } = useTweetModel();
+  const res = useTweetModel();
 
   useEffect(() => {
-    setResearchFileNameList([
-      'Mon Jun 28 2021 22:15:57 GMT+0800 (Malaysia Time)_SampleInvestigation_1.pdf',
-      'Mon Jun 28 2021 22:16:06 GMT+0800 (Malaysia Time)_SampleInvestigation_2.pdf',
-      'Mon Jun 28 2021 22:16:12 GMT+0800 (Malaysia Time)_SampleInvestigation_3.pdf',
-      'Mon Jun 28 2021 22:16:19 GMT+0800 (Malaysia Time)_SampleInvestigation_4.pdf',
-      'Mon Jun 28 2021 22:16:27 GMT+0800 (Malaysia Time)_SampleInvestigation_5.pdf',
-    ]);
+    console.log({ tweetRes: res });
+
+    setResearchFileNameList(investigatedReportIdList);
   }, []);
 
   useEffect(() => {
@@ -115,7 +128,10 @@ const VerifyStepFour: React.FC = () => {
     setSelectedFile(researchFileList[index]);
   };
 
-  const onNext = () => {
+  const onNext = async () => {
+    const uid = localStorage.getItem(LocalStorageEnum.UID);
+
+    submitVerificationResult(uid, tweetId, vote === 'real');
     history.push(RouteConstant.SECURE_VERIFTY_STEP_FIVE);
   };
 
@@ -156,13 +172,13 @@ const VerifyStepFour: React.FC = () => {
         <div className='verify-step-four__container__right'>
           <div className='verify-step-four__tweet'>
             <Tweet
-              name='Jill Chenraya'
-              tag='@jillcry'
-              content='#Malaysia recorded a total of 2,875 new #Covid19 cases on Thursday. This is the eighth consecutive day with the number of cases above 2,000. Read more at https://bit.ly/3neKgcD'
-              submitBy='Jackie Chan'
-              submitTime={new Date()}
-              authenticityScore={67}
-              stage='Verifying'
+              name={authorName}
+              tag={authorTag}
+              content={content}
+              submitBy={submitBy}
+              submitTime={submitTime}
+              authenticityScore={aiScore}
+              stage={stage}
             />
           </div>
           <div className='verify-step-four__container__right__button_group'>

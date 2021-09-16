@@ -13,9 +13,7 @@ const StepThree = ({ nextUrl, role, onRetrieveTweetInfo }) => {
 
   const onClickYes = () => {
     onRetrieveTweetInfo().then((res) => {
-      if (role === 'investigating') {
-        setTweetModel({ ...tweetModel, ...res.data });
-      }
+      setTweetModel({ ...tweetModel, ...res.data });
 
       history.push(nextUrl);
     });
