@@ -39,8 +39,6 @@ router.post(
   async (req, res, next) => {
     let { tweetId, uid } = req.body;
 
-    console.log({ tweetId, reqBody: req.body });
-
     try {
       const result = await getTweetInfo(tweetId);
       console.log({ tweetInfo: result });

@@ -87,7 +87,7 @@ const getTweetToBeVerify = async () => {
   try {
     const querySnapshot = await query.get();
     querySnapshot.forEach((doc) => {
-      queryResult.push(doc.data());
+      queryResult.push(doc.id);
     });
 
     return queryResult;

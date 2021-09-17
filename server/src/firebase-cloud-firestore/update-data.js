@@ -27,12 +27,36 @@ const updateTweetStageToInvestigating = async (tweetId) => {
   }
 };
 
+const updateTweetStageToVerify = async (tweetId) => {
+  const tweetRef = db.collection('tweets').doc(`${tweetId}`);
+
+  try {
+    await tweetRef.update({
+      stage: StageConstant.VERIFYING,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const updateTweetThatUserAgreeToInvestigating = async (tweetId, uid) => {
   const tweetRef = db.collection('tweets').doc(`${tweetId}`);
 
   try {
     await tweetRef.update({
       investigators: admin.firestore.FieldValue.arrayUnion(uid),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateTweetThatUserAgreeToVerifying = async (tweetId, uid) => {
+  const tweetRef = db.collection('tweets').doc(`${tweetId}`);
+
+  try {
+    await tweetRef.update({
+      jurors: admin.firestore.FieldValue.arrayUnion(uid),
     });
   } catch (error) {
     console.log(error);
@@ -79,7 +103,9 @@ const updateUserProfileUponSubmitDocument = async (
 module.exports = {
   updateXpxAccAddress,
   updateTweetStageToInvestigating,
+  updateTweetStageToVerify,
   updateTweetThatUserAgreeToInvestigating,
+  updateTweetThatUserAgreeToVerifying,
   updateTweetUponSubmitDocument,
   updateUserProfileUponSubmitDocument,
 };
