@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 import Tweet from '../Component/Tweet';
-import { getVerifiedTweetList, getUnverifiedTweetList } from '../Util/API/HomeAPI';
+import {
+  getVerifiedTweetList,
+  getUnverifiedTweetList,
+} from '../Util/API/HomeAPI';
 
 import './Home.scss';
 
-
 const Home: React.FC = () => {
-  
   const [homeState, setHomeState] = useState('verified');
   const [unverifiedTweetList, setUnverifiedTweetList] = useState([]);
   const [verifiedTweetList, setVerifiedTweetList] = useState([]);
@@ -15,88 +16,96 @@ const Home: React.FC = () => {
 
   // App init loading
   useEffect(() => {
-    retrieveData();
+    (async () => {
+      await retrieveData();
 
-    console.log('Home page load')
-  }, [])
+      console.log('Home page load');
+    })();
+  }, []);
 
   // promise => resolve or reject (resolve, reject)
   const retrieveData = async () => {
     try {
-      const result = await getUnverifiedTweetList();
-      const result1 = await getVerifiedTweetList();
-
-      setUnverifiedTweetList(result.data.result);
-      setVerifiedTweetList(result1.data.result);
-
-      setTweetListContent(verifiedTweetList)
-
-      console.log({result, unverifiedTweetList});
-    } catch (err){
+      getUnverifiedTweetList().then((res) => {
+        setUnverifiedTweetList(res.data.result);
+      });
+      getVerifiedTweetList().then((res) => {
+        setVerifiedTweetList(res.data.result);
+        setTweetListContent(verifiedTweetList);
+      });
+    } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   const onVerifiedSelected = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     setHomeState('verified');
-    setTweetListContent(verifiedTweetList)
+    setTweetListContent(verifiedTweetList);
   };
-  
+
   const onUnverifiedSelected = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-      setHomeState('unverified');
-      setTweetListContent(unverifiedTweetList);
-    };
+  ) => {
+    setHomeState('unverified');
+    setTweetListContent(unverifiedTweetList);
+  };
 
   return (
     <div className='home'>
       <div className='home__header'>
-        <button 
-          className={homeState === 'verified' ? 'selected-verified' : 'deselected-verified'}
+        <button
+          className={
+            homeState === 'verified'
+              ? 'selected-verified'
+              : 'deselected-verified'
+          }
           onClick={(e) => onVerifiedSelected(e)}
         >
           Verified Posts
         </button>
         <button
-          className={homeState === 'unverified' ? 'selected-unverified' : 'deselected-unverified'}
+          className={
+            homeState === 'unverified'
+              ? 'selected-unverified'
+              : 'deselected-unverified'
+          }
           onClick={(e) => onUnverifiedSelected(e)}
         >
           Unverified Posts
         </button>
-
       </div>
       <div className='home__view-area'>
-       <div className='home__view-area__tweet'>
-         {
-            tweetListContent.map((tweet, index) => {
-              const {    
-                stage,
-                submitBy,
-                submitTime,
-                aiScore,
-                authorName,
-                authorTag,
-                content
-              } = tweet;
+        <div className='home__view-area__tweet'>
+          {console.log(tweetListContent)}
+          {tweetListContent.map((tweet, index) => {
+            const {
+              stage,
+              submitBy,
+              submitTime,
+              aiScore,
+              authorName,
+              authorTag,
+              content,
+            } = tweet;
 
-              return <Tweet
-                key={index}
-                name={authorName}
-                tag={authorTag}
-                content={content}
-                submitBy={submitBy}
-                submitTime={submitTime}
-                authenticityScore={aiScore}
-                stage={stage}
-               />
-            })
-         }
-        
-       </div>
-      </div>      
+            return (
+              <div className='tweet-child'>
+                <Tweet
+                  name={authorName}
+                  tag={authorTag}
+                  content={content}
+                  submitBy={submitBy}
+                  submitTime={submitTime}
+                  authenticityScore={aiScore}
+                  stage={stage}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };

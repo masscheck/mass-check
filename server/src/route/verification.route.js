@@ -55,7 +55,7 @@ router.post('/retrieve-tweet-info-for-verification', async (req, res, next) => {
 
     res.status(200).json({
       tweetId,
-      stage: StageConstant.INVESTIGATING,
+      stage: StageConstant.VERIFYING,
       submitBy,
       submitTime,
       aiScore,

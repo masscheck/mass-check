@@ -104,7 +104,9 @@ const getUnverifiedTweetIdList = async () => {
   try {
     const querySnapshot = await query.get();
     querySnapshot.forEach((doc) => {
-      queryResult.push(doc.data());
+      let res = doc.data();
+      res = { ...res, submit_time: firebaseTimestampToJsDate(res.submit_time) };
+      queryResult.push(res);
     });
 
     return queryResult;
