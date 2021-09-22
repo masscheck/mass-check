@@ -1,22 +1,21 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
-import { SignUpStage } from '../../Util/Constant/SignUpStage';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import { useNotification } from '../../Context/NotificationContext';
 
 import './NavBarPublic.scss';
+import { useAccountInfo } from '../../Context/AccountInfoContext';
 
 const NavBar: React.FC = (props: any) => {
   const { pathname } = useLocation();
+  const {
+    accountInfo: { toSignUpSuccessAllowable },
+  } = useAccountInfo();
   const { warnToast } = useNotification();
 
   const onNext = (event) => {
-    if (
-      localStorage.getItem(LocalStorageEnum.STAGE) ===
-      SignUpStage.MASS_CHECK_ACC_CREATED
-    ) {
+    if (toSignUpSuccessAllowable) {
       event.preventDefault();
       warnToast('Please Complete Sign-Up Application Before Proceeding');
     }

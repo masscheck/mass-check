@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation, useHistory } from 'react-router-dom';
-import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+import React from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../../Context/AuthContext';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
@@ -10,17 +9,12 @@ import { useAccountInfo } from '../../Context/AccountInfoContext';
 import { AccountModel } from '../../Model/AccountModel';
 
 const NavBarHome: React.FC = () => {
-  const { signOut, currentUser } = useAuth();
+  const { signOut } = useAuth();
   const {
     accountInfo: { displayName },
     setAccountInfo,
   } = useAccountInfo();
-  const [username, setUsername] = useState('LOADING...');
   const { pathname } = useLocation();
-
-  useEffect(() => {
-    setUsername(localStorage.getItem(LocalStorageEnum.DISPLAY_NAME));
-  }, []);
 
   const onSignOut = () => {
     setAccountInfo(new AccountModel());

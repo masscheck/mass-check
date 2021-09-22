@@ -95,12 +95,12 @@ const SignIn: React.FC = () => {
           toSecureAllowable: false,
         });
 
-        successToast('Sign In Successfully');
+        successToast('Sign Up Successfully');
         warnToast(
           'You forgot to download XPX private key last time. Getting a new account now.'
         );
         history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
-      } else if (!xpxAddress) {
+      } else if (isNewUser) {
         // User first time sign in
         setAccountInfo({
           uid,

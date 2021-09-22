@@ -32,7 +32,7 @@ const Routing: React.FC = () => {
   return (
     <Switch>
       {toSignUpSuccessAllowable && (
-        <PrivateRoute
+        <Route
           exact
           path={RouteConstant.PUBLIC_SIGN_UP_SUCCESS}
           component={SignUpSuccess}
