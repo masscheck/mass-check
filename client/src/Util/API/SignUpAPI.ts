@@ -1,12 +1,36 @@
 import { postAPIModel } from './ReqAPIModel';
 
+const ACCOUNT_API_BASE_URI = '/api/signup';
+
 const postCreateAcc = async (uid: string, email: string, username: string) => {
-  await postAPIModel('/api/create-acc', {
-    uid: uid,
-    email: email,
-    username: username,
+  return new Promise<any>(async (resolve, reject) => {
+    const res = await postAPIModel(ACCOUNT_API_BASE_URI + '/create-acc', {
+      uid,
+      email,
+      username,
+    });
+
+    if (res.status < 300) {
+      resolve('Success create account');
+    } else {
+      reject('Failed create account');
+    }
   });
 };
+
+const postCreateXpxAcc = async () => {
+  return new Promise<any>(async (resolve, reject) => {
+    const res = await postAPIModel(ACCOUNT_API_BASE_URI + '/create-xpx-acc');
+
+    if (res.status < 300) {
+      resolve(res.data);
+    } else {
+      reject('Failed create account');
+    }
+  });
+};
+
+// below refactor
 
 const downloadPrivateKey = async () => {
   const res = await postAPIModel('/api/download-private-key');
@@ -23,4 +47,4 @@ const storeXpxAddress = async (uid: string, address: string) => {
   return res;
 };
 
-export { postCreateAcc, downloadPrivateKey, storeXpxAddress };
+export { postCreateAcc, postCreateXpxAcc, downloadPrivateKey, storeXpxAddress };

@@ -20,28 +20,25 @@ const BaseLayoutPage: React.FC = () => {
   const { errorToastPersistent } = useNotification();
 
   useEffect(() => {
-    console.log('Check user session');
-    const isSignIn = localStorage.getItem(LocalStorageEnum.IS_SIGN_IN);
+    // if (isSignIn) {
+    //   (async () => {
+    //     setIsLoading(true);
+    //     const [hasValidToken, hasSignOut] = await hasValidTokenAccess();
+    //     setIsLoading(false);
 
-    if (isSignIn) {
-      (async () => {
-        setIsLoading(true);
-        const [hasValidToken, hasSignOut] = await hasValidTokenAccess();
-        setIsLoading(false);
+    //     if (hasValidToken) {
+    //       history.push(RouteConstant.SECURE_HOME);
+    //     } else {
+    //       if (!hasSignOut) {
+    //         errorToastPersistent('Session Timeout. Please Sign In Again.');
 
-        if (hasValidToken) {
-          history.push(RouteConstant.SECURE_HOME);
-        } else {
-          if (!hasSignOut) {
-            errorToastPersistent('Session Timeout. Please Sign In Again.');
-
-            // Avoid printing out the error multiple times
-            localStorage.clear();
-          }
-          history.push(RouteConstant.PUBLIC_SIGN_IN);
-        }
-      })();
-    }
+    //         // Avoid printing out the error multiple times
+    //         localStorage.clear();
+    //       }
+    //       history.push(RouteConstant.PUBLIC_SIGN_IN);
+    //     }
+    //   })();
+    // }
   }, []);
 
   return (

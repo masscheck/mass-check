@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { AuthProvider } from '../Context/AuthContext';
+import { AccountInfoProvider } from '../Context/AccountInfoContext';
 import { NotificationProvider } from '../Context/NotificationContext';
 import { LoadingSpinnerProvider } from '../Context/LoadingSpinnerContext';
 import { TweetProvider } from '../Context/InvestigationContext';
@@ -16,11 +17,13 @@ const App: React.FC = () => {
       <LoadingSpinnerProvider>
         <NotificationProvider>
           <AuthProvider>
-            <TweetProvider>
-              <Router>
-                <BaseLayoutPage />
-              </Router>
-            </TweetProvider>
+            <AccountInfoProvider>
+              <TweetProvider>
+                <Router>
+                  <BaseLayoutPage />
+                </Router>
+              </TweetProvider>
+            </AccountInfoProvider>
           </AuthProvider>
         </NotificationProvider>
       </LoadingSpinnerProvider>

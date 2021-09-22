@@ -6,8 +6,8 @@ import {
   twitterProvider,
 } from '../Util/Firebase/FirebaseConfig';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
-import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
-import { postCreateToken, deleteRefreshToken } from '../Util/API/AuthAPI';
+// import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
+// import { postCreateToken, deleteRefreshToken } from '../Util/API/AuthAPI';
 
 type AuthContextType = {
   signUp: (email: string, password: string, username: string) => any;
@@ -17,10 +17,8 @@ type AuthContextType = {
   signOut: () => void;
   resetPassword: (email: string) => any;
   currentUser: any;
-  curAddress: string;
   hasXpxAcc: boolean;
   setHasXpxAcc: (x: boolean) => void;
-  setAddress: (add: string) => void;
 };
 
 const AuthContext = React.createContext<Partial<AuthContextType>>({});
@@ -31,7 +29,6 @@ const useAuth = () => {
 
 const AuthProvider: React.FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [curAddress, setAddress] = useState('');
   const [hasXpxAcc, setHasXpxAcc] = useState(true);
 
   const setLocalStorageUser = (result: any) => {
@@ -47,7 +44,7 @@ const AuthProvider: React.FC = ({ children }) => {
     try {
       const result = await auth.createUserWithEmailAndPassword(email, password);
 
-      await postCreateToken(result.user.uid, username);
+      // await postCreateToken(result.user.uid, username);
 
       setLocalStorageUser(result);
       localStorage.setItem(LocalStorageEnum.DISPLAY_NAME, username);
@@ -61,14 +58,14 @@ const AuthProvider: React.FC = ({ children }) => {
   const emailSignIn = async (email: string, password: string) => {
     try {
       const result = await auth.signInWithEmailAndPassword(email, password);
-      const user = await getUserInfoByUid(result.user.uid);
+      // const user = await getUserInfoByUid(result.user.uid);
 
-      const { username, stage } = user.data.userInfo;
-      await postCreateToken(result.user.uid, username);
+      // const { username, stage } = user.data.userInfo;
+      // await postCreateToken(result.user.uid, username);
 
       setLocalStorageUser(result);
-      localStorage.setItem(LocalStorageEnum.DISPLAY_NAME, username);
-      localStorage.setItem(LocalStorageEnum.STAGE, stage);
+      // localStorage.setItem(LocalStorageEnum.DISPLAY_NAME, username);
+      // localStorage.setItem(LocalStorageEnum.STAGE, stage);
     } catch (err) {
       throw err;
     }
@@ -76,11 +73,11 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const googleSignIn = async () => {
     googleProvider.setCustomParameters({ prompt: 'select_account' });
-    return await externalMethodSignIn(googleProvider);
+    return externalMethodSignIn(googleProvider);
   };
 
   const twitterSignIn = async () => {
-    return await externalMethodSignIn(twitterProvider);
+    return externalMethodSignIn(twitterProvider);
   };
 
   const externalMethodSignIn = async (provider: any) => {
@@ -93,7 +90,7 @@ const AuthProvider: React.FC = ({ children }) => {
         additionalUserInfo: { isNewUser },
       } = result;
 
-      await postCreateToken(uid, displayName);
+      // await postCreateToken(uid, displayName);
 
       return {
         uid,
@@ -109,7 +106,7 @@ const AuthProvider: React.FC = ({ children }) => {
   const signOut = async () => {
     // TODO Delete Refresh Token
     const refreshToken = localStorage.getItem(LocalStorageEnum.REFRESH_TOKEN);
-    await deleteRefreshToken(refreshToken);
+    // await deleteRefreshToken(refreshToken);
 
     // Clear user info
     localStorage.clear();
@@ -139,8 +136,6 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const value = {
     currentUser,
-    curAddress,
-    setAddress,
     hasXpxAcc,
     setHasXpxAcc,
     emailSignIn,

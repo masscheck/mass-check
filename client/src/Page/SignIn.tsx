@@ -6,14 +6,19 @@ import { useAuth } from '../Context/AuthContext';
 import { useNotification } from '../Context/NotificationContext';
 import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
 
-import { postCreateAcc } from '../Util/API/SignUpAPI';
+import { postCreateAcc, postCreateXpxAcc } from '../Util/API/SignUpAPI';
+import { getAccInfo } from '../Util/API/SignInAPI';
+
 import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
 import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 import { SignInMethodEnum } from '../Util/Constant/SignInMethodEnum';
 import { SignUpStage } from '../Util/Constant/SignUpStage';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
+import useAsync from '../CustomHooks/useAsync';
+
 import './SignIn.scss';
+import { useAccountInfo } from '../Context/AccountInfoContext';
 
 const signInSchema = Joi.object({
   email: Joi.string()
@@ -38,6 +43,7 @@ const SignIn: React.FC = () => {
   const { googleSignIn, emailSignIn, currentUser, twitterSignIn } = useAuth();
   const { successToast, errorToast, warnToast } = useNotification();
   const { setIsLoading } = useLoadingSpinner();
+  const { setAccountInfo } = useAccountInfo();
 
   useEffect(() => {
     setHasNoError(!!(email && password));
@@ -54,10 +60,10 @@ const SignIn: React.FC = () => {
   const onExternalCallback = async (signInMethod: SignInMethodEnum) => {
     switch (signInMethod) {
       case SignInMethodEnum.GOOGLE_SIGN_IN:
-        return await googleSignIn();
+        return googleSignIn();
 
       case SignInMethodEnum.TWITTER_SIGN_IN:
-        return await twitterSignIn();
+        return twitterSignIn();
     }
   };
 
@@ -66,7 +72,6 @@ const SignIn: React.FC = () => {
     signInMethod: SignInMethodEnum
   ) => {
     e.preventDefault();
-    let curStage: SignUpStage;
 
     setIsLoading(true);
     try {
@@ -76,27 +81,26 @@ const SignIn: React.FC = () => {
 
       if (isNewUser) {
         await postCreateAcc(uid, email, username);
-
-        curStage = SignUpStage.MASS_CHECK_ACC_CREATED;
-        localStorage.setItem(
-          LocalStorageEnum.STAGE,
-          SignUpStage.MASS_CHECK_ACC_CREATED
-        );
-
-        successToast('Sign Up Successfully');
-      } else {
-        const user = await getUserInfoByUid(uid);
-        const { stage } = user.data.userInfo;
-        curStage = stage;
-
-        localStorage.setItem(LocalStorageEnum.STAGE, stage);
       }
 
-      if (curStage === SignUpStage.MASS_CHECK_ACC_CREATED) {
+      const { displayName, xpxAddress } = await getAccInfo(uid);
+      setAccountInfo({ displayName, xpxAddress });
+
+      if (!xpxAddress && !isNewUser) {
+        // User not first time sign in but dont have xpx account
+        successToast('Sign In Successfully');
+        warnToast(
+          'You forgot to download XPX private key last time. Getting a new account now.'
+        );
+        history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
+      } else if (!xpxAddress) {
+        // User first time sign in
+        successToast('Sign Up Successfully');
         history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
       } else {
-        history.push(RouteConstant.SECURE_HOME);
+        // User not first time sign and has xpx account
         successToast('Sign In Successfully');
+        history.push(RouteConstant.SECURE_HOME);
       }
     } catch (err) {
       if (err.code === 'auth/popup-closed-by-user') {

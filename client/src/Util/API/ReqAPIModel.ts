@@ -18,39 +18,39 @@ const renewAccessToken = async () => {
   localStorage.setItem(LocalStorageEnum.EXPIRE_TIME_TOKEN, expireTime);
 };
 
-const postAPIModel = async (url, body = {}, header = {}) => {
-  const token = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
+const postAPIModel = async (url, body = {}, headers = {}) => {
+  // const token = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
 
-  console.log('Token', token);
+  // console.log('Token', token);
 
-  if (hasTokenExpire()) {
-    await renewAccessToken();
-  }
+  // if (hasTokenExpire()) {
+  //   await renewAccessToken();
+  // }
 
   return await axios.post(`${API_URL}${url}`, body, {
-    headers: {
-      // 'Access-Control-Allow-Origin': '*',
-      Authorization: `Bearer ${token}`,
-      ...header,
-    },
+    // headers: {
+    //   // 'Access-Control-Allow-Origin': '*',
+    //   Authorization: `Bearer ${token}`,
+    //   ...headers,
+    // },
   });
 };
 
-const getAPIModel = async (url, header = {}) => {
+const getAPIModel = async (url, params = {}, headers = {}) => {
   const token = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
+  // console.log('Token', token);
 
-  console.log('Token', token);
-
-  if (hasTokenExpire()) {
-    await renewAccessToken();
-  }
+  // if (hasTokenExpire()) {
+  //   await renewAccessToken();
+  // }
 
   return await axios.get(`${API_URL}${url}`, {
-    headers: {
-      // 'Access-Control-Allow-Origin': '*',
-      Authorization: `Bearer ${token}`,
-      ...header,
-    },
+    params,
+    // headers: {
+    //   // 'Access-Control-Allow-Origin': '*',
+    //   Authorization: `Bearer ${token}`,
+    //   ...headers,
+    // },
   });
 };
 

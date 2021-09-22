@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PrivateRoute from './ProtectedRoute';
 
-import { useAuth } from '../Context/AuthContext';
+import { useAccountInfo } from '../Context/AccountInfoContext';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import Home from '../Page/Home';
@@ -25,11 +25,13 @@ import VerifyStepFour from '../Page/Verify/VerifyStepFour';
 import VerifyStepFive from '../Page/Verify/VerifyStepFive';
 
 const Routing: React.FC = () => {
-  const { hasXpxAcc } = useAuth();
+  const {
+    accountInfo: { xpxAddress },
+  } = useAccountInfo();
 
   return (
     <Switch>
-      {!hasXpxAcc && (
+      {!xpxAddress && (
         <PrivateRoute
           exact
           path={RouteConstant.PUBLIC_SIGN_UP_SUCCESS}
