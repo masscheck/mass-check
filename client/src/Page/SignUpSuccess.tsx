@@ -53,12 +53,16 @@ const SignUpSuccess: React.FC = () => {
       warnToast('Please download your XPX private key before proceeding');
       return;
     }
+
     try {
       setIsLoading(true);
-      console.log(accountInfo);
+
       const { uid, xpxAddress } = accountInfo;
 
       await postUpdateUserXpxAddress(uid, xpxAddress);
+      const newAccountInfo = { ...accountInfo };
+      newAccountInfo.toSecureAllowable = true;
+      setAccountInfo(newAccountInfo);
 
       history.push(RouteConstant.SECURE_HOME);
     } catch (err) {

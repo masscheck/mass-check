@@ -3,4 +3,5 @@ export class AccountModel {
   displayName: string;
   xpxAddress: string;
   toSignUpSuccessAllowable: boolean;
+  toSecureAllowable: boolean;
 }

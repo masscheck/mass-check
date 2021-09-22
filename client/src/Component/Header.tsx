@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useAccountInfo } from '../Context/AccountInfoContext';
 
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
@@ -8,6 +9,9 @@ import './Header.scss';
 const Header: React.FC = () => {
   const [title, setTitle] = useState('Home');
   const location = useLocation();
+  const {
+    accountInfo: { toSignUpSuccessAllowable },
+  } = useAccountInfo();
 
   useEffect(() => {
     switch (location.pathname) {
@@ -15,8 +19,10 @@ const Header: React.FC = () => {
         setTitle('Sign In');
         break;
       case RouteConstant.PUBLIC_SIGN_UP:
-      case RouteConstant.PUBLIC_SIGN_UP_SUCCESS:
         setTitle('Sign Up');
+        break;
+      case RouteConstant.PUBLIC_SIGN_UP_SUCCESS:
+        toSignUpSuccessAllowable ? setTitle('Sign Up') : setTitle('Error 404');
         break;
       case RouteConstant.PUBLIC_RESET_PASSWORD:
         setTitle('Reset Your Password');

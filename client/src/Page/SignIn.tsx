@@ -92,6 +92,7 @@ const SignIn: React.FC = () => {
           displayName,
           xpxAddress,
           toSignUpSuccessAllowable: true,
+          toSecureAllowable: false,
         });
 
         successToast('Sign In Successfully');
@@ -106,6 +107,7 @@ const SignIn: React.FC = () => {
           displayName,
           xpxAddress,
           toSignUpSuccessAllowable: true,
+          toSecureAllowable: false,
         });
 
         successToast('Sign Up Successfully');
@@ -117,6 +119,7 @@ const SignIn: React.FC = () => {
           displayName,
           xpxAddress,
           toSignUpSuccessAllowable: false,
+          toSecureAllowable: true,
         });
 
         successToast('Sign In Successfully');

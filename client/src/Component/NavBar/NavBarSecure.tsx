@@ -6,15 +6,26 @@ import { useAuth } from '../../Context/AuthContext';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './NavBarSecure.scss';
+import { useAccountInfo } from '../../Context/AccountInfoContext';
+import { AccountModel } from '../../Model/AccountModel';
 
 const NavBarHome: React.FC = () => {
   const { signOut, currentUser } = useAuth();
+  const {
+    accountInfo: { displayName },
+    setAccountInfo,
+  } = useAccountInfo();
   const [username, setUsername] = useState('LOADING...');
   const { pathname } = useLocation();
 
   useEffect(() => {
     setUsername(localStorage.getItem(LocalStorageEnum.DISPLAY_NAME));
   }, []);
+
+  const onSignOut = () => {
+    setAccountInfo(new AccountModel());
+    signOut();
+  };
 
   return (
     <div className='nav-bar-home-container'>
@@ -26,7 +37,7 @@ const NavBarHome: React.FC = () => {
             exact
             to={RouteConstant.SECURE_PROFILE}
           >
-            {username}
+            {displayName}
           </NavLink>
         </h1>
         <div className='nav-link-list'>
@@ -83,7 +94,7 @@ const NavBarHome: React.FC = () => {
             className='nav-link'
             activeClassName='nav-link-active'
             to={RouteConstant.PUBLIC_SIGN_IN}
-            onClick={signOut}
+            onClick={onSignOut}
           >
             Sign Out
           </NavLink>
