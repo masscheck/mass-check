@@ -38,7 +38,7 @@ const SignIn: React.FC = () => {
     useState<validationErrorInterface>({});
   const history = useHistory();
 
-  const { googleSignIn, emailSignIn, currentUser, twitterSignIn } = useAuth();
+  const { googleSignIn, emailSignIn, twitterSignIn } = useAuth();
   const { successToast, errorToast, warnToast } = useNotification();
   const { setIsLoading } = useLoadingSpinner();
   const { accountInfo, setAccountInfo } = useAccountInfo();
@@ -65,6 +65,51 @@ const SignIn: React.FC = () => {
     }
   };
 
+  const navigateToNextPage = async (uid: any, isNewUser: any) => {
+    const { displayName, xpxAddress } = await getAccInfo(uid);
+
+    if (!xpxAddress && !isNewUser) {
+      // User not first time sign in but dont have xpx account
+      setAccountInfo({
+        uid,
+        displayName,
+        xpxAddress,
+        toSignUpSuccessAllowable: true,
+        toSecureAllowable: false,
+      });
+
+      successToast('Sign Up Successfully');
+      warnToast(
+        'You forgot to download XPX private key last time. Getting a new account now.'
+      );
+      history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
+    } else if (isNewUser) {
+      // User first time sign in
+      setAccountInfo({
+        uid,
+        displayName,
+        xpxAddress,
+        toSignUpSuccessAllowable: true,
+        toSecureAllowable: false,
+      });
+
+      successToast('Sign Up Successfully');
+      history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
+    } else {
+      // User not first time sign and has xpx account
+      setAccountInfo({
+        uid,
+        displayName,
+        xpxAddress,
+        toSignUpSuccessAllowable: false,
+        toSecureAllowable: true,
+      });
+
+      successToast('Sign In Successfully');
+      history.push(RouteConstant.SECURE_HOME);
+    }
+  };
+
   const onExternalMethodSignIn = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     signInMethod: SignInMethodEnum
@@ -81,50 +126,7 @@ const SignIn: React.FC = () => {
         await postCreateAcc(uid, email, username);
       }
 
-      const { displayName, xpxAddress } = await getAccInfo(uid);
-
-      console.log({ xpxAddress, val: !xpxAddress });
-
-      if (!xpxAddress && !isNewUser) {
-        // User not first time sign in but dont have xpx account
-        setAccountInfo({
-          uid,
-          displayName,
-          xpxAddress,
-          toSignUpSuccessAllowable: true,
-          toSecureAllowable: false,
-        });
-
-        successToast('Sign Up Successfully');
-        warnToast(
-          'You forgot to download XPX private key last time. Getting a new account now.'
-        );
-        history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
-      } else if (isNewUser) {
-        // User first time sign in
-        setAccountInfo({
-          uid,
-          displayName,
-          xpxAddress,
-          toSignUpSuccessAllowable: true,
-          toSecureAllowable: false,
-        });
-
-        successToast('Sign Up Successfully');
-        history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
-      } else {
-        // User not first time sign and has xpx account
-        setAccountInfo({
-          uid,
-          displayName,
-          xpxAddress,
-          toSignUpSuccessAllowable: false,
-          toSecureAllowable: true,
-        });
-
-        successToast('Sign In Successfully');
-        history.push(RouteConstant.SECURE_HOME);
-      }
+      await navigateToNextPage(uid, isNewUser);
     } catch (err) {
       if (err.code === 'auth/popup-closed-by-user') {
         warnToast('Sign in pop up browser has closed. Please try again.');
@@ -143,18 +145,9 @@ const SignIn: React.FC = () => {
 
     try {
       setIsLoading(true);
-      await emailSignIn(email, password);
+      const { uid, isNewUser } = await emailSignIn(email, password);
 
-      if (
-        localStorage.getItem(LocalStorageEnum.STAGE) ===
-        SignUpStage.MASS_CHECK_ACC_CREATED
-      ) {
-        history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
-      } else {
-        history.push(RouteConstant.SECURE_HOME);
-      }
-
-      successToast('Sign In Successfully');
+      await navigateToNextPage(uid, isNewUser);
     } catch (err) {
       errorToast(err.message);
     } finally {

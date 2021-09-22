@@ -5,20 +5,14 @@ import {
   googleProvider,
   twitterProvider,
 } from '../Util/Firebase/FirebaseConfig';
-import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
-// import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
-// import { postCreateToken, deleteRefreshToken } from '../Util/API/AuthAPI';
 
 type AuthContextType = {
-  signUp: (email: string, password: string, username: string) => any;
-  emailSignIn: (email: string, password: string) => void;
-  googleSignIn: () => any;
-  twitterSignIn: () => any;
+  signUp: (email: string, password: string, username: string) => Promise<any>;
+  emailSignIn: (email: string, password: string) => Promise<any>;
+  googleSignIn: () => Promise<any>;
+  twitterSignIn: () => Promise<any>;
   signOut: () => void;
   resetPassword: (email: string) => any;
-  currentUser: any;
-  hasXpxAcc: boolean;
-  setHasXpxAcc: (x: boolean) => void;
 };
 
 const AuthContext = React.createContext<Partial<AuthContextType>>({});
@@ -28,47 +22,38 @@ const useAuth = () => {
 };
 
 const AuthProvider: React.FC = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [hasXpxAcc, setHasXpxAcc] = useState(true);
-
-  const setLocalStorageUser = (result: any) => {
-    localStorage.setItem(
-      LocalStorageEnum.DISPLAY_NAME,
-      result.user.displayName
-    );
-    localStorage.setItem(LocalStorageEnum.UID, result.user.uid);
-    localStorage.setItem(LocalStorageEnum.IS_SIGN_IN, 'true');
+  const signUp = (email: string, password: string, username: string) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await auth.createUserWithEmailAndPassword(
+          email,
+          password
+        );
+        const {
+          user: { uid },
+        } = result;
+        resolve(uid);
+      } catch (err) {
+        reject(err);
+      }
+    });
   };
 
-  const signUp = async (email: string, password: string, username: string) => {
-    try {
-      const result = await auth.createUserWithEmailAndPassword(email, password);
+  const emailSignIn = (email: string, password: string) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await auth.signInWithEmailAndPassword(email, password);
 
-      // await postCreateToken(result.user.uid, username);
+        const {
+          additionalUserInfo: { isNewUser },
+          user: { uid },
+        } = result;
 
-      setLocalStorageUser(result);
-      localStorage.setItem(LocalStorageEnum.DISPLAY_NAME, username);
-
-      return result.user.uid;
-    } catch (err) {
-      throw err;
-    }
-  };
-
-  const emailSignIn = async (email: string, password: string) => {
-    try {
-      const result = await auth.signInWithEmailAndPassword(email, password);
-      // const user = await getUserInfoByUid(result.user.uid);
-
-      // const { username, stage } = user.data.userInfo;
-      // await postCreateToken(result.user.uid, username);
-
-      setLocalStorageUser(result);
-      // localStorage.setItem(LocalStorageEnum.DISPLAY_NAME, username);
-      // localStorage.setItem(LocalStorageEnum.STAGE, stage);
-    } catch (err) {
-      throw err;
-    }
+        resolve({ uid, isNewUser });
+      } catch (err) {
+        reject(err);
+      }
+    });
   };
 
   const googleSignIn = async () => {
@@ -80,37 +65,29 @@ const AuthProvider: React.FC = ({ children }) => {
     return externalMethodSignIn(twitterProvider);
   };
 
-  const externalMethodSignIn = async (provider: any) => {
-    try {
-      const result = await auth.signInWithPopup(provider);
-      setLocalStorageUser(result);
+  const externalMethodSignIn = (provider: any) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await auth.signInWithPopup(provider);
 
-      const {
-        user: { uid, email, displayName },
-        additionalUserInfo: { isNewUser },
-      } = result;
+        const {
+          user: { uid, email, displayName },
+          additionalUserInfo: { isNewUser },
+        } = result;
 
-      // await postCreateToken(uid, displayName);
-
-      return {
-        uid,
-        email,
-        isNewUser,
-        username: result.user.displayName,
-      };
-    } catch (err) {
-      throw err;
-    }
+        resolve({
+          uid,
+          email,
+          isNewUser,
+          username: displayName,
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
   };
 
   const signOut = async () => {
-    // TODO Delete Refresh Token
-    const refreshToken = localStorage.getItem(LocalStorageEnum.REFRESH_TOKEN);
-    // await deleteRefreshToken(refreshToken);
-
-    // Clear user info
-    localStorage.clear();
-
     return auth.signOut();
   };
 
@@ -122,22 +99,7 @@ const AuthProvider: React.FC = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    setHasXpxAcc(false);
-  }, [signUp, googleSignIn, twitterSignIn]);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user: any) => {
-      setCurrentUser(user);
-    });
-
-    return unsubscribe;
-  }, []);
-
   const value = {
-    currentUser,
-    hasXpxAcc,
-    setHasXpxAcc,
     emailSignIn,
     googleSignIn,
     twitterSignIn,
