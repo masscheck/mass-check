@@ -24,7 +24,7 @@ const AccountInfoProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log('On change: ', { accountInfo });
+    console.log('On acc info change: ', { accountInfo });
   }, [accountInfo]);
 
   return (

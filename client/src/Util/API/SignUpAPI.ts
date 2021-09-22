@@ -4,15 +4,19 @@ const ACCOUNT_API_BASE_URI = '/api/signup';
 
 const postCreateAcc = async (uid: string, email: string, username: string) => {
   return new Promise<any>(async (resolve, reject) => {
-    const res = await postAPIModel(ACCOUNT_API_BASE_URI + '/create-acc', {
-      uid,
-      email,
-      username,
-    });
+    try {
+      const res = await postAPIModel(
+        ACCOUNT_API_BASE_URI + '/create-user-acc',
+        {
+          uid,
+          email,
+          username,
+        }
+      );
 
-    if (res.status < 300) {
       resolve('Success create account');
-    } else {
+    } catch (err) {
+      console.error(err);
       reject('Failed create account');
     }
   });
@@ -20,12 +24,29 @@ const postCreateAcc = async (uid: string, email: string, username: string) => {
 
 const postCreateXpxAcc = async () => {
   return new Promise<any>(async (resolve, reject) => {
-    const res = await postAPIModel(ACCOUNT_API_BASE_URI + '/create-xpx-acc');
+    try {
+      const res = await postAPIModel(ACCOUNT_API_BASE_URI + '/create-xpx-acc');
 
-    if (res.status < 300) {
       resolve(res.data);
-    } else {
-      reject('Failed create account');
+    } catch (err) {
+      console.error(err);
+      reject('Failed create xpx account');
+    }
+  });
+};
+
+const postUpdateUserXpxAddress = async (uid, xpxAddress) => {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const res = await postAPIModel(
+        ACCOUNT_API_BASE_URI + '/update-user-xpx-address',
+        { uid, xpxAddress }
+      );
+
+      resolve('Success');
+    } catch (err) {
+      console.error(err);
+      reject('Failed create xpx account');
     }
   });
 };
@@ -47,4 +68,10 @@ const storeXpxAddress = async (uid: string, address: string) => {
   return res;
 };
 
-export { postCreateAcc, postCreateXpxAcc, downloadPrivateKey, storeXpxAddress };
+export {
+  postCreateAcc,
+  postCreateXpxAcc,
+  postUpdateUserXpxAddress,
+  downloadPrivateKey,
+  storeXpxAddress,
+};

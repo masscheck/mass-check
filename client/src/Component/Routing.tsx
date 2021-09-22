@@ -26,12 +26,12 @@ import VerifyStepFive from '../Page/Verify/VerifyStepFive';
 
 const Routing: React.FC = () => {
   const {
-    accountInfo: { xpxAddress },
+    accountInfo: { toSignUpSuccessAllowable },
   } = useAccountInfo();
 
   return (
     <Switch>
-      {!xpxAddress && (
+      {toSignUpSuccessAllowable && (
         <PrivateRoute
           exact
           path={RouteConstant.PUBLIC_SIGN_UP_SUCCESS}

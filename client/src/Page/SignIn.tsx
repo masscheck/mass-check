@@ -15,8 +15,6 @@ import { SignInMethodEnum } from '../Util/Constant/SignInMethodEnum';
 import { SignUpStage } from '../Util/Constant/SignUpStage';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
-import useAsync from '../CustomHooks/useAsync';
-
 import './SignIn.scss';
 import { useAccountInfo } from '../Context/AccountInfoContext';
 
@@ -43,7 +41,7 @@ const SignIn: React.FC = () => {
   const { googleSignIn, emailSignIn, currentUser, twitterSignIn } = useAuth();
   const { successToast, errorToast, warnToast } = useNotification();
   const { setIsLoading } = useLoadingSpinner();
-  const { setAccountInfo } = useAccountInfo();
+  const { accountInfo, setAccountInfo } = useAccountInfo();
 
   useEffect(() => {
     setHasNoError(!!(email && password));
@@ -84,10 +82,18 @@ const SignIn: React.FC = () => {
       }
 
       const { displayName, xpxAddress } = await getAccInfo(uid);
-      setAccountInfo({ displayName, xpxAddress });
+
+      console.log({ xpxAddress, val: !xpxAddress });
 
       if (!xpxAddress && !isNewUser) {
         // User not first time sign in but dont have xpx account
+        setAccountInfo({
+          uid,
+          displayName,
+          xpxAddress,
+          toSignUpSuccessAllowable: true,
+        });
+
         successToast('Sign In Successfully');
         warnToast(
           'You forgot to download XPX private key last time. Getting a new account now.'
@@ -95,10 +101,24 @@ const SignIn: React.FC = () => {
         history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
       } else if (!xpxAddress) {
         // User first time sign in
+        setAccountInfo({
+          uid,
+          displayName,
+          xpxAddress,
+          toSignUpSuccessAllowable: true,
+        });
+
         successToast('Sign Up Successfully');
         history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
       } else {
         // User not first time sign and has xpx account
+        setAccountInfo({
+          uid,
+          displayName,
+          xpxAddress,
+          toSignUpSuccessAllowable: false,
+        });
+
         successToast('Sign In Successfully');
         history.push(RouteConstant.SECURE_HOME);
       }
@@ -106,8 +126,34 @@ const SignIn: React.FC = () => {
       if (err.code === 'auth/popup-closed-by-user') {
         warnToast('Sign in pop up browser has closed. Please try again.');
       } else {
-        errorToast(err.message);
+        errorToast(`${err.message}. Please try again later.`);
       }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (hasFormContainsErrors()) return;
+
+    try {
+      setIsLoading(true);
+      await emailSignIn(email, password);
+
+      if (
+        localStorage.getItem(LocalStorageEnum.STAGE) ===
+        SignUpStage.MASS_CHECK_ACC_CREATED
+      ) {
+        history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
+      } else {
+        history.push(RouteConstant.SECURE_HOME);
+      }
+
+      successToast('Sign In Successfully');
+    } catch (err) {
+      errorToast(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -143,32 +189,6 @@ const SignIn: React.FC = () => {
     }
 
     return false;
-  };
-
-  const onEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (hasFormContainsErrors()) return;
-
-    try {
-      setIsLoading(true);
-      await emailSignIn(email, password);
-
-      if (
-        localStorage.getItem(LocalStorageEnum.STAGE) ===
-        SignUpStage.MASS_CHECK_ACC_CREATED
-      ) {
-        history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
-      } else {
-        history.push(RouteConstant.SECURE_HOME);
-      }
-
-      successToast('Sign In Successfully');
-    } catch (err) {
-      errorToast(err.message);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
