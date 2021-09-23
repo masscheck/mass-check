@@ -5,18 +5,15 @@ import Joi from 'joi';
 import { useAuth } from '../Context/AuthContext';
 import { useNotification } from '../Context/NotificationContext';
 import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
+import { useAccountInfo } from '../Context/AccountInfoContext';
 
-import { postCreateAcc, postCreateXpxAcc } from '../Util/API/SignUpAPI';
+import { postCreateAcc } from '../Util/API/SignUpAPI';
 import { getAccInfo } from '../Util/API/SignInAPI';
 
-import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
-import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 import { SignInMethodEnum } from '../Util/Constant/SignInMethodEnum';
-import { SignUpStage } from '../Util/Constant/SignUpStage';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import './SignIn.scss';
-import { useAccountInfo } from '../Context/AccountInfoContext';
 
 const signInSchema = Joi.object({
   email: Joi.string()
@@ -41,7 +38,7 @@ const SignIn: React.FC = () => {
   const { googleSignIn, emailSignIn, twitterSignIn } = useAuth();
   const { successToast, errorToast, warnToast } = useNotification();
   const { setIsLoading } = useLoadingSpinner();
-  const { accountInfo, setAccountInfo } = useAccountInfo();
+  const { setAccountInfo } = useAccountInfo();
 
   useEffect(() => {
     setHasNoError(!!(email && password));

@@ -5,13 +5,12 @@ import { useHistory } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
 import { useNotification } from '../Context/NotificationContext';
 import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
+import { useAccountInfo } from '../Context/AccountInfoContext';
 
 import { postCreateAcc } from '../Util/API/SignUpAPI';
-import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
-import { SignUpStage } from '../Util/Constant/SignUpStage'
+import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import './SignUp.scss';
-import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 const signInSchema = Joi.object({
   username: Joi.string().alphanum().required(),
@@ -40,6 +39,7 @@ const SignUp: React.FC = () => {
   const { signUp } = useAuth();
   const { successToast, errorToast } = useNotification();
   const { setIsLoading } = useLoadingSpinner();
+  const { setAccountInfo } = useAccountInfo();
 
   useEffect(() => {
     setHasNoError(!!(username && email && password && confirmPassword));
@@ -101,12 +101,18 @@ const SignUp: React.FC = () => {
     try {
       setIsLoading(true);
       const uid = await signUp(email, password, username);
+
       await postCreateAcc(uid, email, username);
 
-      localStorage.setItem(LocalStorageEnum.STAGE, SignUpStage.MASS_CHECK_ACC_CREATED)
+      setAccountInfo({
+        uid,
+        displayName: username,
+        xpxAddress: null,
+        toSecureAllowable: false,
+        toSignUpSuccessAllowable: true,
+      });
 
       history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
-
       successToast('Sign Up Successfully');
     } catch (err) {
       errorToast(err.message);
