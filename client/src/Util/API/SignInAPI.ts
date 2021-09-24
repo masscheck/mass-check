@@ -1,12 +1,12 @@
-import { postAPIModel, getAPIModel } from './ReqAPIModel';
+import { getAPIModel } from './ReqAPIModel';
 
-const ACCOUNT_API_BASE_URI = '/api/signin';
+const SIGN_IN_API_BASE_URI = '/api/signin';
 
 const getAccInfo = async (uid: string) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
       const res = await getAPIModel(
-        ACCOUNT_API_BASE_URI + '/retrieve-acc-info',
+        SIGN_IN_API_BASE_URI + '/retrieve-acc-info',
         {
           uid,
         }

@@ -45,6 +45,15 @@
   }
 }
 
+.switch-tweet {
+  color: $light-text-color;
+  margin-right: 2rem;
+
+  &.active {
+    color: $button-primary-color;
+  }
+}
+
 .selected-verified {
   color: $button-primary-color;
 }

@@ -1,12 +1,12 @@
 import { postAPIModel } from './ReqAPIModel';
 
-const ACCOUNT_API_BASE_URI = '/api/signup';
+const SIGN_UP_API_BASE_URI = '/api/signup';
 
 const postCreateAcc = async (uid: string, email: string, username: string) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
       const res = await postAPIModel(
-        ACCOUNT_API_BASE_URI + '/create-user-acc',
+        SIGN_UP_API_BASE_URI + '/create-user-acc',
         {
           uid,
           email,
@@ -25,7 +25,7 @@ const postCreateAcc = async (uid: string, email: string, username: string) => {
 const postCreateXpxAcc = async () => {
   return new Promise<any>(async (resolve, reject) => {
     try {
-      const res = await postAPIModel(ACCOUNT_API_BASE_URI + '/create-xpx-acc');
+      const res = await postAPIModel(SIGN_UP_API_BASE_URI + '/create-xpx-acc');
 
       resolve(res.data);
     } catch (err) {
@@ -39,7 +39,7 @@ const postUpdateUserXpxAddress = async (uid, xpxAddress) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
       const res = await postAPIModel(
-        ACCOUNT_API_BASE_URI + '/update-user-xpx-address',
+        SIGN_UP_API_BASE_URI + '/update-user-xpx-address',
         { uid, xpxAddress }
       );
 
@@ -51,27 +51,4 @@ const postUpdateUserXpxAddress = async (uid, xpxAddress) => {
   });
 };
 
-// below refactor
-
-const downloadPrivateKey = async () => {
-  const res = await postAPIModel('/api/download-private-key');
-
-  return res;
-};
-
-const storeXpxAddress = async (uid: string, address: string) => {
-  const res = await postAPIModel('/api/store-xpx-address', {
-    uid,
-    address,
-  });
-
-  return res;
-};
-
-export {
-  postCreateAcc,
-  postCreateXpxAcc,
-  postUpdateUserXpxAddress,
-  downloadPrivateKey,
-  storeXpxAddress,
-};
+export { postCreateAcc, postCreateXpxAcc, postUpdateUserXpxAddress };
