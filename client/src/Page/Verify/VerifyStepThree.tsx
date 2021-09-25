@@ -10,16 +10,16 @@ const VerifyStepThree: React.FC = () => {
   const { tweetModel } = useTweetModel();
   const handleRetrieveTweetInfo = async () => {
     const uid = localStorage.getItem(LocalStorageEnum.UID);
-    const { tweetId } = tweetModel;
+    const { _id } = tweetModel;
 
-    return await retrieveTweetInfo(uid, tweetId);
+    return await retrieveTweetInfo(uid, _id);
   };
 
   return (
     <StepThree
       nextUrl={RouteConstant.SECURE_VERIFTY_STEP_FOUR}
       role='jury'
-      onRetrieveTweetInfo={handleRetrieveTweetInfo}
+      onCancel={handleRetrieveTweetInfo}
     />
   );
 };

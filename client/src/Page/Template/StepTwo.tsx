@@ -12,20 +12,13 @@ import './StepTwo.scss';
 
 const StepTwo = ({ nextUrl, onMatchTweet }) => {
   const history = useHistory();
-  const { setTweetModel } = useTweetModel();
 
   useEffect(() => {
-    setTimeout(() => {
-      onMatchTweet().then((res) => {
-        const { tweetId } = res.data;
+    setTimeout(async () => {
+      await onMatchTweet();
 
-        const tweetModel = new TweetModel();
-        tweetModel.tweetId = tweetId;
-        setTweetModel(tweetModel);
-
-        history.push(nextUrl);
-      });
-    }, 1000);
+      history.push(nextUrl);
+    }, 2000);
   }, []);
 
   const onCancel = () => {

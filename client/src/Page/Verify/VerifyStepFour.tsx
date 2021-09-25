@@ -24,8 +24,8 @@ const VerifyStepFour: React.FC = () => {
   const history = useHistory();
   const {
     tweetModel: {
-      tweetId,
-      stage,
+      _id,
+      curAnalysedPhase,
       submitBy,
       submitTime,
       aiScore,
@@ -131,7 +131,7 @@ const VerifyStepFour: React.FC = () => {
   const onNext = async () => {
     const uid = localStorage.getItem(LocalStorageEnum.UID);
 
-    submitVerificationResult(uid, tweetId, vote === 'real');
+    submitVerificationResult(uid, _id, vote === 'real');
     history.push(RouteConstant.SECURE_VERIFTY_STEP_FIVE);
   };
 
@@ -142,6 +142,7 @@ const VerifyStepFour: React.FC = () => {
         <CountDownTimer
           hoursMinSecs={{ hours: 0, minutes: 30, seconds: 0 }}
           isHour={true}
+          onTimeOut={null}
         />
       </div>
 
@@ -178,7 +179,7 @@ const VerifyStepFour: React.FC = () => {
               submitBy={submitBy}
               submitTime={submitTime}
               authenticityScore={aiScore}
-              stage={stage}
+              stage={curAnalysedPhase}
             />
           </div>
           <div className='verify-step-four__container__right__button_group'>

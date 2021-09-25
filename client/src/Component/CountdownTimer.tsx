@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
-const CountDownTimer = ({ hoursMinSecs, isHour }) => {
+const CountDownTimer = ({ hoursMinSecs, isHour, onTimeOut }) => {
   const { hours = 0, minutes = 0, seconds = 60 } = hoursMinSecs;
   const [[hrs, mins, secs], setTime] = React.useState([
     hours,
@@ -12,9 +12,9 @@ const CountDownTimer = ({ hoursMinSecs, isHour }) => {
   ]);
   const history = useHistory();
 
-  const tick = () => {
+  const tick = async () => {
     if (hrs === 0 && mins === 0 && secs === 0) {
-      console.log('Exit');
+      await onTimeOut();
       history.push(RouteConstant.SECURE_HOME);
     } else if (mins === 0 && secs === 0) {
       setTime([hrs - 1, 59, 59]);

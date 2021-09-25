@@ -1,25 +1,19 @@
 import { useHistory } from 'react-router-dom';
 
 import CountdownTimer from '../../Component/CountdownTimer';
-import { useTweetModel } from '../../Context/InvestigationContext';
-import { TweetModel } from '../../Model/TweetModel';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './StepThree.scss';
 
-const StepThree = ({ nextUrl, role, onRetrieveTweetInfo }) => {
+const StepThree = ({ nextUrl, role, onCancel }) => {
   const history = useHistory();
-  const { tweetModel, setTweetModel } = useTweetModel();
 
   const onClickYes = () => {
-    onRetrieveTweetInfo().then((res) => {
-      setTweetModel({ ...tweetModel, ...res.data });
-
-      history.push(nextUrl);
-    });
+    history.push(nextUrl);
   };
 
-  const onClickNo = () => {
+  const onClickNo = async () => {
+    await onCancel();
     history.push(RouteConstant.SECURE_HOME);
   };
 
@@ -30,10 +24,10 @@ const StepThree = ({ nextUrl, role, onRetrieveTweetInfo }) => {
         <p>You have been matched with a news tweet!</p>
         <p>
           {`Would you like to start ${role}?`} <br /> You have &nbsp;
-          {/* Would you like to start investigating? <br /> You have &nbsp; */}
           <CountdownTimer
             hoursMinSecs={{ hours: 0, minutes: 0, seconds: 60 }}
             isHour={false}
+            onTimeOut={onCancel}
           />
           &nbsp; left to decide.
         </p>

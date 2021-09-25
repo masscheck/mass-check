@@ -8,25 +8,28 @@ import CountDownTimer from '../../Component/CountdownTimer';
 import { storage } from '../../Util/Firebase/FirebaseConfig';
 import { useNotification } from '../../Context/NotificationContext';
 
-import './InvestigateStepFour.scss';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import { useTweetModel } from '../../Context/InvestigationContext';
-import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
-import { submitReport } from '../../Util/API/InvestigationAPI';
+import {
+  submitReport,
+  systemCancelledInvestigationJob,
+} from '../../Util/API/InvestigationAPI';
+import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
+import { useAccountInfo } from '../../Context/AccountInfoContext';
 
-window.onbeforeunload = function () {
-  return window.alert('you can not refresh the page');
-};
+import './InvestigateStepFour.scss';
 
 const InvestigateStepFour: React.FC = () => {
   const history = useHistory();
   const [file, setFile] = useState<File>();
   const { errorToastPersistent } = useNotification();
-  const uid = localStorage.getItem(LocalStorageEnum.UID);
+  const {
+    accountInfo: { uid },
+  } = useAccountInfo();
   const {
     tweetModel: {
-      tweetId,
-      stage,
+      _id,
+      curAnalysedPhase,
       submitBy,
       submitTime,
       aiScore,
@@ -35,6 +38,7 @@ const InvestigateStepFour: React.FC = () => {
       content,
     },
   } = useTweetModel();
+  const { setIsLoading } = useLoadingSpinner();
 
   const genUploadDateTime = () => {
     const date = new Date();
@@ -53,20 +57,35 @@ const InvestigateStepFour: React.FC = () => {
     const sanitisedFileName = file.name.replace(/ /g, '_');
 
     // FileName: UID_Tweet ID_DateTime_File Name
-    const fileName = `${uid}_${tweetId}_${genUploadDateTime()}_${sanitisedFileName}`;
+    const fileName = `${uid}_${_id}_${genUploadDateTime()}_${sanitisedFileName}`;
     const fileRef = storageRef.child(fileName);
 
     try {
+      setIsLoading(true);
       const res = await fileRef.put(file);
+      await submitReport(uid, _id, fileName);
 
-      await submitReport(uid, tweetId, fileName);
-
-      console.log(res);
       history.push(RouteConstant.SECURE_INVESTIGATE_STEP_FIVE);
     } catch (err) {
       console.log(err);
       errorToastPersistent('Upload Failed! Please Try Again.');
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const onSystemCancelled = async () => {
+    return await new Promise(async (resolve, reject) => {
+      try {
+        setIsLoading(true);
+        const res = await systemCancelledInvestigationJob(uid, _id);
+        resolve(res);
+      } catch (err) {
+        reject(err);
+      } finally {
+        setIsLoading(false);
+      }
+    });
   };
 
   return (
@@ -76,6 +95,7 @@ const InvestigateStepFour: React.FC = () => {
         <CountDownTimer
           hoursMinSecs={{ hours: 1, minutes: 0, seconds: 0 }}
           isHour={true}
+          onTimeOut={onSystemCancelled}
         />
       </div>
 
@@ -87,7 +107,7 @@ const InvestigateStepFour: React.FC = () => {
           submitBy={submitBy}
           submitTime={submitTime}
           authenticityScore={aiScore}
-          stage={stage}
+          stage={curAnalysedPhase}
         />
       </div>
 

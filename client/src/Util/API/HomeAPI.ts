@@ -1,13 +1,16 @@
 import { getAPIModel } from './ReqAPIModel';
 
-const HOME_BASE_URL = '/api/home'
+const HOME_BASE_URL = '/api/home';
 
 const getVerifiedTweetList = async (nextVerifiedTweetStartDate) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
-      const res = await getAPIModel('/api/home/retrieve-verified-tweet-list', {
-        nextVerifiedTweetStartDate,
-      });
+      const res = await getAPIModel(
+        HOME_BASE_URL + '/retrieve-verified-tweet-list',
+        {
+          nextVerifiedTweetStartDate,
+        }
+      );
 
       resolve(res.data);
     } catch (err) {
@@ -20,7 +23,7 @@ const getUnverifiedTweetList = async (nextUnverifiedTweetStartDate) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
       const res = await getAPIModel(
-        '/api/home/retrieve-unverified-tweet-list',
+        HOME_BASE_URL + '/retrieve-unverified-tweet-list',
         {
           nextUnverifiedTweetStartDate,
         }
