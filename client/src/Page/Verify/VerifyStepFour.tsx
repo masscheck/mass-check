@@ -9,10 +9,17 @@ import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './VerifyStepFour.scss';
 import { useTweetModel } from '../../Context/InvestigationContext';
-import { submitVerificationResult } from '../../Util/API/VerificationAPI';
+import {
+  systemCancelledInvestigationJob,
+  submitVerificationResult,
+} from '../../Util/API/VerificationAPI';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+import { useAccountInfo } from '../../Context/AccountInfoContext';
+import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
+import { useNotification } from '../../Context/NotificationContext';
 
 const VerifyStepFour: React.FC = () => {
+  const { setIsLoading } = useLoadingSpinner();
   const [researchIndex, setResearchIndex] = useState(1);
   const [hasDownload, setHasDownload] = useState(false);
   const [hasFinishDowload, setHasFinishDowload] = useState(false);
@@ -35,17 +42,16 @@ const VerifyStepFour: React.FC = () => {
       investigatedReportIdList,
     },
   } = useTweetModel();
-  const res = useTweetModel();
+  const {
+    accountInfo: { uid, xpxAddress },
+  } = useAccountInfo();
+  const { errorToast } = useNotification();
 
   useEffect(() => {
-    console.log({ tweetRes: res });
-
     setResearchFileNameList(investigatedReportIdList);
   }, []);
 
   useEffect(() => {
-    console.log(researchFileNameList);
-
     if (researchFileNameList.length === 5 && !hasDownload) {
       researchFileNameList.forEach((x, index) => {
         downloadPDF(x, index + 1);
@@ -65,8 +71,6 @@ const VerifyStepFour: React.FC = () => {
 
       setHasFinishDowload(true);
     }
-
-    console.log(researchFileList);
   }, [researchFileList]);
 
   const downloadPDF = (filename: string, index: number) => {
@@ -91,9 +95,6 @@ const VerifyStepFour: React.FC = () => {
             const newObj = researchFileList;
             newObj[index] = base64String;
             setResearchFileList({ ...newObj });
-
-            console.log(Object.keys(researchFileList).length);
-            console.log(newObj);
           };
         };
 
@@ -101,7 +102,7 @@ const VerifyStepFour: React.FC = () => {
         xhr.send();
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         return null;
       });
   };
@@ -129,10 +130,37 @@ const VerifyStepFour: React.FC = () => {
   };
 
   const onNext = async () => {
-    const uid = localStorage.getItem(LocalStorageEnum.UID);
+    try {
+      setIsLoading(true);
+      const submitStatus = await submitVerificationResult(
+        uid,
+        xpxAddress,
+        _id,
+        vote === 'real'
+      );
+      history.push(RouteConstant.SECURE_VERIFTY_STEP_FIVE);
+    } catch (err) {
+      console.error(err);
+      errorToast(
+        'Please submit again. If error persist, please contact MassCheck developer'
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    submitVerificationResult(uid, _id, vote === 'real');
-    history.push(RouteConstant.SECURE_VERIFTY_STEP_FIVE);
+  const onSystemCancelled = async () => {
+    return await new Promise(async (resolve, reject) => {
+      try {
+        setIsLoading(true);
+        const res = await systemCancelledInvestigationJob(uid, _id);
+        resolve(res);
+      } catch (err) {
+        reject(err);
+      } finally {
+        setIsLoading(false);
+      }
+    });
   };
 
   return (
@@ -142,7 +170,7 @@ const VerifyStepFour: React.FC = () => {
         <CountDownTimer
           hoursMinSecs={{ hours: 0, minutes: 30, seconds: 0 }}
           isHour={true}
-          onTimeOut={null}
+          onTimeOut={onSystemCancelled}
         />
       </div>
 
@@ -167,7 +195,6 @@ const VerifyStepFour: React.FC = () => {
           </div>
           <div className='verify-step-four__container__left__pdf-viewer'>
             {hasFinishDowload ? <PDFViewer pdf={selectedFile} /> : 'Loading'}
-            {/* Loading */}
           </div>
         </div>
         <div className='verify-step-four__container__right'>

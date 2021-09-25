@@ -22,9 +22,9 @@ import './InvestigateStepFour.scss';
 const InvestigateStepFour: React.FC = () => {
   const history = useHistory();
   const [file, setFile] = useState<File>();
-  const { errorToastPersistent } = useNotification();
+  const { errorToast } = useNotification();
   const {
-    accountInfo: { uid },
+    accountInfo: { uid, xpxAddress },
   } = useAccountInfo();
   const {
     tweetModel: {
@@ -63,12 +63,12 @@ const InvestigateStepFour: React.FC = () => {
     try {
       setIsLoading(true);
       const res = await fileRef.put(file);
-      await submitReport(uid, _id, fileName);
+      await submitReport(uid, _id, fileName, xpxAddress);
 
       history.push(RouteConstant.SECURE_INVESTIGATE_STEP_FIVE);
     } catch (err) {
       console.log(err);
-      errorToastPersistent('Upload Failed! Please Try Again.');
+      errorToast('Upload Failed! Please Try Again.');
     } finally {
       setIsLoading(false);
     }

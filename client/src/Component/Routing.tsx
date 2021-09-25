@@ -50,7 +50,7 @@ const Routing: React.FC = () => {
         path={[RouteConstant.PUBLIC_FAQ, RouteConstant.SECURE_FAQ]}
         component={Faq}
       />
-      <Route exact path={RouteConstant.SECURE_PROFILE} component={Profile} />
+      <PrivateRoute exact path={RouteConstant.SECURE_PROFILE} component={Profile} />
       <PrivateRoute
         exact
         path={[RouteConstant.SECURE_HOME, '/']}

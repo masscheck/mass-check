@@ -51,13 +51,14 @@ const systemCancelledInvestigationJob = async (
   });
 };
 
-const submitReport = async (uid: string, tweetId: string, reportId: string) => {
+const submitReport = async (uid: string, tweetId: string, reportId: string, xpxAddress: string) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
       await postAPIModel(INVESTIGATION_BASE_URI + '/submit-report', {
         uid,
         tweetId,
         reportId,
+        xpxAddress
       });
 
       resolve('Submitted');

@@ -1,25 +1,42 @@
 import React from 'react';
+import { useAccountInfo } from '../../Context/AccountInfoContext';
 import { useTweetModel } from '../../Context/InvestigationContext';
-import { retrieveTweetInfo } from '../../Util/API/VerificationAPI';
-import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
+import { useNotification } from '../../Context/NotificationContext';
+import { userCancelledInvestigationJob } from '../../Util/API/VerificationAPI';
+
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import StepThree from '../Template/StepThree';
 
 const VerifyStepThree: React.FC = () => {
-  const { tweetModel } = useTweetModel();
-  const handleRetrieveTweetInfo = async () => {
-    const uid = localStorage.getItem(LocalStorageEnum.UID);
-    const { _id } = tweetModel;
+  const { successToast } = useNotification();
+  const {
+    tweetModel: { _id },
+  } = useTweetModel();
+  const {
+    accountInfo: { uid },
+  } = useAccountInfo();
+  const { setIsLoading } = useLoadingSpinner();
 
-    return await retrieveTweetInfo(uid, _id);
+  const handleCancel = async () => {
+    setIsLoading(true);
+    return new Promise(async (resolve, reject) => {
+      await userCancelledInvestigationJob(uid, _id);
+      successToast(
+        'You have successfully withdrawn from the task. You will not be penalized.'
+      );
+
+      setIsLoading(false);
+      resolve('Success');
+    });
   };
 
   return (
     <StepThree
       nextUrl={RouteConstant.SECURE_VERIFTY_STEP_FOUR}
       role='jury'
-      onCancel={handleRetrieveTweetInfo}
+      onCancel={handleCancel}
     />
   );
 };

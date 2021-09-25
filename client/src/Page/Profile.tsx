@@ -3,21 +3,53 @@ import './Profile.scss';
 import Activity from '../Component/Activity';
 
 import { useNotification } from '../Context/NotificationContext';
-import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
-import { getUserCredibilityScore } from '../Util/API/UserProfileAPI';
+import { useAccountInfo } from '../Context/AccountInfoContext';
+import { getAccountInfo, getXpxBalance } from '../Util/API/UserProfileAPI';
+import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
 
 const Profile: React.FC = () => {
   const { errorToastPersistent } = useNotification();
-  const uid = localStorage.getItem(LocalStorageEnum.UID);
-  const [CredibilityScore, setCredibilityScore] = useState(0);
+  const {
+    accountInfo: { uid, xpxAddress },
+  } = useAccountInfo();
+  const { setIsLoading } = useLoadingSpinner();
+
+  const [credibilityScore, setCredibilityScore] = useState(0);
+  const [xpxBalance, setXpxBalance] = useState(0);
 
   useEffect(() => {
-    async function loadUserCredibilityScore(uid) {
-      const userCredibilityScore = await getUserCredibilityScore(uid);
-      setCredibilityScore(userCredibilityScore.data['credibilityScore']);
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      setIsLoading(true);
+      // Get proximax
+      const userXpxBalance = await getXpxBalance(xpxAddress);
+      setXpxBalance(userXpxBalance);
+
+      // Account Info
+      const accountInfo = await getAccountInfo(uid);
+
+      const { userCredibilityScore } = accountInfo;
+      setCredibilityScore(userCredibilityScore);
+
+      // Set Activity
+
+      console.log({ accountInfo });
+    } catch (err) {
+      console.error(err);
+      errorToastPersistent(
+        'Unexpected error has occured. Please refresh the page or contact MassCheck Developer'
+      );
+    } finally {
+      setIsLoading(false);
     }
-    loadUserCredibilityScore(uid);
-  }, [uid]);
+  };
+
+  const goToXpxWallet = () => {
+    window.open('https://bctestnetwallet.xpxsirius.io/#/home', '_blank');
+  };
 
   return (
     <div className='profile'>
@@ -26,15 +58,20 @@ const Profile: React.FC = () => {
           <div className='profile__top__wallet__title'>My Wallet</div>
           <div className='profile__top__wallet__content'>
             <div className='profile__top__wallet__content__left'>
-              <div>XPX Balance </div>
-              <img src={require(`../Asset/proximax.png`).default} />
+              <div className='profile__top__wallet__content__left__title'>
+                <div>XPX Balance </div>
+                <img src={require(`../Asset/proximax.png`).default} />
+              </div>
               <br />
               <div className='profile__top__wallet__content__left__amount'>
-                100
+                {xpxBalance}
               </div>
             </div>
             <div className='profile__top__wallet__content__right'>
-              <button className='profile__top__wallet__content__right__button'>
+              <button
+                className='profile__top__wallet__content__right__button'
+                onClick={goToXpxWallet}
+              >
                 View in Wallet
               </button>
             </div>
@@ -46,7 +83,7 @@ const Profile: React.FC = () => {
             <div>Credibility Score</div>
             <br />
             <div className='profile__top__credibility__score__value'>
-              {CredibilityScore}/100
+              {credibilityScore}/100
             </div>
           </div>
         </div>
