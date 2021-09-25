@@ -6,6 +6,7 @@ import { useNotification } from '../Context/NotificationContext';
 import { useAccountInfo } from '../Context/AccountInfoContext';
 import { getAccountInfo, getXpxBalance } from '../Util/API/UserProfileAPI';
 import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
+import { ActivityModel } from '../Model/ActivityModel';
 
 const Profile: React.FC = () => {
   const { errorToastPersistent } = useNotification();
@@ -16,6 +17,7 @@ const Profile: React.FC = () => {
 
   const [credibilityScore, setCredibilityScore] = useState(0);
   const [xpxBalance, setXpxBalance] = useState(0);
+  const [activityList, setActivityList] = useState<ActivityModel[]>([]);
 
   useEffect(() => {
     loadData();
@@ -35,8 +37,32 @@ const Profile: React.FC = () => {
       setCredibilityScore(userCredibilityScore);
 
       // Set Activity
+      const tweetActivityList = [];
+      const { investigatedTweets, verifiedTweets } = accountInfo;
 
-      console.log({ accountInfo });
+      investigatedTweets.map((element) => {
+        const { xpxReward, credibilityScoreReward, _id } = element;
+
+        tweetActivityList.push({
+          xpxReward,
+          credibilityScoreReward,
+          ..._id,
+          role: 'Investigator',
+        });
+      });
+
+      verifiedTweets.map((element) => {
+        const { xpxReward, credibilityScoreReward, _id } = element;
+
+        tweetActivityList.push({
+          xpxReward,
+          credibilityScoreReward,
+          ..._id,
+          role: 'Jury',
+        });
+      });
+
+      setActivityList(tweetActivityList);
     } catch (err) {
       console.error(err);
       errorToastPersistent(
@@ -89,7 +115,7 @@ const Profile: React.FC = () => {
         </div>
       </div>
       <div className='profile__activity'>
-        <Activity />
+        <Activity activityList={activityList} />
       </div>
     </div>
   );

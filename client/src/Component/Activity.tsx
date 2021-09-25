@@ -1,78 +1,62 @@
-import React from 'react';
 import Tweet from '../Component/Tweet';
 import './Activity.scss';
 
+const Activity = ({ activityList }) => {
+  return (
+    <div className='activity-layout'>
+      <div className='activity-title'>
+        <div>Activity</div>
+      </div>
+      <div className='activity-header'>
+        <div>News</div>
+        <div className='details'>Role</div>
+        <div className='details'>Credibility</div>
+        <div className='details'>XPX</div>
+      </div>
 
-const Activity: React.FC = () => {
-    return (
-        <div className='activity-layout'>
-            <div className='activity-title'>    
-                <div>Activity</div>
-            </div>
-            <div className='activity-header'>
-                <div>News</div>
-                <div className='details'>Role</div>
-                <div className='details'>Credibility</div>
-                <div className='details'>XPX</div>
-            </div>
-            <div className='activity-content'>
-                <div className='activity-item-container'>
-                    <div className='activity-tweet'>
-                        <Tweet
-                            name='Jill Chenraya'
-                            tag='@jillcry'
-                            content='#Malaysia recorded a total of 2,875 new #Covid19 cases on Thursday. This is the eighth consecutive day with the number of cases above 2,000. Read more at https://bit.ly/3neKgcD'
-                            submitBy='Jackie Chan'
-                            submitTime={new Date()}
-                            authenticityScore={67}
-                            stage='Verifying'
-                            />
-                    </div>
-                    <div className='activity-details'>
-                        <div className='activity-role'>Investigator</div>
-                        <div className='activity-credibility'>+8</div>
-                        <div className='activity-xpx'>+0.2</div>
-                    </div>
+      <div className='activity-content'>
+        {activityList.map((tweet, index) => {
+          const {
+            _id,
+            curAnalysedPhase,
+            submitBy,
+            submitTime,
+            aiScore,
+            authorName,
+            authorTag,
+            content,
+            xpxReward,
+            credibilityScoreReward,
+            role,
+          } = tweet;
+
+          return (
+            <div className='activity-item-container' key={index}>
+              <div className='activity-tweet'>
+                <Tweet
+                  name={authorName}
+                  tag={authorTag}
+                  content={content}
+                  submitBy={submitBy}
+                  submitTime={submitTime}
+                  authenticityScore={aiScore}
+                  stage={curAnalysedPhase}
+                />
+              </div>
+              <div className='activity-details'>
+                <div className='activity-role'>{role}</div>
+                <div className='activity-credibility'>
+                  {credibilityScoreReward >= 0 ? '+' : '-'}
+                  {credibilityScoreReward}
                 </div>
-                <div className='activity-item-container'>
-                    <div className='activity-tweet'>
-                        <Tweet
-                            name='Jill Chenraya'
-                            tag='@jillcry'
-                            content='#Malaysia recorded a total of 2,875 new #Covid19 cases on Thursday. This is the eighth consecutive day with the number of cases above 2,000. Read more at https://bit.ly/3neKgcD'
-                            submitBy='Jackie Chan'
-                            submitTime={new Date()}
-                            authenticityScore={67}
-                            stage='Verifying'
-                            />
-                    </div>
-                    <div className='activity-details'>
-                        <div className='activity-role'>Investigator</div>
-                        <div className='activity-credibility'>+8</div>
-                        <div className='activity-xpx'>+0.2</div>
-                    </div>
-                </div>
-                <div className='activity-item-container'>
-                    <div className='activity-tweet'>
-                        <Tweet
-                            name='Jill Chenraya'
-                            tag='@jillcry'
-                            content='#Malaysia recorded a total of 2,875 new #Covid19 cases on Thursday. This is the eighth consecutive day with the number of cases above 2,000. Read more at https://bit.ly/3neKgcD'
-                            submitBy='Jackie Chan'
-                            submitTime={new Date()}
-                            authenticityScore={67}
-                            stage='Verifying'
-                            />
-                    </div>
-                    <div className='activity-details'>
-                        <div className='activity-role'>Investigator</div>
-                        <div className='activity-credibility'>+8</div>
-                        <div className='activity-xpx'>+0.2</div>
-                    </div>
-                </div>               
+                <div className='activity-xpx'>{xpxReward}</div>
+              </div>
             </div>
-        </div>
-    );
+          );
+        })}
+      </div>
+    </div>
+  );
 };
 
 export default Activity;

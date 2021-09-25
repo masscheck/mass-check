@@ -75,3 +75,21 @@
 .tweet-child {
   margin-bottom: 0.5rem;
 }
+
+.no-tweet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 40vh;
+
+  img {
+    height: 5rem;
+    width: 5rem;
+  }
+
+  p {
+    width: 30vw;
+    text-align: center;
+  }
+}

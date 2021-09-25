@@ -61,7 +61,15 @@ const Home: React.FC = () => {
   };
 
   const displayTweet = () => {
-    const emptyTweetView = <div>No Tweet</div>;
+    const emptyTweetView = (
+      <div className='no-tweet'>
+        <img src={require('../Asset/empty.png').default} />
+        <p>
+          No {isVerifiedTweetView ? 'verified' : 'unverified'} Tweets to be
+          found!
+        </p>
+      </div>
+    );
 
     if (isVerifiedTweetView && verifiedTweetList.length === 0) {
       return emptyTweetView;

@@ -16,7 +16,7 @@ const VerifyStepTwo: React.FC = () => {
       const tweetInfo = await getVerificationJob(uid);
       setTweetModel(tweetInfo);
 
-      resolve('Done');
+      resolve(tweetInfo);
     });
   };
 

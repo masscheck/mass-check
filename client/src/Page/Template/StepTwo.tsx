@@ -1,21 +1,26 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useTweetModel } from '../../Context/InvestigationContext';
-
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
-import { TweetModel } from '../../Model/TweetModel';
 
 import Gavel from '../../Asset/Gavel';
 import GavelBase from '../../Asset/GavelBase';
 import './StepTwo.scss';
+import { useNotification } from '../../Context/NotificationContext';
 
 const StepTwo = ({ nextUrl, onMatchTweet }) => {
   const history = useHistory();
+  const { warnToast } = useNotification();
 
   useEffect(() => {
     setTimeout(async () => {
-      await onMatchTweet();
+      const tweetInfo = await onMatchTweet();
+
+      if (!tweetInfo) {
+        history.push(RouteConstant.SECURE_HOME);
+        warnToast('Currently no task is avaiable');
+        return;
+      }
 
       history.push(nextUrl);
     }, 2000);

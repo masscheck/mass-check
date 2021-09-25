@@ -221,7 +221,7 @@ const SignIn: React.FC = () => {
         <div>
           <NavLink
             className='sign-in__form__forget-password'
-            to='/reset-password'
+            to={RouteConstant.PUBLIC_RESET_PASSWORD}
           >
             I forgot my password
           </NavLink>
