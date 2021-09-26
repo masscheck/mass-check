@@ -124,3 +124,5 @@ server/src/Util/ServiceAccountKey.json
 .gitignore
 
 */build
+
+generate-data
