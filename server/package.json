@@ -15,10 +15,14 @@
     "remove-dependecies:client": "del /S /Q ..\\client\\node_modules",
     "remove-dependecies:server": "del /S /Q node_modules",
     "remove-dependecies:all": "npm run remove-dependecies:client && npm run remove-dependecies:server",
+    "mac-remove-dependecies:client": "rm -rf ../client/node_modules",
+    "mac-remove-dependecies:server": "rm -rf node_modules",
+    "mac-remove-dependecies:all": "npm run mac-remove-dependecies:client && npm run mac-remove-dependecies:server",
     "install-dependencies:client": "cd ../client && npm install",
     "install-dependencies:server": "npm install",
     "install-dependencies:all": "npm run install-dependencies:client && npm run install-dependencies:server",
-    "prepare-project": "npm run remove-dependecies:all && npm run install-dependencies:all"
+    "prepare-project": "npm run remove-dependecies:all && npm run install-dependencies:all",
+    "mac-prepare-project": "npm run mac-remove-dependecies:all && npm run install-dependencies:all"
   },
   "keywords": [],
   "author": "",
