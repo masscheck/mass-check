@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../../Context/AuthContext';
+import { useNotification } from '../../Context/NotificationContext';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './NavBarSecure.scss';
@@ -10,6 +11,7 @@ import { AccountModel } from '../../Model/AccountModel';
 
 const NavBarHome: React.FC = () => {
   const { signOut } = useAuth();
+  const { warnToast } = useNotification();
   const {
     accountInfo: { displayName },
     setAccountInfo,
@@ -21,6 +23,14 @@ const NavBarHome: React.FC = () => {
     signOut();
   };
 
+  const onNext = (event) => {
+    if (pathname.includes('step-three') || pathname.includes('step-four')) {
+      event.preventDefault();
+      warnToast('Please complete your current task');
+      return;
+    }
+  };
+
   return (
     <div className='nav-bar-home-container'>
       <div className='flex-container'>
@@ -30,6 +40,7 @@ const NavBarHome: React.FC = () => {
             activeClassName='nav-link-active'
             exact
             to={RouteConstant.SECURE_PROFILE}
+            onClick={onNext}
           >
             {displayName}
           </NavLink>
@@ -40,6 +51,7 @@ const NavBarHome: React.FC = () => {
             activeClassName='nav-link-active'
             exact
             to={RouteConstant.SECURE_HOME}
+            onClick={onNext}
           >
             Home
           </NavLink>
@@ -56,6 +68,7 @@ const NavBarHome: React.FC = () => {
               ].includes(pathname)
             }
             to={RouteConstant.SECURE_INVESTIGATE_STEP_ONE}
+            onClick={onNext}
           >
             Investigate
           </NavLink>
@@ -72,6 +85,7 @@ const NavBarHome: React.FC = () => {
               ].includes(pathname)
             }
             to={RouteConstant.SECURE_VERIFTY_STEP_ONE}
+            onClick={onNext}
           >
             Verify
           </NavLink>
@@ -81,6 +95,7 @@ const NavBarHome: React.FC = () => {
             className='nav-link'
             activeClassName='nav-link-active'
             to={RouteConstant.SECURE_FAQ}
+            onClick={onNext}
           >
             FAQ
           </NavLink>
