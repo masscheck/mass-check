@@ -8,4 +8,7 @@ export class TweetModel {
   aiScore?: number;
   curAnalysedPhase: string;
   investigatedReportIdList: [];
+  investigatorsId: string[];
+  jurorsId: string[];
+  eachStageRequiredUserNum: number;
 }

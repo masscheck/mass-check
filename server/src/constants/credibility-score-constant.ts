@@ -3,6 +3,6 @@ export const CredibilityScoreSystemConstant = {
   COMPLETE_INVESTIGATION: 5,
   VERIFY_ANS_CORRECT: 3,
   VERIFY_ANS_WRONG: -3,
-  MAX_SCORE: 100,
-  MIN_SCORE: 1,
+  MAX_CREDIBILITY: 100,
+  MIN_CREDIBILITY: 1,
 };

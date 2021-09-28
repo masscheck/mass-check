@@ -31,4 +31,12 @@ export default interface AccountInterface {
       submittedOn?: SchemaDefinitionProperty<DateConstructor>;
     }
   ];
+  forfeitedTweets: [
+    {
+      _id: string;
+      xpxReward?: number;
+      credibilityScoreReward?: number;
+      submittedOn?: SchemaDefinitionProperty<DateConstructor>;
+    }
+  ];
 }

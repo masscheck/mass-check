@@ -83,6 +83,24 @@ const accountSchema = new Schema<AccountInterface>({
       },
     },
   ],
+  forfeitedTweets: [
+    {
+      _id: {
+        type: String,
+        ref: 'Tweets',
+      },
+      xpxReward: {
+        type: Number,
+      },
+      credibilityScoreReward: {
+        type: Number,
+      },
+      submittedOn: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 export default model<AccountInterface>('Accounts', accountSchema);

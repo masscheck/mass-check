@@ -30,6 +30,7 @@ const getRandomTweetAndItsInfo = async (uid: string, phase: string) => {
         curAnalysedPhase: phase,
         investigatorsId: { $nin: [uid] },
         jurorsId: { $nin: [uid] },
+        forfeitedId: { $nin: [uid] },
         totalUserHadParticipants: { $lt: curMaxParticipantsStage },
       })
       .sort({ submitTime: 'asc' })
@@ -79,4 +80,100 @@ const updateTweetWIPStartTime = async (uid: string, tweetId: string) => {
   logger.verbose('MongoDB - updateTweetWIPStartTime', tweetInfo);
 };
 
-export { getRandomTweetAndItsInfo, addUserToTweetWIP, updateTweetWIPStartTime };
+const addToForfeitedList = async (uid: string, tweetId: string) => {
+  await new Promise((resolve, reject) => {
+    TweetModel.findByIdAndUpdate(
+      tweetId,
+      {
+        $inc: { totalUserHadParticipants: -1 },
+        $pull: { wipId: { _id: uid } },
+        $push: { forfeitedId: uid },
+      },
+      (err, result) => {
+        if (err) reject(err);
+
+        resolve(result);
+      }
+    );
+  });
+
+  const tweetInfo = await getTweetInfoById(tweetId);
+  logger.verbose('MongoDB - addToForfeitedList', tweetInfo);
+};
+
+const updateTweetAnalyseStage = async (tweetId: string, curStage: string) => {
+  const tweetInfo = await getTweetInfoById(tweetId);
+
+  const { investigatorsId, jurorsId, eachStageRequiredUserNum } = tweetInfo;
+  const { INVESTIGATING, VERIFYING, COMPLETED } = AnalysePhaseConstant;
+
+  if (
+    curStage === INVESTIGATING &&
+    investigatorsId.length === eachStageRequiredUserNum
+  ) {
+    await new Promise((resolve, reject) => {
+      TweetModel.findByIdAndUpdate(
+        tweetId,
+        {
+          curAnalysedPhase: VERIFYING,
+        },
+        (err, result) => {
+          if (err) reject(err);
+
+          resolve(result);
+        }
+      );
+    });
+  } else if (
+    curStage === VERIFYING &&
+    jurorsId.length === eachStageRequiredUserNum
+  ) {
+    await new Promise((resolve, reject) => {
+      TweetModel.findByIdAndUpdate(
+        tweetId,
+        {
+          curAnalysedPhase: COMPLETED,
+        },
+        (err, result) => {
+          if (err) reject(err);
+
+          resolve(result);
+        }
+      );
+    });
+  }
+};
+
+const submitTweetReportForInvestigation = async (
+  uid: string,
+  tweetId: string,
+  reportId: string
+) => {
+  await new Promise((resolve, reject) => {
+    TweetModel.findByIdAndUpdate(
+      tweetId,
+      {
+        $push: { investigatorsId: uid, investigatedReportIdList: reportId },
+        $pull: { wipId: { _id: uid } },
+      },
+      (err, result) => {
+        if (err) reject(err);
+
+        resolve(result);
+      }
+    );
+  });
+
+  await updateTweetAnalyseStage(tweetId, AnalysePhaseConstant.INVESTIGATING);
+
+  const tweetInfo = await getTweetInfoById(tweetId);
+  logger.verbose('MongoDB - submitTweetReportForInvestigation', tweetInfo);
+};
+
+export {
+  getRandomTweetAndItsInfo,
+  addUserToTweetWIP,
+  updateTweetWIPStartTime,
+  addToForfeitedList,
+  submitTweetReportForInvestigation,
+};

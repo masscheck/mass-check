@@ -11,6 +11,7 @@ export default interface TweetInterface {
   investigatedReportIdList: string[];
   investigatorsId: string[];
   jurorsId: string[];
+  forfeitedId: string[];
   wipId: [
     { _id: string; startedOn?: SchemaDefinitionProperty<DateConstructor> }
   ];

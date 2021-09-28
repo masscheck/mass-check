@@ -88,6 +88,9 @@ const Home: React.FC = () => {
           authorName,
           authorTag,
           content,
+          investigatorsId,
+          jurorsId,
+          eachStageRequiredUserNum,
         } = tweet;
 
         return (
@@ -100,6 +103,12 @@ const Home: React.FC = () => {
               submitTime={submitTime}
               authenticityScore={aiScore}
               stage={curAnalysedPhase}
+              maxPhaseTotalPpl={eachStageRequiredUserNum}
+              currentPhaseTotalPplList={
+                curAnalysedPhase === 'Investigating'
+                  ? investigatorsId
+                  : jurorsId
+              }
             />
           </div>
         );

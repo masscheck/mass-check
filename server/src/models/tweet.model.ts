@@ -40,7 +40,10 @@ const tweetSchema = new Schema<Tweet>({
   ],
   investigatorsId: [{ type: String }],
   jurorsId: [{ type: String }],
-  wipId: [{ _id: { type: String }, startedOn: { type: Date } }],
+  wipId: [
+    { _id: { type: String }, startedOn: { type: Date, default: Date.now } },
+  ],
+  forfeitedId: [{ type: String }],
   eachStageRequiredUserNum: { type: Number, default: 5 },
   totalUserHadParticipants: { type: Number, default: 0 },
   submitBy: { type: String, required: true },

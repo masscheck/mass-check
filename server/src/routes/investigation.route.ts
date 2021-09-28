@@ -19,9 +19,14 @@ import {
   getRandomTweetAndItsInfo,
   addUserToTweetWIP,
   updateTweetWIPStartTime,
+  addToForfeitedList,
+  submitTweetReportForInvestigation,
 } from '../controllers/tweet.controller';
 import {
   addUserToAccountWIP,
+  removeUserFromAccountWIP,
+  addForfeitedTweetToAccount,
+  onInvestigationSubmission,
 } from '../controllers/account.controller';
 
 const router = express.Router();
@@ -70,7 +75,7 @@ router.post('/user-cancel-job', async (req, res, next) => {
   const { uid, tweetId } = req.body;
 
   try {
-    const removeUserToWIPStatus = await removeUserToWIP(uid, tweetId);
+    await removeUserFromAccountWIP(uid, tweetId);
 
     res.sendStatus(200);
   } catch (err) {
@@ -84,28 +89,9 @@ router.post('/system-time-out', async (req, res, next) => {
   const { uid, tweetId } = req.body;
 
   try {
-    const removeUserToWIPStatus = await removeUserToWIP(uid, tweetId);
+    await addToForfeitedList(uid, tweetId);
 
-    const updatedAccountState = await new Promise((resolve, reject) => {
-      AccountModel.findByIdAndUpdate(
-        uid,
-        {
-          $pull: { wipTweets: { tweetId: tweetId } },
-          $inc: {
-            userCredibilityScore: CredibilityScoreSystemConstant.FORFEIT_TASK,
-          },
-        },
-        (err, result) => {
-          if (err) reject(err);
-
-          resolve(result);
-        }
-      );
-    });
-    logger.verbose(
-      'MongoDB Update - Update Account State',
-      updatedAccountState
-    );
+    await addForfeitedTweetToAccount(uid, tweetId);
 
     res.sendStatus(200);
   } catch (err) {
@@ -119,87 +105,9 @@ router.post('/submit-report', async (req, res, next) => {
   const { uid, tweetId, reportId, xpxAddress } = req.body;
 
   try {
-    const updatedTweetStatus = await new Promise((resolve, reject) => {
-      TweetModel.findByIdAndUpdate(
-        tweetId,
-        {
-          $push: { investigatorsId: uid, investigatedReportIdList: reportId },
-          $pull: { wipId: uid },
-        },
-        (err, result) => {
-          if (err) reject(err);
+    await submitTweetReportForInvestigation(uid, tweetId, reportId);
 
-          resolve(result);
-        }
-      );
-    });
-    logger.verbose('MongoDB Update - Update Tweet Status', updatedTweetStatus);
-
-    const updatedAccountState = await new Promise((resolve, reject) => {
-      AccountModel.findByIdAndUpdate(
-        uid,
-        {
-          $pull: { wipTweets: { tweetId: tweetId } },
-          $push: {
-            investigatedTweets: {
-              _id: tweetId,
-              xpxReward: XpxRewardConstant.INVESTIGATOR,
-              credibilityScoreReward:
-                CredibilityScoreSystemConstant.COMPLETE_INVESTIGATION,
-            },
-          },
-          $inc: {
-            userCredibilityScore:
-              CredibilityScoreSystemConstant.COMPLETE_INVESTIGATION,
-          },
-        },
-        (err, result) => {
-          if (err) reject(err);
-
-          resolve(result);
-        }
-      );
-    });
-    logger.verbose(
-      'MongoDB Update - Update Account Status',
-      updatedAccountState
-    );
-
-    const latestTweetInfo = await new Promise<TweetInterface>(
-      (resolve, reject) => {
-        TweetModel.findById(tweetId, (err, result) => {
-          if (err) reject(err);
-
-          resolve(result);
-        });
-      }
-    );
-    logger.verbose('MongoDB Retrieve - Latest Tweet Info', latestTweetInfo);
-
-    if (
-      latestTweetInfo.investigatorsId.length ===
-      latestTweetInfo.eachStageRequiredUserNum
-    ) {
-      const updatedAnalysedPhase = await new Promise<TweetInterface>(
-        (resolve, reject) => {
-          TweetModel.findByIdAndUpdate(
-            tweetId,
-            {
-              curAnalysedPhase: AnalysePhaseConstant.VERIFYING,
-            },
-            (err, result) => {
-              if (err) reject(err);
-
-              resolve(result);
-            }
-          );
-        }
-      );
-      logger.verbose(
-        'MongoDB Update - Update Analysed Phase',
-        updatedAnalysedPhase
-      );
-    }
+    await onInvestigationSubmission(uid, tweetId);
 
     const transferXpxCointStatus = await transferXpxCoin(
       xpxAddress,

@@ -39,6 +39,8 @@ const VerifyStepFour: React.FC = () => {
       authorTag,
       content,
       investigatedReportIdList,
+      jurorsId,
+      eachStageRequiredUserNum,
     },
   } = useTweetModel();
   const {
@@ -206,6 +208,8 @@ const VerifyStepFour: React.FC = () => {
               submitTime={submitTime}
               authenticityScore={aiScore}
               stage={curAnalysedPhase}
+              currentPhaseTotalPplList={jurorsId}
+              maxPhaseTotalPpl={eachStageRequiredUserNum}
             />
           </div>
           <div className='verify-step-four__container__right__button_group'>

@@ -10,6 +10,8 @@ interface TweetInfo {
   submitTime: Date;
   authenticityScore: number;
   stage: string;
+  currentPhaseTotalPplList: string[];
+  maxPhaseTotalPpl: number;
 }
 
 const Tweet: React.FC<TweetInfo> = ({
@@ -20,6 +22,8 @@ const Tweet: React.FC<TweetInfo> = ({
   submitTime,
   authenticityScore,
   stage,
+  currentPhaseTotalPplList,
+  maxPhaseTotalPpl,
 }) => {
   const formatDate = (inputDate) => {
     const date = new Date(inputDate);
@@ -49,7 +53,11 @@ const Tweet: React.FC<TweetInfo> = ({
               ? `${authenticityScore}\% Real`
               : 'AI Predicting...'}
           </span>
-          <span className='tweet__detail__stage'>{` | ${stage}`}</span>
+          <span className='tweet__detail__stage'>
+            {` | ${stage}`}
+            {stage !== 'Completed' &&
+              ` (${currentPhaseTotalPplList.length}/${maxPhaseTotalPpl})`}
+          </span>
         </div>
       </div>
     </div>

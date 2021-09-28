@@ -28,6 +28,9 @@ const Activity = ({ activityList }) => {
             xpxReward,
             credibilityScoreReward,
             role,
+            eachStageRequiredUserNum,
+            investigatorsId,
+            jurorsId,
           } = tweet;
 
           return (
@@ -41,6 +44,12 @@ const Activity = ({ activityList }) => {
                   submitTime={submitTime}
                   authenticityScore={aiScore}
                   stage={curAnalysedPhase}
+                  maxPhaseTotalPpl={eachStageRequiredUserNum}
+                  currentPhaseTotalPplList={
+                    curAnalysedPhase === 'Investigating'
+                      ? investigatorsId
+                      : jurorsId
+                  }
                 />
               </div>
               <div className='activity-details'>
