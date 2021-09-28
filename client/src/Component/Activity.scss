@@ -58,6 +58,10 @@
 
         .activity-credibility,
         .activity-xpx {
+          &.deduct {
+            color: red;
+          }
+
           color: #78c71d;
         }
       }

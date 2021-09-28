@@ -38,7 +38,7 @@ const Profile: React.FC = () => {
 
       // Set Activity
       const tweetActivityList = [];
-      const { investigatedTweets, verifiedTweets } = accountInfo;
+      const { investigatedTweets, verifiedTweets, forfeitedTweets } = accountInfo;
 
       investigatedTweets.map((element) => {
         const { xpxReward, credibilityScoreReward, _id } = element;
@@ -59,6 +59,17 @@ const Profile: React.FC = () => {
           credibilityScoreReward,
           ..._id,
           role: 'Jury',
+        });
+      });
+
+      forfeitedTweets.map((element) => {
+        const { xpxReward, credibilityScoreReward, _id } = element;
+
+        tweetActivityList.push({
+          xpxReward,
+          credibilityScoreReward,
+          ..._id,
+          role: 'Forfeited',
         });
       });
 

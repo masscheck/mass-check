@@ -15,6 +15,7 @@ router.get('/retrieve-user-info', async (req, res, next) => {
       AccountModel.findById(uid)
         .populate('investigatedTweets._id')
         .populate('verifiedTweets._id')
+        .populate('forfeitedTweets._id')
         .exec((err, result) => {
           if (err) reject(err);
 
