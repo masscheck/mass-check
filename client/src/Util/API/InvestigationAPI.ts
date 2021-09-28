@@ -16,6 +16,21 @@ const getInvestigationJob = async (uid: string) => {
   });
 };
 
+const userAcceptInvestigationJob = async (uid: string, tweetId: string) => {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      await postAPIModel(INVESTIGATION_BASE_URI + '/user-accept-job', {
+        uid,
+        tweetId,
+      });
+
+      resolve('Cancel');
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
 const userCancelledInvestigationJob = async (uid: string, tweetId: string) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
@@ -71,6 +86,7 @@ const submitReport = async (uid: string, tweetId: string, reportId: string, xpxA
 export {
   getInvestigationJob,
   userCancelledInvestigationJob,
+  userAcceptInvestigationJob,
   systemCancelledInvestigationJob,
   submitReport,
 };

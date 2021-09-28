@@ -2,14 +2,27 @@ import express from 'express';
 
 import TweetModel from '../models/tweet.model';
 import AccountModel from '../models/account.model';
+
 import { getRandomTweetInfo } from '../common-crud/retrieve-db.common';
 import { addUserToWIP, removeUserToWIP } from '../common-crud/update-db.common';
-import { AnalysePhaseConstant } from '../constants/analyse-phase-constant';
+
 import { logger } from '../middlewares/logger';
+import { AnalysePhaseConstant } from '../constants/analyse-phase-constant';
 import { CredibilityScoreSystemConstant } from '../constants/credibility-score-constant';
 import { XpxRewardConstant } from '../constants/xpx-reward.constant';
+
 import TweetInterface from '../db-interface/tweet.interface';
+
 import { transferXpxCoin } from '../blockchain/perform-transaction.xpx';
+
+import {
+  getRandomTweetAndItsInfo,
+  addUserToTweetWIP,
+  updateTweetWIPStartTime,
+} from '../controllers/tweet.controller';
+import {
+  addUserToAccountWIP,
+} from '../controllers/account.controller';
 
 const router = express.Router();
 
@@ -17,18 +30,35 @@ router.get('/get-job', async (req, res, next) => {
   const { uid } = req.query;
 
   try {
-    const tweetInfo = await getRandomTweetInfo(
+    const tweetInfo = await getRandomTweetAndItsInfo(
       uid as string,
       AnalysePhaseConstant.INVESTIGATING
     );
+    const { _id } = tweetInfo;
 
-    const addUserToWIPStatus = await addUserToWIP(
-      uid as string,
-      tweetInfo._id,
-      AnalysePhaseConstant.INVESTIGATING
-    );
+    await addUserToTweetWIP(uid as string, _id);
 
     res.json({ tweetInfo });
+  } catch (err) {
+    logger.error(err);
+
+    res.sendStatus(500);
+  }
+});
+
+router.post('/user-accept-job', async (req, res, next) => {
+  const { uid, tweetId } = req.body;
+
+  try {
+    await updateTweetWIPStartTime(uid as string, tweetId as string);
+
+    await addUserToAccountWIP(
+      uid as string,
+      tweetId,
+      AnalysePhaseConstant.INVESTIGATING
+    );
+
+    res.sendStatus(200);
   } catch (err) {
     logger.error(err);
 

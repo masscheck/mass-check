@@ -1,7 +1,10 @@
 import React from 'react';
 
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
-import { userCancelledInvestigationJob } from '../../Util/API/InvestigationAPI';
+import {
+  userCancelledInvestigationJob,
+  userAcceptInvestigationJob,
+} from '../../Util/API/InvestigationAPI';
 import { useTweetModel } from '../../Context/InvestigationContext';
 import { useAccountInfo } from '../../Context/AccountInfoContext';
 
@@ -19,6 +22,16 @@ const InvestigateStepThree: React.FC = () => {
   } = useAccountInfo();
   const { setIsLoading } = useLoadingSpinner();
 
+  const handleAccept = async () => {
+    setIsLoading(true);
+    return new Promise(async (resolve, reject) => {
+      await userAcceptInvestigationJob(uid, _id);
+
+      setIsLoading(false);
+      resolve('Success');
+    });
+  };
+
   const handleCancel = async () => {
     setIsLoading(true);
     return new Promise(async (resolve, reject) => {
@@ -35,7 +48,8 @@ const InvestigateStepThree: React.FC = () => {
   return (
     <StepThree
       nextUrl={RouteConstant.SECURE_INVESTIGATE_STEP_FOUR}
-      role='investigating'
+    role='investigating'
+      onAccept={handleAccept}
       onCancel={handleCancel}
     />
   );

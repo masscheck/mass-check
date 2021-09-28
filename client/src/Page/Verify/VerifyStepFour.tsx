@@ -13,7 +13,6 @@ import {
   systemCancelledInvestigationJob,
   submitVerificationResult,
 } from '../../Util/API/VerificationAPI';
-import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 import { useAccountInfo } from '../../Context/AccountInfoContext';
 import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
 import { useNotification } from '../../Context/NotificationContext';

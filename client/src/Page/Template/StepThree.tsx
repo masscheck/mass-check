@@ -5,10 +5,11 @@ import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './StepThree.scss';
 
-const StepThree = ({ nextUrl, role, onCancel }) => {
+const StepThree = ({ nextUrl, role, onCancel, onAccept }) => {
   const history = useHistory();
 
-  const onClickYes = () => {
+  const onClickYes = async () => {
+    await onAccept();
     history.push(nextUrl);
   };
 

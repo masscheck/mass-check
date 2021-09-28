@@ -1,4 +1,4 @@
-import { SchemaDefinitionProperty} from 'mongoose'
+import { SchemaDefinitionProperty } from 'mongoose';
 
 export default interface TweetInterface {
   _id: string;
@@ -10,11 +10,14 @@ export default interface TweetInterface {
   crowdVotedResult: boolean;
   investigatedReportIdList: string[];
   investigatorsId: string[];
-  jurorsId:  string[];
-  wipId:  string[];
+  jurorsId: string[];
+  wipId: [
+    { _id: string; startedOn?: SchemaDefinitionProperty<DateConstructor> }
+  ];
   eachStageRequiredUserNum: number;
   totalUserHadParticipants: number;
   submitBy: string;
   submitTime: SchemaDefinitionProperty<DateConstructor>;
   trustIndex: number;
+  lastAnalysedTime: SchemaDefinitionProperty<DateConstructor>;
 }

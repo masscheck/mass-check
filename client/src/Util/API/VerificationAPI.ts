@@ -16,6 +16,22 @@ const getVerificationJob = async (uid: string) => {
   });
 };
 
+
+const userAcceptInvestigationJob = async (uid: string, tweetId: string) => {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      await postAPIModel(VERIFICATION_BASE_URI + '/user-accept-job', {
+        uid,
+        tweetId,
+      });
+
+      resolve('Cancel');
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
 const userCancelledInvestigationJob = async (uid: string, tweetId: string) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
@@ -74,6 +90,7 @@ const submitVerificationResult = async (
 export {
   getVerificationJob,
   userCancelledInvestigationJob,
+  userAcceptInvestigationJob,
   systemCancelledInvestigationJob,
   submitVerificationResult,
 };

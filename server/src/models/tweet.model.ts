@@ -40,12 +40,13 @@ const tweetSchema = new Schema<Tweet>({
   ],
   investigatorsId: [{ type: String }],
   jurorsId: [{ type: String }],
-  wipId: [{type: String}],
+  wipId: [{ _id: { type: String }, startedOn: { type: Date } }],
   eachStageRequiredUserNum: { type: Number, default: 5 },
   totalUserHadParticipants: { type: Number, default: 0 },
   submitBy: { type: String, required: true },
   submitTime: { type: Date, default: Date.now },
   trustIndex: { type: Number },
+  lastAnalysedTime: { type: Date },
 });
 
 export default model<Tweet>('Tweets', tweetSchema);
