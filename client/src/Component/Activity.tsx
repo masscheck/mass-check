@@ -33,6 +33,19 @@ const Activity = ({ activityList }) => {
             jurorsId,
           } = tweet;
 
+          let credibilityScoreRewardText = 'PENDING';
+          let xpxRewardText = 'PENDING';
+
+          if (credibilityScoreReward !== undefined) {
+            console.log('not undefined');
+            credibilityScoreRewardText = credibilityScoreReward >= 0 ? '+' : '';
+            credibilityScoreRewardText += credibilityScoreReward;
+          }
+
+          if (xpxReward !== undefined) {
+            xpxRewardText = xpxReward;
+          }
+
           return (
             <div className='activity-item-container' key={index}>
               <div className='activity-tweet'>
@@ -59,11 +72,10 @@ const Activity = ({ activityList }) => {
                     credibilityScoreReward <= 0 && 'deduct'
                   }`}
                 >
-                  {credibilityScoreReward >= 0 ? '+' : ''}
-                  {credibilityScoreReward}
+                  {credibilityScoreRewardText}
                 </div>
                 <div className={`activity-xpx ${xpxReward <= 0 && 'deduct'}`}>
-                  {xpxReward}
+                  {xpxRewardText}
                 </div>
               </div>
             </div>
