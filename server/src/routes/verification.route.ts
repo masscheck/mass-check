@@ -145,7 +145,11 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
           );
 
           if (xpxCoin > 0) {
-            await transferXpxCoin(xpxAddress, xpxCoin, 'Your vote aligned with the majority vote');
+            await transferXpxCoin(
+              xpxAddress,
+              xpxCoin,
+              'Your vote aligned with the majority vote'
+            );
           }
         });
 

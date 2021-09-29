@@ -19,7 +19,7 @@ const getTweetInfoById = async (id: string) => {
 };
 
 const getRandomTweetAndItsInfo = async (uid: string, phase: string) => {
-  const totalPerBatch = 1; // TODO Change back later
+  const totalPerBatch = 5;
 
   let curMaxParticipantsStage = 5;
   curMaxParticipantsStage += phase === AnalysePhaseConstant.VERIFYING ? 5 : 0;
@@ -29,7 +29,7 @@ const getRandomTweetAndItsInfo = async (uid: string, phase: string) => {
       .match({
         curAnalysedPhase: phase,
         investigatorsId: { $nin: [uid] },
-        // 'jurorsId._id': { $nin: [uid] },   // TODO UNDO back later
+        'jurorsId._id': { $nin: [uid] },
         forfeitedId: { $nin: [uid] },
         totalUserHadParticipants: { $lt: curMaxParticipantsStage },
       })
