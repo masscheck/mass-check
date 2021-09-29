@@ -195,16 +195,6 @@ const modifyUserCredibilityScoreAndInsertRecord = async (
   });
 
   await new Promise((resolve, reject) => {
-    AccountModel.findOne({ _id: uid, 'verifiedTweets._id': tweetId }).exec(
-      (err, result) => {
-        if (err) reject(err);
-        logger.debug('result', { result });
-        resolve(result);
-      }
-    );
-  });
-
-  await new Promise((resolve, reject) => {
     AccountModel.updateOne(
       { _id: uid, 'verifiedTweets._id': tweetId },
       {

@@ -126,8 +126,8 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
         finalVerdictIsTweetReal += isTweetReal ? 1 : -1;
       });
 
-      await new Promise((resolve, reject) => {
-        jurorsId.map(async (jury) => {
+      await new Promise(async (resolve, reject) => {
+        await jurorsId.map(async (jury) => {
           const { _id, xpxAddress, isTweetReal } = jury;
 
           const credibilityScore =
@@ -143,8 +143,13 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
             credibilityScore,
             xpxCoin
           );
-          resolve(null);
+
+          if (xpxCoin > 0) {
+            await transferXpxCoin(xpxAddress, xpxCoin, 'Your vote aligned with the majority vote');
+          }
         });
+
+        resolve(null);
       });
     }
 

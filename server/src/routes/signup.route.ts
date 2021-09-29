@@ -73,7 +73,8 @@ router.post('/update-user-xpx-address', async (req, res, next) => {
     // Sending Xpx Reward to user
     const transferXpxStatus = await transferXpxCoin(
       xpxAddress as string,
-      XpxRewardConstant.STARTER
+      XpxRewardConstant.STARTER,
+      'Welcome to MassCheck'
     );
     logger.info('ProximaX - Transfer XPX Coin', transferXpxStatus);
 

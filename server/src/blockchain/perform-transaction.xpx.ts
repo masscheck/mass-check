@@ -11,7 +11,7 @@ import {
 
 import { privateKey, testNetGenerationHash, testNetUrl } from './xpx-info.xpx';
 
-const transferXpxCoin = (recipientRawAddress: string, xpxAmount: number) => {
+const transferXpxCoin = (recipientRawAddress: string, xpxAmount: number, message: string) => {
   return new Promise<any>((resolve, reject) => {
     const recipientAddress = Address.createFromRawAddress(recipientRawAddress);
 
@@ -19,7 +19,7 @@ const transferXpxCoin = (recipientRawAddress: string, xpxAmount: number) => {
       Deadline.create(),
       recipientAddress,
       [NetworkCurrencyMosaic.createRelative(xpxAmount)],
-      PlainMessage.create('Welcome To Sirius Chain'),
+      PlainMessage.create(message),
       NetworkType.TEST_NET
     );
 

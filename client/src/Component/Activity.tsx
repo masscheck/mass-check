@@ -69,18 +69,12 @@ const Activity = ({ activityList }) => {
                 <div className='activity-role'>{role}</div>
                 <div
                   className={`activity-credibility ${
-                    credibilityScoreReward <= 0 &&
-                    'deduct' &&
-                    credibilityScoreRewardText !== 'PENDING'
+                    credibilityScoreReward <= 0 && 'deduct'
                   }`}
                 >
                   {credibilityScoreRewardText}
                 </div>
-                <div
-                  className={`activity-xpx ${
-                    xpxReward <= 0 && 'deduct' && xpxRewardText !== 'PENDING'
-                  }`}
-                >
+                <div className={`activity-xpx ${xpxReward <= 0 && 'deduct'}`}>
                   {xpxRewardText}
                 </div>
               </div>

@@ -108,7 +108,8 @@ router.post('/submit-report', async (req, res, next) => {
 
     const transferXpxCointStatus = await transferXpxCoin(
       xpxAddress,
-      XpxRewardConstant.INVESTIGATOR
+      XpxRewardConstant.INVESTIGATOR,
+      'Thanks for participating as investigator'
     );
     logger.info('ProximaX - Transfer XPX Coin', transferXpxCointStatus);
 
