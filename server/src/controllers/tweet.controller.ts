@@ -89,7 +89,7 @@ const removeUserFromTweetWIP = async (uid: string, tweetId: string) => {
 const updateTweetWIPStartTime = async (uid: string, tweetId: string) => {
   await new Promise((resolve, reject) => {
     TweetModel.findOneAndUpdate(
-      { _id: tweetId, wipId: { _id: uid } },
+      { _id: tweetId, 'wipId._id': uid },
       { $set: { 'wipId.$.startedOn': new Date() } }
     ).exec((err, result) => {
       if (err) reject(err);
@@ -227,5 +227,5 @@ export {
   addToForfeitedList,
   submitTweetReportForInvestigation,
   submitTweetVerification,
-  getTweetInfoById
+  getTweetInfoById,
 };
