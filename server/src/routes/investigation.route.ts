@@ -7,6 +7,7 @@ import { XpxRewardConstant } from '../constants/xpx-reward.constant';
 import {
   getRandomTweetAndItsInfo,
   addUserToTweetWIP,
+  removeUserFromTweetWIP,
   updateTweetWIPStartTime,
   addToForfeitedList,
   submitTweetReportForInvestigation,
@@ -71,7 +72,7 @@ router.post('/user-cancel-job', async (req, res, next) => {
   const { uid, tweetId } = req.body;
 
   try {
-    await removeUserFromAccountWIP(uid, tweetId);
+    await removeUserFromTweetWIP(uid, tweetId);
 
     res.sendStatus(200);
   } catch (err) {

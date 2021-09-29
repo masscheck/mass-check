@@ -37,7 +37,7 @@ const InvestigateStepFour: React.FC = () => {
       authorTag,
       content,
       eachStageRequiredUserNum,
-      investigatorsId
+      investigatorsId,
     },
   } = useTweetModel();
   const { setIsLoading } = useLoadingSpinner();
@@ -95,7 +95,7 @@ const InvestigateStepFour: React.FC = () => {
       <div className='investigate-step-four__timer'>
         Timer:&nbsp;
         <CountDownTimer
-          hoursMinSecs={{ hours: 0, minutes: 0, seconds: 10 }}
+          hoursMinSecs={{ hours: 1, minutes: 0, seconds: 0 }}
           isHour={true}
           onTimeOut={onSystemCancelled}
         />

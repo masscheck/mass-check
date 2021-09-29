@@ -10,7 +10,7 @@ export default interface TweetInterface {
   crowdVotedResult: boolean;
   investigatedReportIdList: string[];
   investigatorsId: string[];
-  jurorsId: string[];
+  jurorsId: [{ _id: string; isTweetReal: boolean; xpxAddress: string }];
   forfeitedId: string[];
   wipId: [
     { _id: string; startedOn?: SchemaDefinitionProperty<DateConstructor> }

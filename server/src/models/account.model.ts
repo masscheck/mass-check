@@ -70,12 +70,11 @@ const accountSchema = new Schema<AccountInterface>({
       },
       xpxReward: {
         type: Number,
+        default: null,
       },
       credibilityScoreReward: {
         type: Number,
-      },
-      votedCorrectly: {
-        type: Boolean,
+        default: null,
       },
       submittedOn: {
         type: Date,

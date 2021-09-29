@@ -32,7 +32,7 @@ const userAcceptVerificationJob = async (uid: string, tweetId: string) => {
   });
 };
 
-const userCancelledInvestigationJob = async (uid: string, tweetId: string) => {
+const userCancelledVerificationJob = async (uid: string, tweetId: string) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
       await postAPIModel(VERIFICATION_BASE_URI + '/user-cancel-job', {
@@ -89,7 +89,7 @@ const submitVerificationResult = async (
 
 export {
   getVerificationJob,
-  userCancelledInvestigationJob,
+  userCancelledVerificationJob,
   userAcceptVerificationJob,
   systemCancelledVerificationJob,
   submitVerificationResult,

@@ -27,7 +27,6 @@ export default interface AccountInterface {
       _id: string;
       xpxReward?: number;
       credibilityScoreReward?: number;
-      votedCorrectly?: boolean;
       submittedOn?: SchemaDefinitionProperty<DateConstructor>;
     }
   ];

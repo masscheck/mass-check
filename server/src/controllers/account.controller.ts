@@ -53,23 +53,34 @@ const removeUserFromAccountWIP = async (uid: string, tweetId: string) => {
   });
 
   const accountInfo = await getAccountInfoById(uid);
-  logger.verbose('MongoDB - addUserToAccountWIP', accountInfo);
+  logger.verbose('MongoDB - removeUserFromAccountWIP', accountInfo);
 };
 
 const addForfeitedTweetToAccount = async (uid: string, tweetId: string) => {
+  const { MIN_CREDIBILITY, FORFEIT_TASK } = CredibilityScoreSystemConstant;
+
+  const oldAccountInfo = await getAccountInfoById(uid);
+  const { userCredibilityScore } = oldAccountInfo;
+
+  // Ensure the credibility score capped at 100
+  let credibilityScoreToDecrease = FORFEIT_TASK;
+  if (userCredibilityScore + FORFEIT_TASK < MIN_CREDIBILITY) {
+    credibilityScoreToDecrease = userCredibilityScore - MIN_CREDIBILITY;
+  }
+
   await new Promise((resolve, reject) => {
     AccountModel.findByIdAndUpdate(
       uid,
       {
         $inc: {
-          userCredibilityScore: CredibilityScoreSystemConstant.FORFEIT_TASK,
+          userCredibilityScore: credibilityScoreToDecrease,
         },
         $pull: { wipTweets: { tweetId } },
         $push: {
           forfeitedTweets: {
             _id: tweetId,
             xpxReward: 0,
-            credibilityScoreReward: CredibilityScoreSystemConstant.FORFEIT_TASK,
+            credibilityScoreReward: credibilityScoreToDecrease,
           },
         },
       },
@@ -126,9 +137,91 @@ const onInvestigationSubmission = async (uid: string, tweetId: string) => {
   logger.verbose('MongoDB - onInvestigationSubmission', accountInfo);
 };
 
+const onVerificationSubmission = async (uid: string, tweetId: string) => {
+  await new Promise((resolve, reject) => {
+    AccountModel.findByIdAndUpdate(
+      uid,
+      {
+        $pull: { wipTweets: { tweetId } },
+        $push: {
+          verifiedTweets: {
+            _id: tweetId,
+          },
+        },
+      },
+      (err, result) => {
+        if (err) reject(err);
+
+        resolve(result);
+      }
+    );
+  });
+
+  const accountInfo = await getAccountInfoById(uid);
+  logger.verbose('MongoDB - onVerificationSubmission', accountInfo);
+};
+
+const modifyUserCredibilityScoreAndInsertRecord = async (
+  uid: string,
+  tweetId: string,
+  credibilityScore: number,
+  xpxCoin: number
+) => {
+  const { MAX_CREDIBILITY: MAX_SCORE } = CredibilityScoreSystemConstant;
+
+  const oldAccountInfo = await getAccountInfoById(uid);
+  const { userCredibilityScore } = oldAccountInfo;
+
+  // Ensure the credibility score capped at 100
+  let credibilityScoreToIncrease = credibilityScore;
+  if (userCredibilityScore + credibilityScoreToIncrease > MAX_SCORE) {
+    credibilityScoreToIncrease = MAX_SCORE - userCredibilityScore;
+  }
+
+  await new Promise((resolve, reject) => {
+    AccountModel.findByIdAndUpdate(
+      uid,
+      {
+        $inc: {
+          userCredibilityScore: credibilityScoreToIncrease,
+        },
+      },
+      (err, result) => {
+        if (err) reject(err);
+
+        resolve(result);
+      }
+    );
+  });
+
+  await new Promise((resolve, reject) => {
+    AccountModel.findOneAndUpdate(
+      { _id: uid, verifiedTweets: { _id: tweetId } },
+      {
+        $set: {
+          'verifiedTweets.$.xpxReward': xpxCoin,
+          'verifiedTweets.$.credibilityScoreReward': credibilityScore,
+        },
+      }
+    ).exec((err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
+  });
+
+  const accountInfo = await getAccountInfoById(uid);
+  logger.verbose(
+    'MongoDB - modifyUserCredibilityScoreAndInsertRecord',
+    accountInfo
+  );
+};
+
 export {
   addUserToAccountWIP,
   removeUserFromAccountWIP,
   addForfeitedTweetToAccount,
   onInvestigationSubmission,
+  onVerificationSubmission,
+  modifyUserCredibilityScoreAndInsertRecord,
 };

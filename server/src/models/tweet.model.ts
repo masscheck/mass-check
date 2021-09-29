@@ -39,7 +39,13 @@ const tweetSchema = new Schema<Tweet>({
     },
   ],
   investigatorsId: [{ type: String }],
-  jurorsId: [{ type: String }],
+  jurorsId: [
+    {
+      _id: { type: String, ref: 'Accounts' },
+      isTweetReal: { type: Boolean },
+      xpxAddress: { type: String },
+    },
+  ],
   wipId: [
     { _id: { type: String }, startedOn: { type: Date, default: Date.now } },
   ],

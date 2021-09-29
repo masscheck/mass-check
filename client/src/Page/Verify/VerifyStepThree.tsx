@@ -4,7 +4,7 @@ import { useTweetModel } from '../../Context/InvestigationContext';
 import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
 import { useNotification } from '../../Context/NotificationContext';
 import {
-  userCancelledInvestigationJob,
+  userCancelledVerificationJob,
   userAcceptVerificationJob,
 } from '../../Util/API/VerificationAPI';
 
@@ -35,7 +35,7 @@ const VerifyStepThree: React.FC = () => {
   const handleCancel = async () => {
     setIsLoading(true);
     return new Promise(async (resolve, reject) => {
-      await userCancelledInvestigationJob(uid, _id);
+      await userCancelledVerificationJob(uid, _id);
       successToast(
         'You have successfully withdrawn from the task. You will not be penalized.'
       );

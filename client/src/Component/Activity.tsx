@@ -36,13 +36,13 @@ const Activity = ({ activityList }) => {
           let credibilityScoreRewardText = 'PENDING';
           let xpxRewardText = 'PENDING';
 
-          if (credibilityScoreReward !== undefined) {
+          if (credibilityScoreReward !== null) {
             console.log('not undefined');
             credibilityScoreRewardText = credibilityScoreReward >= 0 ? '+' : '';
             credibilityScoreRewardText += credibilityScoreReward;
           }
 
-          if (xpxReward !== undefined) {
+          if (xpxReward !== null) {
             xpxRewardText = xpxReward;
           }
 
@@ -69,12 +69,18 @@ const Activity = ({ activityList }) => {
                 <div className='activity-role'>{role}</div>
                 <div
                   className={`activity-credibility ${
-                    credibilityScoreReward <= 0 && 'deduct'
+                    credibilityScoreReward <= 0 &&
+                    'deduct' &&
+                    credibilityScoreRewardText !== 'PENDING'
                   }`}
                 >
                   {credibilityScoreRewardText}
                 </div>
-                <div className={`activity-xpx ${xpxReward <= 0 && 'deduct'}`}>
+                <div
+                  className={`activity-xpx ${
+                    xpxReward <= 0 && 'deduct' && xpxRewardText !== 'PENDING'
+                  }`}
+                >
                   {xpxRewardText}
                 </div>
               </div>

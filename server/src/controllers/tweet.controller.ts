@@ -29,7 +29,7 @@ const getRandomTweetAndItsInfo = async (uid: string, phase: string) => {
       .match({
         curAnalysedPhase: phase,
         investigatorsId: { $nin: [uid] },
-        jurorsId: { $nin: [uid] },
+        // 'jurorsId._id': { $nin: [uid] },   // TODO UNDO back later
         forfeitedId: { $nin: [uid] },
         totalUserHadParticipants: { $lt: curMaxParticipantsStage },
       })
@@ -39,7 +39,7 @@ const getRandomTweetAndItsInfo = async (uid: string, phase: string) => {
       .exec((err, result) => {
         if (err) reject(err);
 
-        if (!result) resolve(null)
+        if (!result) resolve(null);
 
         resolve(result[0]);
       });
@@ -64,6 +64,26 @@ const addUserToTweetWIP = async (uid: string, tweetId: string) => {
 
   const tweetInfo = await getTweetInfoById(tweetId);
   logger.verbose('MongoDB - addUserToTweetWIP', tweetInfo);
+};
+
+const removeUserFromTweetWIP = async (uid: string, tweetId: string) => {
+  await new Promise((resolve, reject) => {
+    TweetModel.findByIdAndUpdate(
+      tweetId,
+      {
+        $inc: { totalUserHadParticipants: -1 },
+        $pull: { wipId: { _id: uid } },
+      },
+      (err, result) => {
+        if (err) reject(err);
+
+        resolve(result);
+      }
+    );
+  });
+
+  const tweetInfo = await getTweetInfoById(tweetId);
+  logger.verbose('MongoDB - removeUserFromTweetWIP', tweetInfo);
 };
 
 const updateTweetWIPStartTime = async (uid: string, tweetId: string) => {
@@ -172,10 +192,40 @@ const submitTweetReportForInvestigation = async (
   logger.verbose('MongoDB - submitTweetReportForInvestigation', tweetInfo);
 };
 
+const submitTweetVerification = async (
+  uid: string,
+  tweetId: string,
+  isTweetReal: string,
+  xpxAddress: string
+) => {
+  await new Promise((resolve, reject) => {
+    TweetModel.findByIdAndUpdate(
+      tweetId,
+      {
+        $push: { jurorsId: { _id: uid, isTweetReal, xpxAddress } },
+        $pull: { wipId: { _id: uid } },
+      },
+      (err, result) => {
+        if (err) reject(err);
+
+        resolve(result);
+      }
+    );
+  });
+
+  await updateTweetAnalyseStage(tweetId, AnalysePhaseConstant.VERIFYING);
+
+  const tweetInfo = await getTweetInfoById(tweetId);
+  logger.verbose('MongoDB - submitTweetVerification', tweetInfo);
+};
+
 export {
   getRandomTweetAndItsInfo,
   addUserToTweetWIP,
+  removeUserFromTweetWIP,
   updateTweetWIPStartTime,
   addToForfeitedList,
   submitTweetReportForInvestigation,
+  submitTweetVerification,
+  getTweetInfoById
 };
