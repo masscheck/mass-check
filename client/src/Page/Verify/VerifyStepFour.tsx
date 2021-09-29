@@ -10,7 +10,7 @@ import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import './VerifyStepFour.scss';
 import { useTweetModel } from '../../Context/InvestigationContext';
 import {
-  systemCancelledInvestigationJob,
+  systemCancelledVerificationJob,
   submitVerificationResult,
 } from '../../Util/API/VerificationAPI';
 import { useAccountInfo } from '../../Context/AccountInfoContext';
@@ -154,7 +154,7 @@ const VerifyStepFour: React.FC = () => {
     return await new Promise(async (resolve, reject) => {
       try {
         setIsLoading(true);
-        const res = await systemCancelledInvestigationJob(uid, _id);
+        const res = await systemCancelledVerificationJob(uid, _id);
         resolve(res);
       } catch (err) {
         reject(err);

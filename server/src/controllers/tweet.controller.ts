@@ -39,6 +39,8 @@ const getRandomTweetAndItsInfo = async (uid: string, phase: string) => {
       .exec((err, result) => {
         if (err) reject(err);
 
+        if (!result) resolve(null)
+
         resolve(result[0]);
       });
   });

@@ -1,19 +1,8 @@
 import express from 'express';
 
-import TweetModel from '../models/tweet.model';
-import AccountModel from '../models/account.model';
-
-import { getRandomTweetInfo } from '../common-crud/retrieve-db.common';
-import { addUserToWIP, removeUserToWIP } from '../common-crud/update-db.common';
-
 import { logger } from '../middlewares/logger';
 import { AnalysePhaseConstant } from '../constants/analyse-phase-constant';
-import { CredibilityScoreSystemConstant } from '../constants/credibility-score-constant';
 import { XpxRewardConstant } from '../constants/xpx-reward.constant';
-
-import TweetInterface from '../db-interface/tweet.interface';
-
-import { transferXpxCoin } from '../blockchain/perform-transaction.xpx';
 
 import {
   getRandomTweetAndItsInfo,
@@ -28,6 +17,7 @@ import {
   addForfeitedTweetToAccount,
   onInvestigationSubmission,
 } from '../controllers/account.controller';
+import { transferXpxCoin } from '../blockchain/perform-transaction.xpx';
 
 const router = express.Router();
 
@@ -39,6 +29,12 @@ router.get('/get-job', async (req, res, next) => {
       uid as string,
       AnalysePhaseConstant.INVESTIGATING
     );
+
+    if (!tweetInfo) {
+      logger.info('No investigation task currently available')
+      res.json({});
+    }
+
     const { _id } = tweetInfo;
 
     await addUserToTweetWIP(uid as string, _id);

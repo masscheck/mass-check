@@ -1,9 +1,7 @@
 import express from 'express';
 
 import TweetModel from '../models/tweet.model';
-import AccountModel from '../models/account.model';
-import { getRandomTweetInfo } from '../common-crud/retrieve-db.common';
-import { addUserToWIP, removeUserToWIP } from '../common-crud/update-db.common';
+
 import { AnalysePhaseConstant } from '../constants/analyse-phase-constant';
 import { logger } from '../middlewares/logger';
 import { CredibilityScoreSystemConstant } from '../constants/credibility-score-constant';
@@ -11,29 +9,60 @@ import { XpxRewardConstant } from '../constants/xpx-reward.constant';
 import TweetInterface from '../db-interface/tweet.interface';
 import { transferXpxCoin } from '../blockchain/perform-transaction.xpx';
 
+import {
+  getRandomTweetAndItsInfo,
+  addUserToTweetWIP,
+  updateTweetWIPStartTime,
+  addToForfeitedList,
+} from '../controllers/tweet.controller';
+import {
+  addUserToAccountWIP,
+  removeUserFromAccountWIP,
+  addForfeitedTweetToAccount,
+  onInvestigationSubmission,
+} from '../controllers/account.controller';
+
 const router = express.Router();
 
 router.get('/get-job', async (req, res, next) => {
   const { uid } = req.query;
 
   try {
-    const tweetInfo = await getRandomTweetInfo(
+    const tweetInfo = await getRandomTweetAndItsInfo(
       uid as string,
       AnalysePhaseConstant.VERIFYING
     );
 
     if (!tweetInfo) {
+      logger.info('No verification task currently available');
       res.json({});
-      return;
     }
 
-    const addUserToWIPStatus = await addUserToWIP(
+    const { _id } = tweetInfo;
+
+    await addUserToTweetWIP(uid as string, _id);
+
+    res.json({ tweetInfo });
+  } catch (err) {
+    logger.error(err);
+
+    res.sendStatus(500);
+  }
+});
+
+router.post('/user-accept-job', async (req, res, next) => {
+  const { uid, tweetId } = req.body;
+
+  try {
+    await updateTweetWIPStartTime(uid as string, tweetId as string);
+
+    await addUserToAccountWIP(
       uid as string,
-      tweetInfo._id,
+      tweetId,
       AnalysePhaseConstant.VERIFYING
     );
 
-    res.json({ tweetInfo });
+    res.sendStatus(200);
   } catch (err) {
     logger.error(err);
 
@@ -45,7 +74,7 @@ router.post('/user-cancel-job', async (req, res, next) => {
   const { uid, tweetId } = req.body;
 
   try {
-    const removeUserToWIPStatus = await removeUserToWIP(uid, tweetId);
+    await removeUserFromAccountWIP(uid, tweetId);
 
     res.sendStatus(200);
   } catch (err) {
@@ -59,25 +88,9 @@ router.post('/system-time-out', async (req, res, next) => {
   const { uid, tweetId } = req.body;
 
   try {
-    const removeUserToWIPStatus = await removeUserToWIP(uid, tweetId);
+    await addToForfeitedList(uid, tweetId);
 
-    const updatedAccountState = await new Promise((resolve, reject) => {
-      AccountModel.findByIdAndUpdate(
-        uid,
-        {
-          $pull: { wipTweets: { tweetId: tweetId } },
-          $inc: {
-            userCredibilityScore: CredibilityScoreSystemConstant.FORFEIT_TASK,
-          },
-        },
-        (err, result) => {
-          if (err) reject(err);
-
-          resolve(result);
-        }
-      );
-    });
-    logger.verbose('MongoDB - Update Account State', updatedAccountState);
+    await addForfeitedTweetToAccount(uid, tweetId);
 
     res.sendStatus(200);
   } catch (err) {
@@ -105,7 +118,7 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
         }
       );
     });
-    logger.verbose('MongoDB - Update Tweet Status', updatedTweetStatus)
+    logger.verbose('MongoDB - Update Tweet Status', updatedTweetStatus);
 
     // do later
     // const updatedAccountState = await new Promise((resolve, reject) => {
@@ -168,7 +181,7 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
           );
         }
       );
-      logger.verbose('MongoDB - Update Analyse Phase', updatedAnalysedPhase)
+      logger.verbose('MongoDB - Update Analyse Phase', updatedAnalysedPhase);
     }
 
     // const transferXpxCointStatus = await transferXpxCoin(

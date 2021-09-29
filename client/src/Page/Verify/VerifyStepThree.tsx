@@ -3,7 +3,10 @@ import { useAccountInfo } from '../../Context/AccountInfoContext';
 import { useTweetModel } from '../../Context/InvestigationContext';
 import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
 import { useNotification } from '../../Context/NotificationContext';
-import { userCancelledInvestigationJob } from '../../Util/API/VerificationAPI';
+import {
+  userCancelledInvestigationJob,
+  userAcceptVerificationJob,
+} from '../../Util/API/VerificationAPI';
 
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
@@ -18,6 +21,16 @@ const VerifyStepThree: React.FC = () => {
     accountInfo: { uid },
   } = useAccountInfo();
   const { setIsLoading } = useLoadingSpinner();
+
+  const handleAccept = async () => {
+    setIsLoading(true);
+    return new Promise(async (resolve, reject) => {
+      await userAcceptVerificationJob(uid, _id);
+
+      setIsLoading(false);
+      resolve('Success');
+    });
+  };
 
   const handleCancel = async () => {
     setIsLoading(true);
@@ -36,7 +49,7 @@ const VerifyStepThree: React.FC = () => {
     <StepThree
       nextUrl={RouteConstant.SECURE_VERIFTY_STEP_FOUR}
       role='jury'
-      onAccept={null}
+      onAccept={handleAccept}
       onCancel={handleCancel}
     />
   );

@@ -17,7 +17,7 @@ const getVerificationJob = async (uid: string) => {
 };
 
 
-const userAcceptInvestigationJob = async (uid: string, tweetId: string) => {
+const userAcceptVerificationJob = async (uid: string, tweetId: string) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
       await postAPIModel(VERIFICATION_BASE_URI + '/user-accept-job', {
@@ -47,7 +47,7 @@ const userCancelledInvestigationJob = async (uid: string, tweetId: string) => {
   });
 };
 
-const systemCancelledInvestigationJob = async (
+const systemCancelledVerificationJob = async (
   uid: string,
   tweetId: string
 ) => {
@@ -90,7 +90,7 @@ const submitVerificationResult = async (
 export {
   getVerificationJob,
   userCancelledInvestigationJob,
-  userAcceptInvestigationJob,
-  systemCancelledInvestigationJob,
+  userAcceptVerificationJob,
+  systemCancelledVerificationJob,
   submitVerificationResult,
 };
