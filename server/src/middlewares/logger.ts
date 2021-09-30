@@ -81,6 +81,27 @@ const logConfiguration = {
   transports: transportsConfig,
 };
 
-const logger = winston.createLogger(logConfiguration);
+const customLog = winston.createLogger(logConfiguration);
+
+const logger = {
+  error: (...args) => {
+    customLog.error(util.format(...args));
+  },
+  warn: (...args) => {
+    customLog.warn(util.format(...args));
+  },
+  info: (...args) => {
+    customLog.info(util.format(...args));
+  },
+  http: (...args) => {
+    customLog.http(util.format(...args));
+  },
+  verbose: (...args) => {
+    customLog.verbose(util.format(...args));
+  },
+  debug: (...args) => {
+    customLog.debug(util.format(...args));
+  },
+};
 
 export { logger };
