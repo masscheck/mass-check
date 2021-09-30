@@ -19,7 +19,7 @@ const getTweetInfoById = async (id: string) => {
 };
 
 const getRandomTweetAndItsInfo = async (uid: string, phase: string) => {
-  const totalPerBatch = 5;
+  const totalPerBatch = 3;
 
   let curMaxParticipantsStage = 5;
   curMaxParticipantsStage += phase === AnalysePhaseConstant.VERIFYING ? 5 : 0;
@@ -247,5 +247,5 @@ export {
   submitTweetReportForInvestigation,
   submitTweetVerification,
   getTweetInfoById,
-  updateTweetTrustIndex
+  updateTweetTrustIndex,
 };

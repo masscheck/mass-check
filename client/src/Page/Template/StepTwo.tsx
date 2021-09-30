@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
@@ -11,6 +11,7 @@ import { useNotification } from '../../Context/NotificationContext';
 const StepTwo = ({ nextUrl, onMatchTweet }) => {
   const history = useHistory();
   const { warnToast } = useNotification();
+  const [hasCancelTask, setHasCancelTask] = useState(false);
 
   useEffect(() => {
     setTimeout(async () => {
@@ -18,15 +19,16 @@ const StepTwo = ({ nextUrl, onMatchTweet }) => {
 
       if (!tweetInfo) {
         history.push(RouteConstant.SECURE_HOME);
-        warnToast('Currently no task is avaiable');
+        warnToast('Currently no task is available');
         return;
       }
 
-      history.push(nextUrl);
+      if (!hasCancelTask) history.push(nextUrl);
     }, 2000);
   }, []);
 
   const onCancel = () => {
+    setHasCancelTask(true);
     history.push(RouteConstant.SECURE_HOME);
   };
 

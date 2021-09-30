@@ -53,8 +53,8 @@ const VerifyStepFour: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (researchFileNameList.length === 5 && !hasDownload) {
-      researchFileNameList.forEach((x, index) => {
+    if (researchFileNameList.length >= 5 && !hasDownload) {
+      researchFileNameList.slice(0, 5).forEach((x, index) => {
         downloadPDF(x, index + 1);
       });
 

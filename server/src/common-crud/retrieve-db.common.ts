@@ -21,7 +21,7 @@ const getTweetList = async (isVerified: boolean, queryStartDate: number) => {
         .where('submitTime')
         .lt(queryStartDate)
         .sort({ submitTime: 'desc' })
-        .limit(tweetPerPage)
+        // .limit(tweetPerPage)
         .exec((err, result) => {
           if (err) reject(err);
 
