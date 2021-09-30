@@ -218,6 +218,7 @@ const modifyUserCredibilityScoreAndInsertRecord = async (
 };
 
 export {
+  getAccountInfoById,
   addUserToAccountWIP,
   removeUserFromAccountWIP,
   addForfeitedTweetToAccount,

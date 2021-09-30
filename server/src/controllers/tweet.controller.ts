@@ -219,6 +219,25 @@ const submitTweetVerification = async (
   logger.verbose('MongoDB - submitTweetVerification', tweetInfo);
 };
 
+const updateTweetTrustIndex = async (tweetId: string, trustIndex: number) => {
+  await new Promise((resolve, reject) => {
+    TweetModel.findByIdAndUpdate(
+      tweetId,
+      {
+        trustIndex,
+      },
+      (err, result) => {
+        if (err) reject(err);
+
+        resolve(result);
+      }
+    );
+  });
+
+  const tweetInfo = await getTweetInfoById(tweetId);
+  logger.verbose('MongoDB - submitTweetVerification', tweetInfo);
+};
+
 export {
   getRandomTweetAndItsInfo,
   addUserToTweetWIP,
@@ -228,4 +247,5 @@ export {
   submitTweetReportForInvestigation,
   submitTweetVerification,
   getTweetInfoById,
+  updateTweetTrustIndex
 };

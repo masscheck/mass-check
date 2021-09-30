@@ -1,14 +1,14 @@
 import express from 'express';
 
-import TweetModel from '../models/tweet.model';
-
 import { AnalysePhaseConstant } from '../constants/analyse-phase-constant';
 import { logger } from '../middlewares/logger';
 import { CredibilityScoreSystemConstant } from '../constants/credibility-score-constant';
 import { XpxRewardConstant } from '../constants/xpx-reward.constant';
-import TweetInterface from '../db-interface/tweet.interface';
 import { transferXpxCoin } from '../blockchain/perform-transaction.xpx';
-
+import {
+  TrustIndexInterface,
+  calculateTrustIndex,
+} from '../utils/calculate-trust-index';
 import {
   getRandomTweetAndItsInfo,
   addUserToTweetWIP,
@@ -17,12 +17,14 @@ import {
   addToForfeitedList,
   submitTweetVerification,
   getTweetInfoById,
+  updateTweetTrustIndex,
 } from '../controllers/tweet.controller';
 import {
   addUserToAccountWIP,
   addForfeitedTweetToAccount,
   onVerificationSubmission,
   modifyUserCredibilityScoreAndInsertRecord,
+  getAccountInfoById,
 } from '../controllers/account.controller';
 
 const router = express.Router();
@@ -127,6 +129,8 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
       });
 
       await new Promise(async (resolve, reject) => {
+        let trustIndexArr: TrustIndexInterface[] = [];
+
         await jurorsId.map(async (jury) => {
           const { _id, xpxAddress, isTweetReal } = jury;
 
@@ -136,6 +140,12 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
               : VERIFY_ANS_WRONG;
           const xpxCoin =
             finalVerdictIsTweetReal > 0 === isTweetReal ? JUROR : 0;
+
+          const curJuryInfo = await getAccountInfoById(_id);
+          trustIndexArr.push({
+            credibilityScore: curJuryInfo.userCredibilityScore,
+            voteIsReal: isTweetReal,
+          });
 
           await modifyUserCredibilityScoreAndInsertRecord(
             _id,
@@ -152,6 +162,9 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
             );
           }
         });
+
+        const curTweetTrustIndex = calculateTrustIndex(trustIndexArr);
+        await updateTweetTrustIndex(tweetId, curTweetTrustIndex);
 
         resolve(null);
       });
