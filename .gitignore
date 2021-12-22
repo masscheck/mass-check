@@ -124,3 +124,4 @@ server/src/Util/ServiceAccountKey.json
 .gitignore
 
 */build
+**/venv
