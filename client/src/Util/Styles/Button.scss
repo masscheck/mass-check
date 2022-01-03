@@ -1,7 +1,6 @@
 @import './Color.scss';
 
 @mixin btn-base {
-  border-radius: 2rem;
   margin-bottom: 1rem;
   border-style: hidden;
   height: 2.8rem;
@@ -11,14 +10,33 @@
   }
 }
 
-@mixin regular-blue-button {
+@mixin regular-purple-button {
   @include btn-base;
 
   font-weight: bold;
   font-size: 1.25rem;
   color: white;
-  background-color: $button-primary-color;
+  background-image: $button-primary-color;
   width: 12.5rem;
+  border-radius: 0.5rem;
+
+  &:disabled {
+    background: $button-disabled-color;
+    cursor: not-allowed;
+  }
+}
+
+@mixin decline-button {
+  @include btn-base;
+
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #ff1515;
+  background-color: $button-secondary-color;
+  border-style: solid;
+  border-color: $button-decline-border-color;
+  width: 12.5rem;
+  border-radius: 0.5rem;
 
   &:disabled {
     background: $button-disabled-color;

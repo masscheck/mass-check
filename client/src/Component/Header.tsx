@@ -32,34 +32,34 @@ const Header: React.FC = () => {
         setTitle('FAQ');
         break;
       case RouteConstant.SECURE_INVESTIGATE_STEP_ONE:
-        setTitle('Investigate (1/5)');
+        setTitle('Investigate');
         break;
       case RouteConstant.SECURE_INVESTIGATE_STEP_TWO:
-        setTitle('Investigate (2/5)');
+        setTitle('Investigate');
         break;
       case RouteConstant.SECURE_INVESTIGATE_STEP_THREE:
-        setTitle('Investigate (3/5)');
+        setTitle('Investigate');
         break;
       case RouteConstant.SECURE_INVESTIGATE_STEP_FOUR:
-        setTitle('Investigate (4/5)');
+        setTitle('Investigate');
         break;
       case RouteConstant.SECURE_INVESTIGATE_STEP_FIVE:
-        setTitle('Investigate (5/5)');
+        setTitle('Investigate');
         break;
       case RouteConstant.SECURE_VERIFTY_STEP_ONE:
-        setTitle('Verify (1/5)');
+        setTitle('Verify');
         break;
       case RouteConstant.SECURE_VERIFTY_STEP_TWO:
-        setTitle('Verify (2/5)');
+        setTitle('Verify');
         break;
       case RouteConstant.SECURE_VERIFTY_STEP_THREE:
-        setTitle('Verify (3/5)');
+        setTitle('Verify');
         break;
       case RouteConstant.SECURE_VERIFTY_STEP_FOUR:
-        setTitle('Verify (4/5)');
+        setTitle('Verify');
         break;
       case RouteConstant.SECURE_VERIFTY_STEP_FIVE:
-        setTitle('Verify (5/5)');
+        setTitle('Verify');
         break;
       case RouteConstant.SECURE_PROFILE:
         setTitle('Profile');
@@ -76,7 +76,6 @@ const Header: React.FC = () => {
   return (
     <div className='header-container'>
       <h1>{title}</h1>
-      <hr />
     </div>
   );
 };

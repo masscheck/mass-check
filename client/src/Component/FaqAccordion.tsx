@@ -6,7 +6,6 @@ import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-
 const Accordion = withStyles({
   root: {
     backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -40,7 +39,7 @@ const AccordionSummary = withStyles({
     '&$expanded': {
       minHeight: 40,
       borderBottom: '0px solid rgba(0, 0, 0, .125)',
-      color: 'rgba(85, 172, 238, 1)',
+      color: 'rgba(105, 50, 227, 1)',
     },
   },
   content: {
@@ -60,14 +59,23 @@ const AccordionDetails = withStyles((theme) => ({
 export default function CustomizedAccordions(Props) {
   const [expanded, setExpanded] = React.useState<string | false>('');
 
-  const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, newExpanded: boolean) => {
-    setExpanded(newExpanded ? panel : false);
-  };
+  const handleChange =
+    (panel: string) => (event: React.ChangeEvent<{}>, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : false);
+    };
 
   return (
     <div className='faq-container'>
-      <Accordion square expanded={expanded === 'panel'} onChange={handleChange('panel')}>
-        <AccordionSummary aria-controls="paneld-content" id="paneld-header" expandIcon={<ExpandMoreIcon />}>
+      <Accordion
+        square
+        expanded={expanded === 'panel'}
+        onChange={handleChange('panel')}
+      >
+        <AccordionSummary
+          aria-controls='paneld-content'
+          id='paneld-header'
+          expandIcon={<ExpandMoreIcon />}
+        >
           <Typography>{Props.question}</Typography>
         </AccordionSummary>
         <AccordionDetails>

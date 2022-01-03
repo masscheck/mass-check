@@ -48,7 +48,7 @@ const InvestigateStepThree: React.FC = () => {
   return (
     <StepThree
       nextUrl={RouteConstant.SECURE_INVESTIGATE_STEP_FOUR}
-    role='investigating'
+      process='investigating'
       onAccept={handleAccept}
       onCancel={handleCancel}
     />

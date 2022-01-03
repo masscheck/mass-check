@@ -4,16 +4,21 @@
 @import '../Util/Styles/FormLabel.scss';
 
 .home {
-  width: 70%;
+  width: 70vw;
 
   &__header {
     display: flex;
     flex-direction: row;
+    max-width: max-content;
     margin-bottom: 0.5em;
+    background-color: #f3f2f5;
+    border-radius: 0.5rem;
 
     button {
       @include subtitle;
-      padding: 0;
+      padding: 0.5rem;
+      width: 10vw;
+      margin: auto;
       border-width: 0;
       background-color: transparent;
 
@@ -34,13 +39,13 @@
 
   &__view-area {
     height: 70vh;
-    width: 60vw;
     overflow: auto;
 
     &__tweet {
       margin-top: 0.5em;
       margin-bottom: 0.5em;
       margin-right: 10%;
+      width: 68vw;
     }
   }
 }
@@ -48,9 +53,12 @@
 .switch-tweet {
   color: $light-text-color;
   margin-right: 2rem;
+  width: 100%;
 
   &.active {
-    color: $button-primary-color;
+    color: white;
+    background-image: $button-primary-color;
+    border-radius: 0.5rem;
   }
 }
 

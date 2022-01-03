@@ -48,7 +48,7 @@ const VerifyStepThree: React.FC = () => {
   return (
     <StepThree
       nextUrl={RouteConstant.SECURE_VERIFTY_STEP_FOUR}
-      role='jury'
+      process='verifying'
       onAccept={handleAccept}
       onCancel={handleCancel}
     />

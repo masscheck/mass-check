@@ -4,7 +4,7 @@
 
 .step-one {
   // &__image {
-  //   
+  //
   // }
 
   &__description {
@@ -14,7 +14,7 @@
   }
 
   &__button {
-    @include regular-blue-button;
+    @include regular-purple-button;
   }
 
   text-align: center;

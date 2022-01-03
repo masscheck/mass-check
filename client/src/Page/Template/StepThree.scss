@@ -20,13 +20,11 @@
   }
 
   &__yes-button {
-    @include regular-blue-button;
+    @include regular-purple-button;
   }
 
   &__no-button {
-    @include regular-blue-button;
-    background-color: $button-secondary-color;
-    margin-left: 0.8rem;
+    @include decline-button;
   }
 
   text-align: center;

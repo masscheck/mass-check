@@ -1,22 +1,24 @@
 // Navigation Bar
-$nav-primary-color: #55acee;
-$nav-secondary-color: #000000;
+$nav-primary-color: #000000;
+$nav-secondary-color: #857c99;
 $nav-disabled-color: #66757f;
+$nav-selected-color: linear-gradient(to right, #ffde44, #ffeea0);
 
 // Button
-$button-primary-color: #55acee;
-$button-secondary-color: #66757f;
-$button-disabled-color: rgba(85, 172, 238, 0.5);
+$button-primary-color: linear-gradient(to right, #6932e3, #a880ff);
+$button-secondary-color: white;
+$button-decline-border-color: #cdcdcd;
+$button-disabled-color: #55acee80;
 $button-deselected-real-color: rgba(85, 238, 129, 0.5);
 $button-selected-real-color: rgba(85, 238, 129, 1);
 $button-deselected-fake-color: rgba(238, 85, 85, 0.5);
 $button-selected-fake-color: rgba(238, 85, 85, 1);
 
 // Text
-$text-color: #66757f;
-$light-text-color: #9baab4;
+$text-color: #6932e3;
+$light-text-color: #857c99;
 $body-text-color: #000000;
-$impact-text-color: #55acee;
+$impact-text-color: #6932e3;
 
 // Background
 $nav-background-color: #ffffff;
