@@ -51,6 +51,7 @@ const InvestigateStepThree: React.FC = () => {
       process='investigating'
       onAccept={handleAccept}
       onCancel={handleCancel}
+      iconName='Investigate'
     />
   );
 };

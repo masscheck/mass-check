@@ -51,6 +51,7 @@ const VerifyStepThree: React.FC = () => {
       process='verifying'
       onAccept={handleAccept}
       onCancel={handleCancel}
+      iconName='Jury'
     />
   );
 };

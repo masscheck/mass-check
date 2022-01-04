@@ -2,13 +2,20 @@
 
 @mixin body-text {
   color: $light-text-color;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+@mixin bold-body-text {
+  color: $body-text-color;
+  font-size: 1.7rem;
+  font-weight: bold;
   font-family: 'Source Sans Pro', sans-serif;
 }
 
 @mixin smaller-body-text {
   color: $body-text-color;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-family: 'Open Sans', sans-serif;
 }
 
