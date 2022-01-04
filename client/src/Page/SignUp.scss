@@ -5,6 +5,14 @@
 @import '../Util/Styles/FormLabel.scss';
 
 .sign-up {
+  img {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100vw;
+    z-index: -10;
+  }
+
   &__form {
     &--error {
       @include error-message;

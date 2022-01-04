@@ -123,6 +123,7 @@ const SignUp: React.FC = () => {
 
   return (
     <div className='sign-up'>
+      <img src={require(`../Asset/Background.png`).default} />
       <form
         className='sign-up__form'
         onSubmit={(e) => onEmailSignUp(e)}

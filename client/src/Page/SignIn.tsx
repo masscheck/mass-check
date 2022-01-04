@@ -186,6 +186,7 @@ const SignIn: React.FC = () => {
 
   return (
     <div className='sign-in'>
+      <img src={require(`../Asset/Background.png`).default} />
       <form
         className='sign-in__form'
         onSubmit={(e) => onEmailSignIn(e)}

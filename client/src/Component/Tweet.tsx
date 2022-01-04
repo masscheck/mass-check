@@ -44,20 +44,22 @@ const Tweet: React.FC<TweetInfo> = ({
       </div>
       <div className='tweet__content'>{content}</div>
       <div className='tweet__detail'>
+        <div className='tweet__detail__left'>
+          <div className='tweet__detail__left__box'>
+            <span className='tweet__detail__left__box__authenticity-score'>
+              {authenticityScore
+                ? `${authenticityScore}\% Real`
+                : 'AI Predicting...'}
+            </span>
+            <span className='tweet__detail__left__box__stage'>
+              {` | ${stage}`}
+              {stage !== 'Completed' &&
+                ` (${currentPhaseTotalPplList.length}/${maxPhaseTotalPpl})`}
+            </span>
+          </div>
+        </div>
         <div className='tweet__detail__submit-by'>
           Submitted by {submitBy} on {formatDate(submitTime)}
-        </div>
-        <div>
-          <span className='tweet__detail__authenticity-score'>
-            {authenticityScore
-              ? `${authenticityScore}\% Real`
-              : 'AI Predicting...'}
-          </span>
-          <span className='tweet__detail__stage'>
-            {` | ${stage}`}
-            {stage !== 'Completed' &&
-              ` (${currentPhaseTotalPplList.length}/${maxPhaseTotalPpl})`}
-          </span>
         </div>
       </div>
     </div>

@@ -66,7 +66,7 @@ const Header: React.FC = () => {
         break;
       case RouteConstant.SECURE_HOME:
       case '/':
-        setTitle('Home');
+        setTitle("What's New?");
         break;
       default:
         setTitle('Error 404');

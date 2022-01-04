@@ -12,12 +12,18 @@
     max-width: max-content;
     margin-bottom: 0.5em;
     background-color: #f3f2f5;
-    border-radius: 0.5rem;
+    border-radius: 0.8rem;
 
     button {
-      @include subtitle;
-      padding: 0.5rem;
-      width: 10vw;
+      letter-spacing: 0.07rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: 'Open Sans', sans-serif;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-top: 0.6rem;
+      padding-bottom: 0.6rem;
+      width: fit-content;
       margin: auto;
       border-width: 0;
       background-color: transparent;
@@ -42,7 +48,7 @@
     overflow: auto;
 
     &__tweet {
-      margin-top: 0.5em;
+      margin-top: 3em;
       margin-bottom: 0.5em;
       margin-right: 10%;
       width: 68vw;
@@ -58,7 +64,7 @@
   &.active {
     color: white;
     background-image: $button-primary-color;
-    border-radius: 0.5rem;
+    border-radius: 0.8rem;
   }
 }
 

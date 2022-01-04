@@ -5,10 +5,18 @@
   padding-right: 3vw;
   height: 100%;
   max-height: 100vh;
+  // box-shadow: 0px 4px 30px -15px #bfaee3;
+
+  img {
+    padding-left: 0.5rem;
+    padding-right: 1rem;
+    height: 1.1rem;
+  }
 
   h1 {
     margin: 0;
     padding-top: 3rem;
+    text-align: center;
   }
 
   .flex-container {
@@ -18,9 +26,9 @@
     justify-content: space-between;
 
     .nav-link {
-      font-weight: 700;
+      font-weight: 600;
       margin-bottom: 1rem;
-      padding: 1rem;
+      padding: 0.8rem;
       display: block;
       font-size: 1.4rem;
       text-decoration: none;
@@ -35,7 +43,8 @@
       text-decoration: none;
       color: $nav-primary-color;
       background-image: $nav-selected-color;
-      border-radius: 0.5rem;
+      border-radius: 0.8rem;
+      box-shadow: 0px 4px 37px -12px #ffd200;
     }
 
     .nav-link:hover {

@@ -27,3 +27,11 @@ $content-background-color: #f5f9fb;
 // Brand Color
 $google-color: #c71c1c;
 $twitter-color: #55acee;
+
+//Authenticity Color
+$high-auth-color: #006113;
+$med-auth-color: #866800;
+$low-auth-color: #500000;
+$high-auth-background-color: linear-gradient(to right, #21e14b, #c6ff4e);
+$med-auth-background-color: linear-gradient(to right, #ffc700, #ffef61);
+$low-auth-background-color: linear-gradient(to right, #ff4040, #ff9a62);
