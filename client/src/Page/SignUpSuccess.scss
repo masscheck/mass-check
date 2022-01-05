@@ -38,10 +38,12 @@
   &__download-btn {
     @include btn-for-sign-up;
     background-image: $button-primary-color;
+    border-radius: 0.4rem;
   }
 
   &__get-started-btn {
     @include btn-for-sign-up;
     background-image: $button-primary-color;
+    border-radius: 0.4rem;
   }
 }

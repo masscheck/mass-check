@@ -53,7 +53,7 @@ const NavBarHome: React.FC = () => {
             to={RouteConstant.SECURE_HOME}
             onClick={onNext}
           >
-            <img src={require(`../../Asset/Home-icon.png`).default} />
+            <img src={require(`../../Asset/Home.png`).default} />
             Home
           </NavLink>
           <NavLink
@@ -71,7 +71,7 @@ const NavBarHome: React.FC = () => {
             to={RouteConstant.SECURE_INVESTIGATE_STEP_ONE}
             onClick={onNext}
           >
-            <img src={require(`../../Asset/Investigate-icon.png`).default} />
+            <img src={require(`../../Asset/Magnifying-Glass.png`).default} />
             Investigate
           </NavLink>
           <NavLink
@@ -89,7 +89,7 @@ const NavBarHome: React.FC = () => {
             to={RouteConstant.SECURE_VERIFTY_STEP_ONE}
             onClick={onNext}
           >
-            <img src={require(`../../Asset/Verify-icon.png`).default} />
+            <img src={require(`../../Asset/Check.png`).default} />
             Verify
           </NavLink>
         </div>
@@ -100,7 +100,7 @@ const NavBarHome: React.FC = () => {
             to={RouteConstant.SECURE_FAQ}
             onClick={onNext}
           >
-            <img src={require(`../../Asset/FAQ-icon.png`).default} />
+            <img src={require(`../../Asset/FAQ.png`).default} />
             FAQ
           </NavLink>
           <NavLink

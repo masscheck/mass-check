@@ -53,7 +53,9 @@ const UploadBox = ({ onSetFile }) => {
       <section className='upload-box__container'>
         <div {...getRootProps({ className: 'upload-box__dropzone' })}>
           <input {...getInputProps()} />
-          <p>Drag 'n' drop some files here, or click to select files</p>
+          <p>
+            <strong>Choose a file</strong> or drag it here
+          </p>
           <em>(The maximum number of files you can drop here is 1)</em>
         </div>
         <aside>

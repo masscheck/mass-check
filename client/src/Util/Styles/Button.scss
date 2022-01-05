@@ -31,7 +31,7 @@
 
   font-weight: bold;
   font-size: 1.25rem;
-  color: #ff1515;
+  color: $red-text-color;
   background-color: $button-secondary-color;
   border-style: solid;
   border-color: $button-decline-border-color;
@@ -51,7 +51,7 @@
   font-size: 1.25rem;
   color: white;
   width: 11rem;
-  margin-inline-end: 1rem;
+  border-radius: 0.4rem;
 }
 
 @mixin sign-in-and-sign-up-button {
@@ -72,7 +72,7 @@
 @mixin pdf-tab-button {
   font-weight: bold;
   font-size: 0.94rem;
-  color: black;
+  color: $light-text-color;
   border-radius: 0.5rem 0.5rem 0 0;
   border-style: none;
   height: 2rem;

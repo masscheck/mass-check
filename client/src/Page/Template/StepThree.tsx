@@ -28,7 +28,7 @@ const StepThree = ({ nextUrl, process, onCancel, onAccept, iconName }) => {
         <div className='step-three__left__timer'>
           <img src={require(`../../Asset/stopwatch.png`).default} />
           <CountdownTimer
-            hoursMinSecs={{ hours: 1, minutes: 0, seconds: 60 }}
+            hoursMinSecs={{ hours: 0, minutes: 0, seconds: 60 }}
             isHour={false}
             onTimeOut={onCancel}
           />

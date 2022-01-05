@@ -38,7 +38,8 @@ const Profile: React.FC = () => {
 
       // Set Activity
       const tweetActivityList = [];
-      const { investigatedTweets, verifiedTweets, forfeitedTweets } = accountInfo;
+      const { investigatedTweets, verifiedTweets, forfeitedTweets } =
+        accountInfo;
 
       investigatedTweets.map((element) => {
         const { xpxReward, credibilityScoreReward, _id } = element;
@@ -89,39 +90,75 @@ const Profile: React.FC = () => {
   };
 
   return (
+    // <div className='profile'>
+    //   <div className='profile__top'>
+    //     <div className='profile__top__wallet'>
+    //       <div className='profile__top__wallet__title'>My Wallet</div>
+    //       <div className='profile__top__wallet__content'>
+    //         <div className='profile__top__wallet__content__left'>
+    //           <div className='profile__top__wallet__content__left__title'>
+    //             <div>XPX Balance </div>
+    //             <img src={require(`../Asset/proximax.png`).default} />
+    //           </div>
+    //           <br />
+    //           <div className='profile__top__wallet__content__left__amount'>
+    //             {xpxBalance}
+    //           </div>
+    //         </div>
+    //         <div className='profile__top__wallet__content__right'>
+    //           <button
+    //             className='profile__top__wallet__content__right__button'
+    //             onClick={goToXpxWallet}
+    //           >
+    //             View in Wallet
+    //           </button>
+    //         </div>
+    //       </div>
+    //     </div>
+    //     <div className='profile__top__credibility'>
+    //       <div className='profile__top__credibility__title'>My Credibility</div>
+    //       <div className='profile__top__credibility__score'>
+    //         <div>Credibility Score</div>
+    //         <br />
+    //         <div className='profile__top__credibility__score__value'>
+    //           {credibilityScore}/100
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    //   <div className='profile__activity'>
+    //     <Activity activityList={activityList} />
+    //   </div>
+    // </div>
     <div className='profile'>
-      <div className='profile__top'>
-        <div className='profile__top__wallet'>
-          <div className='profile__top__wallet__title'>My Wallet</div>
-          <div className='profile__top__wallet__content'>
-            <div className='profile__top__wallet__content__left'>
-              <div className='profile__top__wallet__content__left__title'>
-                <div>XPX Balance </div>
-                <img src={require(`../Asset/proximax.png`).default} />
-              </div>
-              <br />
-              <div className='profile__top__wallet__content__left__amount'>
-                {xpxBalance}
-              </div>
-            </div>
-            <div className='profile__top__wallet__content__right'>
-              <button
-                className='profile__top__wallet__content__right__button'
-                onClick={goToXpxWallet}
-              >
-                View in Wallet
-              </button>
-            </div>
+      <div className='profile__left'>
+        <div className='profile__left__wallet'>
+          <div className='profile__left__wallet__title'>
+            <img src={require(`../Asset/Wallet.png`).default} />
+            <p>My Wallet</p>
+          </div>
+          <div className='profile__left__wallet__balance'>
+            <img src={require(`../Asset/proximax.png`).default} />
+            <p>{xpxBalance} XPX</p>
+          </div>
+          <div className='profile__left__wallet__button'>
+            <button
+              className='profile__top__wallet__content__right__button'
+              onClick={goToXpxWallet}
+            >
+              View in Wallet
+            </button>
           </div>
         </div>
-        <div className='profile__top__credibility'>
-          <div className='profile__top__credibility__title'>My Credibility</div>
-          <div className='profile__top__credibility__score'>
-            <div>Credibility Score</div>
-            <br />
-            <div className='profile__top__credibility__score__value'>
-              {credibilityScore}/100
-            </div>
+        <div className='profile__left__credibility'>
+          <div className='profile__left__credibility__title'>
+            <img src={require(`../Asset/Credibility.png`).default} />
+            <p>My Credibility</p>
+          </div>
+          <div className='profile__left__credibility__score'>
+            <p className='profile__left__credibility__score__value'>
+              <strong>{credibilityScore}</strong>/100
+            </p>
           </div>
         </div>
       </div>

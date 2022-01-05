@@ -7,6 +7,7 @@ const InvestigateStepFive: React.FC = () => {
     <StepFive
       tqStatement='Your report has been submitted successfully!'
       feedbackStatement='Only when all the reports are collected would the news tweet progress to the verification stage.'
+      iconName='Investigate'
     />
   );
 };

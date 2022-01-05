@@ -5,12 +5,19 @@
 .activity-layout {
   display: grid;
   grid-template-areas: 'header' 'content';
-  margin-top: 2em;
-  height: 55vh;
+  height: 65vh;
 
   .activity-title {
+    display: flex;
     @include form-label;
-    margin-bottom: 0.5em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 1rem;
+    }
   }
 
   .activity-header {
@@ -64,6 +71,10 @@
 
           color: #78c71d;
         }
+      }
+      .activity-role {
+        @include activity-detail-role-text;
+        color: white;
       }
     }
   }

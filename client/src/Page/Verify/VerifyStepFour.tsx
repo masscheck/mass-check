@@ -166,70 +166,72 @@ const VerifyStepFour: React.FC = () => {
 
   return (
     <div className='verify-step-four'>
-      <div className='verify-step-four__timer'>
-        Timer:&nbsp;
-        <CountDownTimer
-          hoursMinSecs={{ hours: 0, minutes: 30, seconds: 0 }}
-          isHour={true}
-          onTimeOut={onSystemCancelled}
-        />
-      </div>
-
-      <div className='verify-step-four__container'>
-        <div className='verify-step-four__container__left'>
-          <div className='verify-step-four__container__left__button_group'>
-            {[1, 2, 3, 4, 5].map((x) => {
-              return (
-                <button
-                  key={x}
-                  className={
-                    researchIndex === x
-                      ? `verify-step-four__container__left__active`
-                      : ''
-                  }
-                  onClick={(e) => onResearchSelected(e, x)}
-                >
-                  Research {x}
-                </button>
-              );
-            })}
-          </div>
-          <div className='verify-step-four__container__left__pdf-viewer'>
-            {hasFinishDowload ? <PDFViewer pdf={selectedFile} /> : 'Loading'}
-          </div>
+      <div className='verify-step-four__left'>
+        <div className='verify-step-four__left__button-group'>
+          {[1, 2, 3, 4, 5].map((x) => {
+            return (
+              <button
+                key={x}
+                className={
+                  researchIndex === x
+                    ? `verify-step-four__left__button-group__active`
+                    : ''
+                }
+                onClick={(e) => onResearchSelected(e, x)}
+              >
+                Research {x}
+              </button>
+            );
+          })}
         </div>
-        <div className='verify-step-four__container__right'>
-          <div className='verify-step-four__tweet'>
-            <Tweet
-              name={authorName}
-              tag={authorTag}
-              content={content}
-              submitBy={submitBy}
-              submitTime={submitTime}
-              authenticityScore={aiScore}
-              stage={curAnalysedPhase}
-              currentPhaseTotalPplList={jurorsId}
-              maxPhaseTotalPpl={eachStageRequiredUserNum}
-            />
-          </div>
-          <div className='verify-step-four__container__right__button_group'>
-            <button
-              className={vote === 'real' ? 'selected-real' : 'deselected-real'}
-              onClick={(e) => onRealSelected(e)}
-            >
-              Real
-            </button>
-            <button
-              className={vote === 'fake' ? 'selected-fake' : 'deselected-fake'}
-              onClick={(e) => onFakeSelected(e)}
-            >
-              Fake
-            </button>
-          </div>
-          <button className='confirm' onClick={onNext} disabled={!voted}>
-            Confirm
+        <div className='verify-step-four__left__pdf-viewer'>
+          {hasFinishDowload ? <PDFViewer pdf={selectedFile} /> : 'Loading'}
+        </div>
+      </div>
+      <div className='verify-step-four__right'>
+        <div className='verify-step-four__right__tweet'>
+          <Tweet
+            name={authorName}
+            tag={authorTag}
+            content={content}
+            submitBy={submitBy}
+            submitTime={submitTime}
+            authenticityScore={aiScore}
+            stage={curAnalysedPhase}
+            currentPhaseTotalPplList={jurorsId}
+            maxPhaseTotalPpl={eachStageRequiredUserNum}
+          />
+        </div>
+        <div className='verify-step-four__right__timer'>
+          <img src={require(`../../Asset/stopwatch.png`).default} />
+          <CountDownTimer
+            hoursMinSecs={{ hours: 0, minutes: 30, seconds: 0 }}
+            isHour={true}
+            onTimeOut={onSystemCancelled}
+          />
+          <p>Submit your verdict before the timer runs out.</p>
+        </div>
+        <div className='verify-step-four__right__vote-buttons'>
+          <button
+            className={vote === 'real' ? 'selected-real' : 'deselected-real'}
+            onClick={(e) => onRealSelected(e)}
+          >
+            Real
+          </button>
+          <button
+            className={vote === 'fake' ? 'selected-fake' : 'deselected-fake'}
+            onClick={(e) => onFakeSelected(e)}
+          >
+            Fake
           </button>
         </div>
+        <button
+          className='verify-step-four__right__confirm-button'
+          onClick={onNext}
+          disabled={!voted}
+        >
+          Confirm
+        </button>
       </div>
     </div>
   );

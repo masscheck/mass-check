@@ -7,6 +7,7 @@ const InvestigateStepFive: React.FC = () => {
     <StepFive
       tqStatement='Your verdict has been recorded successfully!'
       feedbackStatement='Only when all the jurors have passed their verdicts would the news tweet be completely verified.'
+      iconName='Jury'
     />
   );
 };

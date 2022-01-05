@@ -8,7 +8,7 @@ $nav-selected-color: linear-gradient(to right, #ffde44, #ffeea0);
 $button-primary-color: linear-gradient(to right, #6932e3, #a880ff);
 $button-secondary-color: white;
 $button-decline-border-color: #cdcdcd;
-$button-disabled-color: #55acee80;
+$button-disabled-color: #c2acf0;
 $button-deselected-real-color: rgba(85, 238, 129, 0.5);
 $button-selected-real-color: rgba(85, 238, 129, 1);
 $button-deselected-fake-color: rgba(238, 85, 85, 0.5);
@@ -19,10 +19,18 @@ $text-color: #6932e3;
 $light-text-color: #857c99;
 $body-text-color: #000000;
 $impact-text-color: #6932e3;
+$red-text-color: #ff1515;
+$white-text-color: white;
+$credibility-text-color: #ffde44;
 
 // Background
 $nav-background-color: #ffffff;
 $content-background-color: #f5f9fb;
+$dropbox-background-color: #f3f2f5;
+$role-background-color: #6932e3;
+
+// Container Border
+$section-border-color: #f3f2f5;
 
 // Brand Color
 $google-color: #c71c1c;

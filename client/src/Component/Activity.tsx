@@ -5,6 +5,7 @@ const Activity = ({ activityList }) => {
   return (
     <div className='activity-layout'>
       <div className='activity-title'>
+        <img src={require(`../Asset/History.png`).default} />
         <div>Activity</div>
       </div>
       <div className='activity-header'>

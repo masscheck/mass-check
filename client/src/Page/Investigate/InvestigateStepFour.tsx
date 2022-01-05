@@ -92,67 +92,77 @@ const InvestigateStepFour: React.FC = () => {
 
   return (
     <div className='investigate-step-four'>
-      <div className='investigate-step-four__timer'>
-        Timer:&nbsp;
-        <CountDownTimer
-          hoursMinSecs={{ hours: 1, minutes: 0, seconds: 0 }}
-          isHour={true}
-          onTimeOut={onSystemCancelled}
-        />
-      </div>
-
-      <div className='investigate-step-four__tweet'>
-        <Tweet
-          name={authorName}
-          tag={authorTag}
-          content={content}
-          submitBy={submitBy}
-          submitTime={submitTime}
-          authenticityScore={aiScore}
-          stage={curAnalysedPhase}
-          currentPhaseTotalPplList={investigatorsId}
-          maxPhaseTotalPpl={eachStageRequiredUserNum}
-        />
-      </div>
-
-      <br />
-
-      <div className='investigate-step-four__description'>
-        Find evidence to prove or disprove the news tweet above.
+      <div className='investigate-step-four__left'>
+        <div className='investigate-step-four__left__step-1'>
+          <p className='investigate-step-four__left__step-1__number'>1</p>
+          <Link
+            to='/Investigation_Report_Template.docx'
+            target='_blank'
+            className='investigate-step-four__left__step-1__button'
+            download
+          >
+            {`Download Report Template`}
+          </Link>
+        </div>
         <br />
-        Compile your findings into a PDF document to submit below.
+        <div className='investigate-step-four__left__step-2'>
+          <div className='investigate-step-four__left__step-2__headline'>
+            <p className='investigate-step-four__left__step-2__headline__number'>
+              2
+            </p>
+            <p className='investigate-step-four__left__step-2__headline__description'>
+              Find evidence to prove or disprove this news tweet and compile
+              your findings in the Report Template.
+            </p>
+          </div>
+          <div className='investigate-step-four__left__step-2__tweet'>
+            <Tweet
+              name={authorName}
+              tag={authorTag}
+              content={content}
+              submitBy={submitBy}
+              submitTime={submitTime}
+              authenticityScore={aiScore}
+              stage={curAnalysedPhase}
+              currentPhaseTotalPplList={investigatorsId}
+              maxPhaseTotalPpl={eachStageRequiredUserNum}
+            />
+          </div>
+        </div>
         <br />
-        It will be read by the jury for their final verdict.
+        <div className='investigate-step-four__left__step-3'>
+          <div className='investigate-step-four__left__step-3__headline'>
+            <p className='investigate-step-four__left__step-3__headline__number'>
+              3
+            </p>
+            <p className='investigate-step-four__left__step-3__headline__description'>
+              Upload your completed Report Remplate PDF
+            </p>
+          </div>
+          <div className='investigate-step-four__left__step-3__dropbox'>
+            <UploadBox onSetFile={setFile} />
+          </div>
+        </div>
       </div>
 
-      <div className='investigate-step-four__download'>
-        Please download the
-        <Link
-          to='/Investigation_Report_Template.docx'
-          target='_blank'
-          className='investigate-step-four__download__link'
-          download
+      <div className='investigate-step-four__right'>
+        <div className='investigate-step-four__right__timer'>
+          <img src={require(`../../Asset/stopwatch.png`).default} />
+          <CountDownTimer
+            hoursMinSecs={{ hours: 1, minutes: 0, seconds: 0 }}
+            isHour={true}
+            onTimeOut={onSystemCancelled}
+          />
+          <p>Submit your investigation before the timer runs out.</p>
+        </div>
+        <button
+          className='investigate-step-four__right__button'
+          onClick={onNext}
+          disabled={!!!file}
         >
-          {` report template here `}
-        </Link>
-        and add your findings directly into it.
+          Submit
+        </button>
       </div>
-
-      <br />
-
-      <div className='investigate-step-four__upload-box'>
-        <UploadBox onSetFile={setFile} />
-      </div>
-
-      <br />
-
-      <button
-        className='investigate-step-four__button'
-        onClick={onNext}
-        disabled={!!!file}
-      >
-        Submit
-      </button>
     </div>
   );
 };
