@@ -23,7 +23,7 @@ const NavBar: React.FC = (props: any) => {
 
   return (
     <div className='nav-bar-container'>
-      <h1>Mass Check</h1>
+      <img src={require(`../../Asset/Logo-White-Outline.png`).default} />
       <div className='flex-container'>
         <div className='nav-link-list'>
           <NavLink

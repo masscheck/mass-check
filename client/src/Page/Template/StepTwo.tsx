@@ -24,7 +24,7 @@ const StepTwo = ({ nextUrl, onMatchTweet }) => {
       }
 
       if (!hasCancelTask) history.push(nextUrl);
-    }, 2000);
+    }, 4000);
   }, []);
 
   const onCancel = () => {
@@ -35,16 +35,23 @@ const StepTwo = ({ nextUrl, onMatchTweet }) => {
   return (
     <div className='step-two'>
       <div className='step-two__animation'>
-        <Gavel />
-        <GavelBase />
+        {/* <Gavel />
+        <GavelBase /> */}
+        {/* <img src={require(`../../Asset/Loading-Animation.gif`).default} /> */}
+        <video preload="true" autoPlay muted loop>
+          <source src={require(`../../Asset/Loading-Animation.mp4`).default} type="video/mp4" />
+          Matching you to a Tweet...
+        </video>
       </div>
-      <div className='step-two__description'>
+      {/* <div className='step-two__description'>
         <br />
         <p>Matching you to a news tweet...</p>
+      </div> */}
+      <div>
+        <button className='step-two__button' onClick={onCancel}>
+          Cancel
+        </button>
       </div>
-      <button className='step-two__button' onClick={onCancel}>
-        Cancel
-      </button>
     </div>
   );
 };

@@ -15,7 +15,7 @@ const StepOne = ({ role, onNextPage, iconName }) => {
           <br />
         </div>
         <button className='step-one__left__button' onClick={onNextPage}>
-          Give me a tweet!
+          <span>Give me a Tweet! </span>
           <img src={require(`../../Asset/twitter-32.png`).default} />
         </button>
       </div>

@@ -1,0 +1,30 @@
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: lightsteelblue;
+  border-radius: 3px;
+}
+
+.faq {
+  height: 65vh;
+  width: 100%;
+  max-width: 100vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.faq-container {
+  margin-bottom: 1rem;
+}
+
+.background {
+  img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: -10;
+  }
+}

@@ -4,16 +4,30 @@
 @import '../Util/Styles/FormInput.scss';
 @import '../Util/Styles/FormLabel.scss';
 
-.sign-up {
+.background {
   img {
     position: fixed;
     top: 0;
-    right: 0;
+    left: 0;
     width: 100vw;
     z-index: -10;
   }
+}
 
+.masscheck-glow {
+  img {
+    position: fixed;
+    top: 0;
+    left: 40%;
+    height: 100vh;
+    z-index: -10;
+  }
+}
+
+.sign-up {
   &__form {
+    margin-top: 3rem;
+
     &--error {
       @include error-message;
     }
@@ -23,7 +37,7 @@
     }
 
     &__password-group {
-      margin-top: 5rem;
+      margin-top: 3rem;
     }
 
     label,
@@ -37,6 +51,10 @@
 
     input {
       @include form-input;
+    }
+
+    ::placeholder {
+      color: $input-placeholder-text-color;
     }
 
     div {

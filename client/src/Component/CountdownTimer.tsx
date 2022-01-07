@@ -38,7 +38,7 @@ const CountDownTimer = ({ hoursMinSecs, isHour, onTimeOut }) => {
       .toString()
       .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`}</span>
   ) : (
-    <strong>{`${secs.toString()} seconds`}</strong>
+    <strong>{`0:${secs.toString()}`}</strong>
   );
 };
 

@@ -186,18 +186,23 @@ const SignIn: React.FC = () => {
 
   return (
     <div className='sign-in'>
-      <img src={require(`../Asset/Background.png`).default} />
+      <div className='background'>
+        <img src={require(`../Asset/Background.png`).default} />
+      </div>
+      <div className='masscheck-glow'>
+        <img src={require(`../Asset/Logo-White-Glow.png`).default} />
+      </div>
       <form
         className='sign-in__form'
         onSubmit={(e) => onEmailSignIn(e)}
         noValidate
       >
         <div>
-          <label htmlFor='email'>Email Address</label>
+          {/* <label htmlFor='email'>Email Address</label> */}
           <input
             name='email'
             type='email'
-            placeholder='Email Address'
+            placeholder='Email'
             value={email}
             onChange={(e) => onEmailChange(e)}
           />
@@ -206,7 +211,7 @@ const SignIn: React.FC = () => {
           )}
         </div>
         <div>
-          <label htmlFor='password'>Password</label>
+          {/* <label htmlFor='password'>Password</label> */}
           <input
             name='password'
             type='password'
@@ -241,7 +246,6 @@ const SignIn: React.FC = () => {
           onExternalMethodSignIn(e, SignInMethodEnum.GOOGLE_SIGN_IN)
         }
       >
-        Sign In with <strong>Google</strong>
       </button>
       <button
         className='sign-in__twitter-button'
@@ -249,7 +253,6 @@ const SignIn: React.FC = () => {
           onExternalMethodSignIn(e, SignInMethodEnum.TWITTER_SIGN_IN)
         }
       >
-        Sign In with <strong>Twitter</strong>
       </button>
     </div>
   );

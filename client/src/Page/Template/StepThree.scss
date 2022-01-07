@@ -19,11 +19,12 @@
     }
 
     &__timer {
+      text-align: center;
       font-size: 4rem;
-      margin-top: 5vh;
-      margin-bottom: 5vh;
+      margin-right: 1rem;
       img {
-        margin-right: rem;
+        margin-right: 1rem;
+        height: 3rem;
       }
     }
 
@@ -50,7 +51,7 @@
 
   &__image {
     grid-area: right-side;
-    width: 70%;
+    width: 90%;
 
     img {
       width: 100%;

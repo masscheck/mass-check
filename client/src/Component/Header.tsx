@@ -28,6 +28,8 @@ const Header: React.FC = () => {
         setTitle('Reset Your Password');
         break;
       case RouteConstant.PUBLIC_FAQ:
+        setTitle('Frequently Asked:');
+        break;
       case RouteConstant.SECURE_FAQ:
         setTitle('FAQ');
         break;
@@ -75,7 +77,12 @@ const Header: React.FC = () => {
 
   return (
     <div className='header-container'>
-      <h1>{title}</h1>
+      <h1 className=
+        {title === 'Sign In' ? 'public' :
+        (title ==='Sign Up' ? 'public' : 
+        (title ==='Frequently Asked:' ? 'public' : 'secure')
+        )
+        }>{title}</h1>
     </div>
   );
 };

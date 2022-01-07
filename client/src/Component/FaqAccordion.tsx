@@ -22,7 +22,7 @@ const Accordion = withStyles({
       marginTop: 'auto',
       marginBottom: 'auto',
       backgroundColor: 'rgba(255, 255, 255, 1)',
-      boxShadow: '0px 1px 5px 0px rgba(0, 0, 0, 0.07)',
+      boxShadow: '0px 4px 30px -15px rgba(191, 174, 227, 0.45)',
       borderRadius: '0.2rem',
     },
   },

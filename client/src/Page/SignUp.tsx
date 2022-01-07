@@ -123,14 +123,19 @@ const SignUp: React.FC = () => {
 
   return (
     <div className='sign-up'>
-      <img src={require(`../Asset/Background.png`).default} />
+      <div className='background'>
+        <img src={require(`../Asset/Background.png`).default} />
+      </div>
+      <div className='masscheck-glow'>
+        <img src={require(`../Asset/Logo-White-Glow.png`).default} />
+      </div>
       <form
         className='sign-up__form'
         onSubmit={(e) => onEmailSignUp(e)}
         noValidate
       >
         <div>
-          <label htmlFor='username'>Username</label>
+          {/* <label htmlFor='username'>Username</label> */}
           <input
             name='username'
             type='text'
@@ -143,11 +148,11 @@ const SignUp: React.FC = () => {
           )}
         </div>
         <div>
-          <label htmlFor='email'>Email Address</label>
+          {/* <label htmlFor='email'>Email Address</label> */}
           <input
             name='email'
             type='email'
-            placeholder='Email Address'
+            placeholder='Email'
             value={email}
             onChange={(e) => onEmailChange(e)}
           />
@@ -157,7 +162,7 @@ const SignUp: React.FC = () => {
         </div>
         <div className='sign-up__form__password-group'></div>
         <div>
-          <label htmlFor='password'>Password</label>
+          {/* <label htmlFor='password'>Password</label> */}
           <input
             name='password'
             type='password'
@@ -170,11 +175,11 @@ const SignUp: React.FC = () => {
           )}
         </div>
         <div>
-          <label htmlFor='confirmPassword'>Confirm Password</label>
+          {/* <label htmlFor='confirmPassword'>Confirm Password</label> */}
           <input
             name='confirmPassword'
             type='password'
-            placeholder='Re-enter Password'
+            placeholder='Repeat Password'
             value={confirmPassword}
             onChange={(e) => onConfirmPasswordChange(e)}
           />

@@ -11,6 +11,7 @@ import SignIn from '../Page/SignIn';
 import SignUpSuccess from '../Page/SignUpSuccess';
 import ResetPassword from '../Page/ResetPassword';
 import Faq from '../Page/Faq';
+import FaqPublic from '../Page/FaqPublic';
 import Profile from '../Page/Profile';
 import Error404 from '../Page/Error404';
 import InvestigateStepOne from '../Page/Investigate/InvestigateStepOne';
@@ -47,7 +48,12 @@ const Routing: React.FC = () => {
       />
       <Route
         exact
-        path={[RouteConstant.PUBLIC_FAQ, RouteConstant.SECURE_FAQ]}
+        path={[RouteConstant.PUBLIC_FAQ]}
+        component={FaqPublic}
+      />
+      <PrivateRoute
+        exact
+        path={RouteConstant.SECURE_FAQ}
         component={Faq}
       />
       <PrivateRoute exact path={RouteConstant.SECURE_PROFILE} component={Profile} />
