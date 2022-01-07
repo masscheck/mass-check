@@ -2,18 +2,23 @@
 <html lang="en">
 <head> 
   <link rel="stylesheet" href="toggle.css">
+
   <title>Toggle Page</title>
   <body>
       <div>
           <h3>John Cena</h3>
           <p>MassCheck on <br> Twitter is</p>
           <label class="switch">
-            <input type="checkbox">
+            <input id="myCheckbox" type="checkbox"  >
             <span class="slider round"></span>
           </label> 
-          
-          <a href="popup.html"><button class="toggleB">Sign Out</button></a>
+          <div class ="loggedInArea" >
+           
+          </div>
+          <a href="popup.html"><button class="logout-btn-auth" id='sign_out'>Sign Out</button></a>
       </div>
-      <script src="toggle.js"></script>
+      <script src="toggle.js"  ></script> 
+      <script src="contentScript.js" defer></script>
+   
   </body> 
 </head>
