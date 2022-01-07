@@ -8,8 +8,17 @@ import PDFViewer from '../../Component/PDFViewer';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './VerifyStepFour.scss';
+import { useTweetModel } from '../../Context/InvestigationContext';
+import {
+  systemCancelledVerificationJob,
+  submitVerificationResult,
+} from '../../Util/API/VerificationAPI';
+import { useAccountInfo } from '../../Context/AccountInfoContext';
+import { useLoadingSpinner } from '../../Context/LoadingSpinnerContext';
+import { useNotification } from '../../Context/NotificationContext';
 
 const VerifyStepFour: React.FC = () => {
+  const { setIsLoading } = useLoadingSpinner();
   const [researchIndex, setResearchIndex] = useState(1);
   const [hasDownload, setHasDownload] = useState(false);
   const [hasFinishDowload, setHasFinishDowload] = useState(false);
@@ -19,22 +28,33 @@ const VerifyStepFour: React.FC = () => {
   const [researchFileNameList, setResearchFileNameList] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const history = useHistory();
+  const {
+    tweetModel: {
+      _id,
+      curAnalysedPhase,
+      submitBy,
+      submitTime,
+      aiScore,
+      authorName,
+      authorTag,
+      content,
+      investigatedReportIdList,
+      jurorsId,
+      eachStageRequiredUserNum,
+    },
+  } = useTweetModel();
+  const {
+    accountInfo: { uid, xpxAddress },
+  } = useAccountInfo();
+  const { errorToast } = useNotification();
 
   useEffect(() => {
-    setResearchFileNameList([
-      'Mon Jun 28 2021 22:15:57 GMT+0800 (Malaysia Time)_SampleInvestigation_1.pdf',
-      'Mon Jun 28 2021 22:16:06 GMT+0800 (Malaysia Time)_SampleInvestigation_2.pdf',
-      'Mon Jun 28 2021 22:16:12 GMT+0800 (Malaysia Time)_SampleInvestigation_3.pdf',
-      'Mon Jun 28 2021 22:16:19 GMT+0800 (Malaysia Time)_SampleInvestigation_4.pdf',
-      'Mon Jun 28 2021 22:16:27 GMT+0800 (Malaysia Time)_SampleInvestigation_5.pdf',
-    ]);
+    setResearchFileNameList(investigatedReportIdList);
   }, []);
 
   useEffect(() => {
-    console.log(researchFileNameList);
-
-    if (researchFileNameList.length === 5 && !hasDownload) {
-      researchFileNameList.forEach((x, index) => {
+    if (researchFileNameList.length >= 5 && !hasDownload) {
+      researchFileNameList.slice(0, 5).forEach((x, index) => {
         downloadPDF(x, index + 1);
       });
 
@@ -52,8 +72,6 @@ const VerifyStepFour: React.FC = () => {
 
       setHasFinishDowload(true);
     }
-
-    console.log(researchFileList);
   }, [researchFileList]);
 
   const downloadPDF = (filename: string, index: number) => {
@@ -78,9 +96,6 @@ const VerifyStepFour: React.FC = () => {
             const newObj = researchFileList;
             newObj[index] = base64String;
             setResearchFileList({ ...newObj });
-
-            console.log(Object.keys(researchFileList).length);
-            console.log(newObj);
           };
         };
 
@@ -88,7 +103,7 @@ const VerifyStepFour: React.FC = () => {
         xhr.send();
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         return null;
       });
   };
@@ -115,74 +130,108 @@ const VerifyStepFour: React.FC = () => {
     setSelectedFile(researchFileList[index]);
   };
 
-  const onNext = () => {
-    history.push(RouteConstant.SECURE_VERIFTY_STEP_FIVE);
+  const onNext = async () => {
+    try {
+      setIsLoading(true);
+      const submitStatus = await submitVerificationResult(
+        uid,
+        xpxAddress,
+        _id,
+        vote === 'real'
+      );
+      history.push(RouteConstant.SECURE_VERIFTY_STEP_FIVE);
+    } catch (err) {
+      console.error(err);
+      errorToast(
+        'Please submit again. If error persist, please contact MassCheck developer'
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onSystemCancelled = async () => {
+    return await new Promise(async (resolve, reject) => {
+      try {
+        setIsLoading(true);
+        const res = await systemCancelledVerificationJob(uid, _id);
+        resolve(res);
+      } catch (err) {
+        reject(err);
+      } finally {
+        setIsLoading(false);
+      }
+    });
   };
 
   return (
     <div className='verify-step-four'>
-      <div className='verify-step-four__timer'>
-        Timer:&nbsp;
-        <CountDownTimer
-          hoursMinSecs={{ hours: 0, minutes: 30, seconds: 0 }}
-          isHour={true}
-        />
-      </div>
-
-      <div className='verify-step-four__container'>
-        <div className='verify-step-four__container__left'>
-          <div className='verify-step-four__container__left__button_group'>
-            {[1, 2, 3, 4, 5].map((x) => {
-              return (
-                <button
-                  key={x}
-                  className={
-                    researchIndex === x
-                      ? `verify-step-four__container__left__active`
-                      : ''
-                  }
-                  onClick={(e) => onResearchSelected(e, x)}
-                >
-                  Research {x}
-                </button>
-              );
-            })}
-          </div>
-          <div className='verify-step-four__container__left__pdf-viewer'>
-            {hasFinishDowload ? <PDFViewer pdf={selectedFile} /> : 'Loading'}
-            {/* Loading */}
-          </div>
+      <div className='verify-step-four__left'>
+        <div className='verify-step-four__left__button-group'>
+          {[1, 2, 3, 4, 5].map((x) => {
+            return (
+              <button
+                key={x}
+                className={
+                  researchIndex === x
+                    ? `verify-step-four__left__button-group__active`
+                    : ''
+                }
+                onClick={(e) => onResearchSelected(e, x)}
+              >
+                Research {x}
+              </button>
+            );
+          })}
         </div>
-        <div className='verify-step-four__container__right'>
-          <div className='verify-step-four__tweet'>
-            <Tweet
-              name='Jill Chenraya'
-              tag='@jillcry'
-              content='#Malaysia recorded a total of 2,875 new #Covid19 cases on Thursday. This is the eighth consecutive day with the number of cases above 2,000. Read more at https://bit.ly/3neKgcD'
-              submitBy='Jackie Chan'
-              submitTime={new Date()}
-              authenticityScore={67}
-              stage='Verifying'
-            />
-          </div>
-          <div className='verify-step-four__container__right__button_group'>
-            <button
-              className={vote === 'real' ? 'selected-real' : 'deselected-real'}
-              onClick={(e) => onRealSelected(e)}
-            >
-              Real
-            </button>
-            <button
-              className={vote === 'fake' ? 'selected-fake' : 'deselected-fake'}
-              onClick={(e) => onFakeSelected(e)}
-            >
-              Fake
-            </button>
-          </div>
-          <button className='confirm' onClick={onNext} disabled={!voted}>
-            Confirm
+        <div className='verify-step-four__left__pdf-viewer'>
+          {hasFinishDowload ? <PDFViewer pdf={selectedFile} /> : 'Loading'}
+        </div>
+      </div>
+      <div className='verify-step-four__right'>
+        <div className='verify-step-four__right__tweet'>
+          <Tweet
+            name={authorName}
+            tag={authorTag}
+            content={content}
+            submitBy={submitBy}
+            submitTime={submitTime}
+            authenticityScore={aiScore}
+            stage={curAnalysedPhase}
+            currentPhaseTotalPplList={jurorsId}
+            maxPhaseTotalPpl={eachStageRequiredUserNum}
+          />
+        </div>
+        <div className='verify-step-four__right__timer'>
+          <img src={require(`../../Asset/stopwatch.png`).default} />
+          <CountDownTimer
+            hoursMinSecs={{ hours: 0, minutes: 30, seconds: 0 }}
+            isHour={true}
+            onTimeOut={onSystemCancelled}
+          />
+          <p>Submit your verdict before the timer runs out.</p>
+        </div>
+        <div className='verify-step-four__right__vote-buttons'>
+          <button
+            className={vote === 'real' ? 'selected-real' : 'deselected-real'}
+            onClick={(e) => onRealSelected(e)}
+          >
+            Real
+          </button>
+          <button
+            className={vote === 'fake' ? 'selected-fake' : 'deselected-fake'}
+            onClick={(e) => onFakeSelected(e)}
+          >
+            Fake
           </button>
         </div>
+        <button
+          className='verify-step-four__right__confirm-button'
+          onClick={onNext}
+          disabled={!voted}
+        >
+          Confirm
+        </button>
       </div>
     </div>
   );

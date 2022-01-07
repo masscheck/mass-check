@@ -3,53 +3,72 @@
 @import '../../Util/Styles/BodyText.scss';
 
 .verify-step-four {
-  &__timer {
-    @include body-text;
-    text-align: left;
-    font-size: 1.65rem;
-    margin-bottom: 0.8rem;
-  }
+  display: grid;
+  grid-template-areas: 'left-side right-side';
 
-  &__container {
-    display: flex;
+  &__left {
+    grid-area: left-side;
+    width: 50vw;
+    height: 70vh;
+    margin-right: 1rem;
 
-    &__left {
-      width: 60%;
-      margin-right: 1rem;
-
-      &__button_group {
-        display: flex;
-        flex-direction: row;
-      }
-
+    &__button-group {
+      display: flex;
+      flex-direction: row;
       button {
         @include pdf-tab-button;
         width: 20%;
       }
-
       &__active {
         background-color: white;
-      }
-
-      &__pdf-viewer {
-        padding: 1rem;
-        background-color: white;
-        height: 100%;
-        max-height: 100%;
-        overflow: auto;
+        // color: $body-text-color;
       }
     }
 
-    &__right {
-      width: 40%;
+    &__pdf-viewer {
+      padding: 1rem;
+      background-color: white;
+      height: 100%;
+      max-height: 100%;
+      overflow: auto;
+    }
+  }
 
-      &__button_group {
-        margin-top: 1rem;
+  &__right {
+    grid-area: right-side;
+    width: 20vw;
+    height: 70vh;
+
+    &__timer {
+      text-align: center;
+      font-size: 4rem;
+      font-weight: bold;
+      margin-top: 5vh;
+      margin-bottom: 7vh;
+      img {
+        margin-right: 2rem;
       }
+      p {
+        font-size: 1rem;
+        font-weight: normal;
+        font-style: italic;
+        color: $red-text-color;
+      }
+    }
+
+    &__vote-buttons {
+      display: flex;
+      width: 20vw;
 
       button {
-        max-width: none;
+        width: 100%;
       }
+    }
+
+    &__confirm-button {
+      @include regular-purple-button;
+      width: 20vw;
+      height: 10vh;
     }
   }
 }
@@ -57,11 +76,13 @@
 .selected-real {
   @include vote-button;
   background-color: $button-selected-real-color;
+  margin-right: 1rem;
 }
 
 .deselected-real {
   @include vote-button;
   background-color: $button-deselected-real-color;
+  margin-right: 1rem;
 }
 
 .selected-fake {
@@ -72,8 +93,4 @@
 .deselected-fake {
   @include vote-button;
   background-color: $button-deselected-fake-color;
-}
-
-.confirm {
-  @include sign-in-and-sign-up-button;
 }

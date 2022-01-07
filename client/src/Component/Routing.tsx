@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PrivateRoute from './ProtectedRoute';
 
-import { useAuth } from '../Context/AuthContext';
+import { useAccountInfo } from '../Context/AccountInfoContext';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import Home from '../Page/Home';
@@ -11,6 +11,7 @@ import SignIn from '../Page/SignIn';
 import SignUpSuccess from '../Page/SignUpSuccess';
 import ResetPassword from '../Page/ResetPassword';
 import Faq from '../Page/Faq';
+import FaqPublic from '../Page/FaqPublic';
 import Profile from '../Page/Profile';
 import Error404 from '../Page/Error404';
 import InvestigateStepOne from '../Page/Investigate/InvestigateStepOne';
@@ -25,12 +26,14 @@ import VerifyStepFour from '../Page/Verify/VerifyStepFour';
 import VerifyStepFive from '../Page/Verify/VerifyStepFive';
 
 const Routing: React.FC = () => {
-  const { hasXpxAcc } = useAuth();
+  const {
+    accountInfo: { toSignUpSuccessAllowable },
+  } = useAccountInfo();
 
   return (
     <Switch>
-      {!hasXpxAcc && (
-        <PrivateRoute
+      {toSignUpSuccessAllowable && (
+        <Route
           exact
           path={RouteConstant.PUBLIC_SIGN_UP_SUCCESS}
           component={SignUpSuccess}
@@ -45,10 +48,15 @@ const Routing: React.FC = () => {
       />
       <Route
         exact
-        path={[RouteConstant.PUBLIC_FAQ, RouteConstant.SECURE_FAQ]}
+        path={[RouteConstant.PUBLIC_FAQ]}
+        component={FaqPublic}
+      />
+      <PrivateRoute
+        exact
+        path={RouteConstant.SECURE_FAQ}
         component={Faq}
       />
-      <Route exact path={RouteConstant.SECURE_PROFILE} component={Profile} />
+      <PrivateRoute exact path={RouteConstant.SECURE_PROFILE} component={Profile} />
       <PrivateRoute
         exact
         path={[RouteConstant.SECURE_HOME, '/']}

@@ -14,14 +14,14 @@
 
   &__description {
     font-weight: 400;
-    color: $text-color;
+    color: $light-text-color;
     text-align: center;
     font-size: 1.875rem;
   }
 
   &__note {
     font-weight: 600;
-    color: $text-color;
+    color: $light-text-color;
     text-align: center;
   }
 
@@ -37,11 +37,13 @@
 
   &__download-btn {
     @include btn-for-sign-up;
-    background-color: $button-primary-color;
+    background-image: $button-primary-color;
+    border-radius: 0.4rem;
   }
 
   &__get-started-btn {
     @include btn-for-sign-up;
-    background-color: $button-secondary-color;
+    background-image: $button-primary-color;
+    border-radius: 0.4rem;
   }
 }

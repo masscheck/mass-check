@@ -1,43 +1,67 @@
 @import '../Util/Styles/BodyText.scss';
+@import '../Util/Styles/Color.scss';
 
 .tweet {
   @include body-text;
-  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.07);
-  border-radius: 0.2rem;
+  box-shadow: 0px 4px 30px -15px #bfaee3;
+  border-radius: 1rem;
   text-align: left;
-  max-width: 43.75rem;
-  padding: 1rem;
+  width: 100%;
+  max-width: 78vw;
+  padding: 1.5rem;
+  margin-bottom: 1.8rem;
   background-color: #ffffff;
   color: black;
 
   &__handle {
     &__name {
+      color: $light-text-color;
       font-size: 1rem;
-      font-weight: 800;
+      font-weight: 600;
     }
 
     &__tag {
+      color: $light-text-color;
       font-size: 1rem;
-      font-style: italic;
+      font-weight: 500;
     }
   }
 
   &__content {
-    font-size: 1rem;
+    font-size: 1.1rem;
     margin-top: 0.7rem;
     margin-bottom: 1rem;
   }
 
   &__detail {
-    font-size: 0.8rem;
+    font-size: 1rem;
+    color: $light-text-color;
+    display: flex;
 
-    &__authenticity-score {
-      color: #78c71d;
+    &__left {
+      width: 50%;
+
+      &__box {
+        background-image: $high-auth-background-color;
+        width: fit-content;
+
+        &__authenticity-score {
+          margin-left: 0.3rem;
+          color: $high-auth-color;
+          font-weight: 600;
+        }
+
+        &__stage {
+          margin-right: 0.2rem;
+          color: $high-auth-color;
+        }
+      }
     }
 
-    &__submit-by,
-    &__stage {
+    &__submit-by {
+      width: 50%;
       color: #66757f;
+      text-align: right;
     }
   }
 }

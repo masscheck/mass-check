@@ -1,5 +1,7 @@
+@import '../Util/Styles/Color.scss';
+
 .upload-box {
-  max-width: 43.75rem;
+  // max-width: 43.75rem;
 
   &__dropzone {
     flex: 1;
@@ -11,11 +13,15 @@
     border-radius: 2px;
     border-color: #eeeeee;
     border-style: dashed;
-    background-color: #fafafa;
-    color: #bdbdbd;
+    background-color: $dropbox-background-color;
+    color: $light-text-color;
     outline: none;
     transition: border 0.24s ease-in-out;
     cursor: pointer;
+
+    strong {
+      color: $impact-text-color;
+    }
   }
 
   &__container {

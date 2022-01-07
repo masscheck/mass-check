@@ -1,55 +1,51 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useAuth } from '../Context/AuthContext';
 import { useNotification } from '../Context/NotificationContext';
-import { downloadPrivateKey, storeXpxAddress } from '../Util/API/SignUpAPI';
+import {
+  postCreateXpxAcc,
+  postUpdateUserXpxAddress,
+} from '../Util/API/SignUpAPI';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 import downloadFile from '../Util/Useful/DownloadFile';
 import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
 
 import './SignUpSuccess.scss';
+import { useAccountInfo } from '../Context/AccountInfoContext';
 
 const SignUpSuccess: React.FC = () => {
   const [hasRemind, setHasRemind] = useState(false);
-  const [privateKey, setPrivateKey] = useState('');
-  const [address, setAddress] = useState('');
+  const [xpxPrivateKey, setXpxPrivateKey] = useState('');
   const history = useHistory();
-  const { currentUser, setHasXpxAcc } = useAuth();
-  const { warnToast } = useNotification();
+  const { warnToast, errorToast } = useNotification();
   const { setIsLoading } = useLoadingSpinner();
-
-  // Disable existing user to future access this page
-  useEffect(() => {
-    return () => {
-      setHasXpxAcc(true);
-      setPrivateKey(null);
-    };
-  }, []);
+  const { accountInfo, setAccountInfo } = useAccountInfo();
 
   const onDownload = async () => {
     if (!hasRemind) {
       try {
         setIsLoading(true);
 
-        const res = await downloadPrivateKey();
+        const { privateKey, address } = await postCreateXpxAcc();
 
-        const { address, privateKey } = res.data;
+        const newAccountInfo = { ...accountInfo };
+        newAccountInfo.xpxAddress = address;
+        setAccountInfo(newAccountInfo);
 
+        setXpxPrivateKey(privateKey);
         downloadFile('xpx-private-key', privateKey);
-        setPrivateKey(privateKey);
-        setAddress(address);
 
-        setIsLoading(false);
+        setHasRemind(true);
       } catch (error) {
-        console.log(error);
+        errorToast('Please download the XPX Private Key again.');
+        console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     } else {
-      downloadFile('xpx-private-key', privateKey);
+      downloadFile('xpx-private-key', xpxPrivateKey);
     }
-
-    setHasRemind(true);
   };
 
   const onGetStart = async () => {
@@ -57,15 +53,24 @@ const SignUpSuccess: React.FC = () => {
       warnToast('Please download your XPX private key before proceeding');
       return;
     }
+
     try {
-      const res = await storeXpxAddress(currentUser.uid, address);
+      setIsLoading(true);
 
-      console.log(res);
+      const { uid, xpxAddress } = accountInfo;
+
+      await postUpdateUserXpxAddress(uid, xpxAddress);
+      const newAccountInfo = { ...accountInfo };
+      newAccountInfo.toSecureAllowable = true;
+      setAccountInfo(newAccountInfo);
+
+      history.push(RouteConstant.SECURE_HOME);
     } catch (err) {
-      console.log(err);
+      errorToast("Please click 'Get Started Now' again");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
-
-    history.push(RouteConstant.SECURE_HOME);
   };
 
   return (

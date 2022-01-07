@@ -1,14 +1,18 @@
 import { Route, Redirect } from 'react-router-dom';
+import { useAccountInfo } from '../Context/AccountInfoContext';
 
-import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
+  const {
+    accountInfo: { toSecureAllowable },
+  } = useAccountInfo();
+
   return (
     <Route
       {...rest}
       render={(props) => {
-        return localStorage.getItem(LocalStorageEnum.IS_SIGN_IN) ? (
+        return toSecureAllowable ? (
           <Component {...props} />
         ) : (
           <Redirect to={RouteConstant.PUBLIC_SIGN_IN} />

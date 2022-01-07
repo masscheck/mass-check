@@ -3,31 +3,59 @@
 @import '../../Util/Styles/BodyText.scss';
 
 .step-three {
-  // &__image {
-  //   //
-  // }
+  display: grid;
+  grid-template-areas: 'left-side right-side';
 
-  &__description {
-    p {
-      @include body-text;
+  &__left {
+    max-width: 20vw;
+    max-height: 70vh;
+    margin-right: 10vh;
+    grid-area: left-side;
+
+    &__description {
+      p {
+        @include bold-body-text;
+      }
+    }
+
+    &__timer {
+      text-align: center;
+      font-size: 4rem;
+      margin-right: 1rem;
+      img {
+        margin-right: 1rem;
+        height: 3rem;
+      }
+    }
+
+    &__small-description {
+      p {
+        @include body-text;
+      }
+    }
+
+    &__yes-button {
+      @include regular-purple-button;
+      width: 18vw;
+      height: 7vh;
+      margin-top: 5vh;
+    }
+
+    &__no-button {
+      @include decline-button;
+      width: 18vw;
+      height: 3.5vh;
+      font-size: 1rem;
     }
   }
 
-  &__small-description {
-    p {
-      @include smaller-body-text;
+  &__image {
+    grid-area: right-side;
+    width: 90%;
+
+    img {
+      width: 100%;
+      max-height: auto;
     }
   }
-
-  &__yes-button {
-    @include regular-blue-button;
-  }
-
-  &__no-button {
-    @include regular-blue-button;
-    background-color: $button-secondary-color;
-    margin-left: 0.8rem;
-  }
-
-  text-align: center;
 }

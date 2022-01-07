@@ -3,13 +3,19 @@
 .header-container {
   padding: 0;
 
-  h1 {
+  .secure {
     margin: 0;
     margin-top: 3rem;
     color: $text-color;
+    font-size: 4rem;
   }
 
-  hr {
-    color: #e1e8ed;
+  .public {
+    margin: 0;
+    margin-top: 8rem;
+    color: $white-text-color;
+    font-size: 4rem;
+    font-weight: 500;
+    font-family: 'Open Sans', sans-serif;
   }
 }

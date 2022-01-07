@@ -5,13 +5,13 @@ import Joi from 'joi';
 import { useAuth } from '../Context/AuthContext';
 import { useNotification } from '../Context/NotificationContext';
 import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
+import { useAccountInfo } from '../Context/AccountInfoContext';
 
 import { postCreateAcc } from '../Util/API/SignUpAPI';
-import { getUserInfoByUid } from '../Util/API/NavBarHomeAPI';
-import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
+import { getAccInfo } from '../Util/API/SignInAPI';
+
 import { SignInMethodEnum } from '../Util/Constant/SignInMethodEnum';
-import { SignUpStage } from '../Util/Constant/SignUpStage';
-import { RouteConstant } from '../Util/Constant/RouteConstant'
+import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import './SignIn.scss';
 
@@ -35,9 +35,10 @@ const SignIn: React.FC = () => {
     useState<validationErrorInterface>({});
   const history = useHistory();
 
-  const { googleSignIn, emailSignIn, currentUser, twitterSignIn } = useAuth();
+  const { googleSignIn, emailSignIn, twitterSignIn } = useAuth();
   const { successToast, errorToast, warnToast } = useNotification();
   const { setIsLoading } = useLoadingSpinner();
+  const { setAccountInfo } = useAccountInfo();
 
   useEffect(() => {
     setHasNoError(!!(email && password));
@@ -54,10 +55,55 @@ const SignIn: React.FC = () => {
   const onExternalCallback = async (signInMethod: SignInMethodEnum) => {
     switch (signInMethod) {
       case SignInMethodEnum.GOOGLE_SIGN_IN:
-        return await googleSignIn();
+        return googleSignIn();
 
       case SignInMethodEnum.TWITTER_SIGN_IN:
-        return await twitterSignIn();
+        return twitterSignIn();
+    }
+  };
+
+  const navigateToNextPage = async (uid: any, isNewUser: any) => {
+    const { displayName, xpxAddress } = await getAccInfo(uid);
+
+    if (!xpxAddress && !isNewUser) {
+      // User not first time sign in but dont have xpx account
+      setAccountInfo({
+        uid,
+        displayName,
+        xpxAddress,
+        toSignUpSuccessAllowable: true,
+        toSecureAllowable: false,
+      });
+
+      successToast('Sign Up Successfully');
+      warnToast(
+        'You forgot to download XPX private key last time. Getting a new account now.'
+      );
+      history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
+    } else if (isNewUser) {
+      // User first time sign in
+      setAccountInfo({
+        uid,
+        displayName,
+        xpxAddress,
+        toSignUpSuccessAllowable: true,
+        toSecureAllowable: false,
+      });
+
+      successToast('Sign Up Successfully');
+      history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
+    } else {
+      // User not first time sign and has xpx account
+      setAccountInfo({
+        uid,
+        displayName,
+        xpxAddress,
+        toSignUpSuccessAllowable: false,
+        toSecureAllowable: true,
+      });
+
+      successToast('Sign In Successfully');
+      history.push(RouteConstant.SECURE_HOME);
     }
   };
 
@@ -66,7 +112,6 @@ const SignIn: React.FC = () => {
     signInMethod: SignInMethodEnum
   ) => {
     e.preventDefault();
-    let curStage: SignUpStage;
 
     setIsLoading(true);
     try {
@@ -76,31 +121,32 @@ const SignIn: React.FC = () => {
 
       if (isNewUser) {
         await postCreateAcc(uid, email, username);
-
-        curStage = SignUpStage.MASS_CHECK_ACC_CREATED;
-        localStorage.setItem(LocalStorageEnum.STAGE, 'sign-up-success');
-
-        successToast('Sign Up Successfully');
-      } else {
-        const user = await getUserInfoByUid(uid);
-        const { stage } = user.data.userInfo;
-        curStage = stage;
-
-        localStorage.setItem(LocalStorageEnum.STAGE, stage);
       }
 
-      if (curStage === SignUpStage.MASS_CHECK_ACC_CREATED) {
-        history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
-      } else {
-        history.push(RouteConstant.SECURE_HOME);
-        successToast('Sign In Successfully');
-      }
+      await navigateToNextPage(uid, isNewUser);
     } catch (err) {
       if (err.code === 'auth/popup-closed-by-user') {
         warnToast('Sign in pop up browser has closed. Please try again.');
       } else {
-        errorToast(err.message);
+        errorToast(`${err.message}. Please try again later.`);
       }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (hasFormContainsErrors()) return;
+
+    try {
+      setIsLoading(true);
+      const { uid, isNewUser } = await emailSignIn(email, password);
+
+      await navigateToNextPage(uid, isNewUser);
+    } catch (err) {
+      errorToast(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -138,45 +184,25 @@ const SignIn: React.FC = () => {
     return false;
   };
 
-  const onEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (hasFormContainsErrors()) return;
-
-    try {
-      setIsLoading(true);
-      await emailSignIn(email, password);
-
-      if (
-        localStorage.getItem(LocalStorageEnum.STAGE) ===
-        SignUpStage.MASS_CHECK_ACC_CREATED
-      ) {
-        history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
-      } else {
-        history.push(RouteConstant.SECURE_HOME);
-      }
-
-      successToast('Sign In Successfully');
-    } catch (err) {
-      errorToast(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className='sign-in'>
+      <div className='background'>
+        <img src={require(`../Asset/Background.png`).default} />
+      </div>
+      <div className='masscheck-glow'>
+        <img src={require(`../Asset/Logo-White-Glow.png`).default} />
+      </div>
       <form
         className='sign-in__form'
         onSubmit={(e) => onEmailSignIn(e)}
         noValidate
       >
         <div>
-          <label htmlFor='email'>Email Address</label>
+          {/* <label htmlFor='email'>Email Address</label> */}
           <input
             name='email'
             type='email'
-            placeholder='Email Address'
+            placeholder='Email'
             value={email}
             onChange={(e) => onEmailChange(e)}
           />
@@ -185,7 +211,7 @@ const SignIn: React.FC = () => {
           )}
         </div>
         <div>
-          <label htmlFor='password'>Password</label>
+          {/* <label htmlFor='password'>Password</label> */}
           <input
             name='password'
             type='password'
@@ -201,7 +227,7 @@ const SignIn: React.FC = () => {
         <div>
           <NavLink
             className='sign-in__form__forget-password'
-            to='/reset-password'
+            to={RouteConstant.PUBLIC_RESET_PASSWORD}
           >
             I forgot my password
           </NavLink>
@@ -220,7 +246,6 @@ const SignIn: React.FC = () => {
           onExternalMethodSignIn(e, SignInMethodEnum.GOOGLE_SIGN_IN)
         }
       >
-        Sign In with <strong>Google</strong>
       </button>
       <button
         className='sign-in__twitter-button'
@@ -228,8 +253,10 @@ const SignIn: React.FC = () => {
           onExternalMethodSignIn(e, SignInMethodEnum.TWITTER_SIGN_IN)
         }
       >
-        Sign In with <strong>Twitter</strong>
       </button>
+      <div className='sign-in__powered-by'>
+        <img src={require(`../Asset/Powered-By.png`).default} />
+      </div>
     </div>
   );
 };

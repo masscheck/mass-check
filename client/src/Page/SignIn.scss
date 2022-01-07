@@ -4,10 +4,38 @@
 @import '../Util/Styles/FormInput.scss';
 @import '../Util/Styles/FormLabel.scss';
 
+.background {
+  img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: -10;
+  }
+}
+
+.masscheck-glow {
+  img {
+    position: fixed;
+    top: 0;
+    left: 40%;
+    height: 100vh;
+    z-index: -10;
+  }
+}
+
 .sign-in {
-  width: 80%;
+  // img {
+  //   position: fixed;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100vw;
+  //   z-index: -10;
+  // }
 
   &__form {
+    margin-top: 3rem;
+
     &--error {
       @include error-message;
     }
@@ -29,35 +57,44 @@
       @include form-input;
     }
 
-    div {
-      margin-bottom: 1rem;
+    ::placeholder {
+      color: $input-placeholder-text-color;
     }
 
     &__forget-password {
-      margin-left: 16rem;
-      color: $nav-primary-color;
+      margin-left: 14rem;
+      color: $nav-primary-color-public;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.8rem;
 
       &:visited {
-        color: $nav-primary-color;
+        color: $nav-primary-color-public;
       }
-    }
-  }
-
-  &__google-button {
-    @include sign-in-external-button;
-
-    strong {
-      color: $google-color;
     }
   }
 
   &__twitter-button {
     @include sign-in-external-button;
-
+    background-color: #1877f2;
+    background-image: url('../Asset/twitter-32.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1.3rem;
     margin-left: 0.8rem;
+  }
 
-    strong {
-      color: $twitter-color;
-    }
+  &__google-button {
+    @include sign-in-external-button;
+    background-color: #ff2e1c;
+    background-image: url('../Asset/google.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1.3rem;
+  }
+
+  &__powered-by {
+    position: absolute;
+    bottom: 0rem;
+    right: 0rem;
   }
 }

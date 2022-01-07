@@ -1,20 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation, useHistory } from 'react-router-dom';
-import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+import React from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../../Context/AuthContext';
+import { useNotification } from '../../Context/NotificationContext';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 
 import './NavBarSecure.scss';
+import { useAccountInfo } from '../../Context/AccountInfoContext';
+import { AccountModel } from '../../Model/AccountModel';
 
 const NavBarHome: React.FC = () => {
-  const { signOut, currentUser } = useAuth();
-  const [username, setUsername] = useState('LOADING...');
+  const { signOut } = useAuth();
+  const { warnToast } = useNotification();
+  const {
+    accountInfo: { displayName },
+    setAccountInfo,
+  } = useAccountInfo();
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    setUsername(localStorage.getItem(LocalStorageEnum.DISPLAY_NAME));
-  }, []);
+  const onSignOut = () => {
+    setAccountInfo(new AccountModel());
+    signOut();
+  };
+
+  const onNext = (event) => {
+    if (pathname.includes('step-three') || pathname.includes('step-four')) {
+      event.preventDefault();
+      warnToast('Please complete your current task');
+      return;
+    }
+  };
 
   return (
     <div className='nav-bar-home-container'>
@@ -25,8 +40,9 @@ const NavBarHome: React.FC = () => {
             activeClassName='nav-link-active'
             exact
             to={RouteConstant.SECURE_PROFILE}
+            onClick={onNext}
           >
-            {username}
+            {displayName}
           </NavLink>
         </h1>
         <div className='nav-link-list'>
@@ -35,7 +51,9 @@ const NavBarHome: React.FC = () => {
             activeClassName='nav-link-active'
             exact
             to={RouteConstant.SECURE_HOME}
+            onClick={onNext}
           >
+            <img src={require(`../../Asset/Home.png`).default} />
             Home
           </NavLink>
           <NavLink
@@ -51,7 +69,9 @@ const NavBarHome: React.FC = () => {
               ].includes(pathname)
             }
             to={RouteConstant.SECURE_INVESTIGATE_STEP_ONE}
+            onClick={onNext}
           >
+            <img src={require(`../../Asset/Magnifying-Glass.png`).default} />
             Investigate
           </NavLink>
           <NavLink
@@ -67,7 +87,9 @@ const NavBarHome: React.FC = () => {
               ].includes(pathname)
             }
             to={RouteConstant.SECURE_VERIFTY_STEP_ONE}
+            onClick={onNext}
           >
+            <img src={require(`../../Asset/Check.png`).default} />
             Verify
           </NavLink>
         </div>
@@ -76,14 +98,16 @@ const NavBarHome: React.FC = () => {
             className='nav-link'
             activeClassName='nav-link-active'
             to={RouteConstant.SECURE_FAQ}
+            onClick={onNext}
           >
+            <img src={require(`../../Asset/FAQ.png`).default} />
             FAQ
           </NavLink>
           <NavLink
             className='nav-link'
             activeClassName='nav-link-active'
             to={RouteConstant.PUBLIC_SIGN_IN}
-            onClick={signOut}
+            onClick={onSignOut}
           >
             Sign Out
           </NavLink>

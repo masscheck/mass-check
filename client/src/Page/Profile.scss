@@ -4,55 +4,95 @@
 @import '../Util/Styles/FormLabel.scss';
 
 .profile {
-  width: 100%;
-  &__top {
-    display: flex;
+  display: grid;
+  grid-template-areas: 'left-side right-side';
+  grid-template-columns: 1fr 3fr;
+  &__left {
+    grid-area: left-side;
+    // width: 20vw;
+    height: 70vh;
+
     &__wallet {
-      @include form-label;
-      width: 55%;
+      box-shadow: 0px 4px 30px -15px #bfaee3;
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      height: 35vh;
+
       &__title {
-        margin-bottom: 0.5em;
-      }
-      &__content {
-        @include body-text;
-        box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.07);
-        background-color: white;
-        border-radius: 0.2rem;
         display: flex;
-        width: 80%;
-        &__left {
-          width: 50%;
-          padding: 1rem;
-          &__amount {
-            @include impact-text;
-          }
+        @include form-label;
+
+        img {
+          width: 1.5rem;
+          height: 1.5rem;
+          margin: auto 0;
+          margin-right: 1rem;
         }
-        &__right {
-          width: 50%;
-          padding: 1rem;
-          &__button {
-            @include wallet-button;
-          }
+      }
+      &__balance {
+        display: flex;
+        justify-content: space-evenly;
+
+        img {
+          width: 20%;
+          height: 20%;
+          margin: auto 0;
+        }
+        p {
+          font-size: 3rem;
+          font-weight: bold;
+        }
+      }
+      &__button {
+        button {
+          @include regular-purple-button;
+          width: 17vw;
+          cursor: pointer;
         }
       }
     }
+
     &__credibility {
-      @include form-label;
-      width: 45%;
+      box-shadow: 0px 4px 30px -15px #bfaee3;
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      height: 32vh;
+
       &__title {
-        margin-bottom: 0.5em;
+        display: flex;
+        @include form-label;
+
+        img {
+          width: 1.5rem;
+          height: 1.5rem;
+          margin: auto 0;
+          margin-right: 1rem;
+        }
       }
       &__score {
-        @include body-text;
-        box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.07);
-        padding: 1rem;
-        background-color: white;
-        border-radius: 0.2rem;
-        width: 80%;
+        text-align: center;
+
         &__value {
-          @include impact-text;
+          font-size: 3rem;
+          font-weight: bold;
+          color: $body-text-color;
+
+          strong {
+            color: $credibility-text-color;
+          }
         }
       }
     }
+  }
+
+  &__activity {
+    grid-area: right-side;
+    // width: 50vw;
+    height: 70vh;
+    margin-left: 1.5rem;
+    box-shadow: 0px 4px 30px -15px #bfaee3;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
   }
 }

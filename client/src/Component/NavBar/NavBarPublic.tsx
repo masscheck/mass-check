@@ -1,21 +1,21 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import { useNotification } from '../../Context/NotificationContext';
 
 import './NavBarPublic.scss';
+import { useAccountInfo } from '../../Context/AccountInfoContext';
 
 const NavBar: React.FC = (props: any) => {
   const { pathname } = useLocation();
+  const {
+    accountInfo: { toSignUpSuccessAllowable },
+  } = useAccountInfo();
   const { warnToast } = useNotification();
 
   const onNext = (event) => {
-    if (
-      localStorage.getItem(LocalStorageEnum.STAGE) ===
-      RouteConstant.PUBLIC_SIGN_UP_SUCCESS
-    ) {
+    if (toSignUpSuccessAllowable) {
       event.preventDefault();
       warnToast('Please Complete Sign-Up Application Before Proceeding');
     }
@@ -23,7 +23,7 @@ const NavBar: React.FC = (props: any) => {
 
   return (
     <div className='nav-bar-container'>
-      <h1>Mass Check</h1>
+      <img src={require(`../../Asset/Logo-White-Outline.png`).default} />
       <div className='flex-container'>
         <div className='nav-link-list'>
           <NavLink

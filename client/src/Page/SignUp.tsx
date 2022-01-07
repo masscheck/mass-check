@@ -5,12 +5,12 @@ import { useHistory } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
 import { useNotification } from '../Context/NotificationContext';
 import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
+import { useAccountInfo } from '../Context/AccountInfoContext';
 
 import { postCreateAcc } from '../Util/API/SignUpAPI';
-import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
+import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import './SignUp.scss';
-import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 const signInSchema = Joi.object({
   username: Joi.string().alphanum().required(),
@@ -39,6 +39,7 @@ const SignUp: React.FC = () => {
   const { signUp } = useAuth();
   const { successToast, errorToast } = useNotification();
   const { setIsLoading } = useLoadingSpinner();
+  const { setAccountInfo } = useAccountInfo();
 
   useEffect(() => {
     setHasNoError(!!(username && email && password && confirmPassword));
@@ -100,10 +101,18 @@ const SignUp: React.FC = () => {
     try {
       setIsLoading(true);
       const uid = await signUp(email, password, username);
+
       await postCreateAcc(uid, email, username);
 
-      history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
+      setAccountInfo({
+        uid,
+        displayName: username,
+        xpxAddress: null,
+        toSecureAllowable: false,
+        toSignUpSuccessAllowable: true,
+      });
 
+      history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
       successToast('Sign Up Successfully');
     } catch (err) {
       errorToast(err.message);
@@ -114,13 +123,19 @@ const SignUp: React.FC = () => {
 
   return (
     <div className='sign-up'>
+      <div className='background'>
+        <img src={require(`../Asset/Background.png`).default} />
+      </div>
+      <div className='masscheck-glow'>
+        <img src={require(`../Asset/Logo-White-Glow.png`).default} />
+      </div>
       <form
         className='sign-up__form'
         onSubmit={(e) => onEmailSignUp(e)}
         noValidate
       >
         <div>
-          <label htmlFor='username'>Username</label>
+          {/* <label htmlFor='username'>Username</label> */}
           <input
             name='username'
             type='text'
@@ -133,11 +148,11 @@ const SignUp: React.FC = () => {
           )}
         </div>
         <div>
-          <label htmlFor='email'>Email Address</label>
+          {/* <label htmlFor='email'>Email Address</label> */}
           <input
             name='email'
             type='email'
-            placeholder='Email Address'
+            placeholder='Email'
             value={email}
             onChange={(e) => onEmailChange(e)}
           />
@@ -147,7 +162,7 @@ const SignUp: React.FC = () => {
         </div>
         <div className='sign-up__form__password-group'></div>
         <div>
-          <label htmlFor='password'>Password</label>
+          {/* <label htmlFor='password'>Password</label> */}
           <input
             name='password'
             type='password'
@@ -160,11 +175,11 @@ const SignUp: React.FC = () => {
           )}
         </div>
         <div>
-          <label htmlFor='confirmPassword'>Confirm Password</label>
+          {/* <label htmlFor='confirmPassword'>Confirm Password</label> */}
           <input
             name='confirmPassword'
             type='password'
-            placeholder='Re-enter Password'
+            placeholder='Repeat Password'
             value={confirmPassword}
             onChange={(e) => onConfirmPasswordChange(e)}
           />

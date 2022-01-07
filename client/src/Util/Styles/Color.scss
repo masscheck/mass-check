@@ -1,26 +1,48 @@
 // Navigation Bar
-$nav-primary-color: #55acee;
-$nav-secondary-color: #000000;
+$nav-primary-color-secure: #000000;
+$nav-secondary-color-secure: #857c99;
+$nav-primary-color-public: #ffffff;
+$nav-secondary-color-public: #e2daf3;
+$nav-disabled-color: rgba(226, 218, 243, 0.5);
+$nav-selected-color: linear-gradient(to right, #ffde44, #ffeea0);
 
 // Button
-$button-primary-color: #55acee;
-$button-secondary-color: #66757f;
-$button-disabled-color: rgba(85, 172, 238, 0.5);
+$button-primary-color: linear-gradient(to right, #6932e3, #a880ff);
+$button-secondary-color: white;
+$button-decline-border-color: #cdcdcd;
+$button-disabled-color: rgba(226, 218, 243, 0.2);
 $button-deselected-real-color: rgba(85, 238, 129, 0.5);
 $button-selected-real-color: rgba(85, 238, 129, 1);
 $button-deselected-fake-color: rgba(238, 85, 85, 0.5);
 $button-selected-fake-color: rgba(238, 85, 85, 1);
 
 // Text
-$text-color: #66757f;
-$light-text-color: #9baab4;
+$text-color: #6932e3;
+$light-text-color: #857c99;
 $body-text-color: #000000;
-$impact-text-color: #55acee;
+$impact-text-color: #6932e3;
+$red-text-color: #ff1515;
+$white-text-color: white;
+$credibility-text-color: #ffde44;
+$input-placeholder-text-color: #857c99;
 
 // Background
 $nav-background-color: #ffffff;
 $content-background-color: #f5f9fb;
+$dropbox-background-color: #f3f2f5;
+$role-background-color: #6932e3;
+
+// Container Border
+$section-border-color: #f3f2f5;
 
 // Brand Color
 $google-color: #c71c1c;
 $twitter-color: #55acee;
+
+//Authenticity Color
+$high-auth-color: #006113;
+$med-auth-color: #866800;
+$low-auth-color: #500000;
+$high-auth-background-color: linear-gradient(to right, #21e14b, #c6ff4e);
+$med-auth-background-color: linear-gradient(to right, #ffc700, #ffef61);
+$low-auth-background-color: linear-gradient(to right, #ff4040, #ff9a62);
