@@ -254,6 +254,9 @@ const SignIn: React.FC = () => {
         }
       >
       </button>
+      <div className='sign-in__powered-by'>
+        <img src={require(`../Asset/Powered-By.png`).default} />
+      </div>
     </div>
   );
 };
