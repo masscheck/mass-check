@@ -28,6 +28,7 @@ import HomeRoute from './routes/home.route';
 import InvestigationRoute from './routes/investigation.route';
 import VerificationRoute from './routes/verification.route';
 import UserProfileRoute from './routes/user-profile.route';
+import TweetRoute from './routes/tweet.route';
 
 // Config
 app.use(express.json());
@@ -69,6 +70,7 @@ app.use('/api/home', HomeRoute);
 app.use('/api/investigation', InvestigationRoute);
 app.use('/api/verification', VerificationRoute);
 app.use('/api/user-profile', UserProfileRoute);
+app.use('/api/tweet', TweetRoute);
 app.use('/', (req, res) => {
   res.send('MassCheck API');
 });

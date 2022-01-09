@@ -1,7 +1,7 @@
 const MessageConstant = {
-  ACTIVATE_MASSCHECK: 'activate_masscheck',
-  DEACTIVATE_MASSCHECK: 'deactivate_masscheck',
-  RESPOND_SUCCESS: 'respond_success',
+  ACTIVATE_MASSCHECK: 'ACTIVATE_MASSCHECK',
+  DEACTIVATE_MASSCHECK: 'DEACTIVATE_MASSCHECK',
+  EXT_MASSCHECK_INTERFACE_STATE: 'EXT_MASSCHECK_INTERFACE_STATE',
 };
 
 const toggleBtn = document.getElementById('toggleBtn');
