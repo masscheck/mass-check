@@ -55,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@types/chrome": "0.0.175",
     "@types/joi": "^17.2.3",
     "@types/node-sass": "^4.11.1",
     "@types/pdfjs-dist": "^2.7.4",
