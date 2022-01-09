@@ -4,6 +4,44 @@ import TweetModel from '../models/tweet.model';
 import { AnalysePhaseConstant } from '../constants/analyse-phase-constant';
 import { logger } from '../middlewares/logger';
 
+const getTweetList = async (isVerified: boolean, queryStartDate: number) => {
+  const tweetPerPage = 10;
+
+  try {
+    const tweetList = await new Promise<TweetInterface[]>((resolve, reject) => {
+      const query = isVerified
+        ? TweetModel.find({
+            curAnalysedPhase: { $in: [AnalysePhaseConstant.COMPLETED] },
+          })
+        : TweetModel.find({
+            curAnalysedPhase: { $nin: [AnalysePhaseConstant.COMPLETED] },
+          });
+
+      query
+        .where('submitTime')
+        .lt(queryStartDate)
+        .sort({ submitTime: 'desc' })
+        // .limit(tweetPerPage)
+        .exec((err, result) => {
+          if (err) reject(err);
+
+          resolve(result);
+        });
+    });
+    logger.verbose('MongoDB Query - Retrieve Tweet List', tweetList);
+
+    let newNextTweetStartDate = null;
+
+    if (tweetList.length > 0) {
+      newNextTweetStartDate = tweetList[tweetList.length - 1]['submitTime'];
+    }
+
+    return { tweetList, newNextTweetStartDate };
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getTweetInfoById = async (id: string) => {
   const tweetInfo = await new Promise<TweetInterface>((resolve, reject) => {
     setTimeout(() => {
@@ -239,6 +277,7 @@ const updateTweetTrustIndex = async (tweetId: string, trustIndex: number) => {
 };
 
 export {
+  getTweetList,
   getRandomTweetAndItsInfo,
   addUserToTweetWIP,
   removeUserFromTweetWIP,

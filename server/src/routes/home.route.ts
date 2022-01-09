@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { logger } from '../middlewares/logger';
-import { getTweetList } from '../common-crud/retrieve-db.common';
+import { getTweetList } from '../controllers/tweet.controller';
 
 const router = express.Router();
 
