@@ -1,40 +1,24 @@
 console.log('Load content script');
 
-/* Appending button to webpage */
-var main = document.createElement('DIV');
-var buttons = document.createElement('BUTTON');
+// declare constant
+const MessageConstant = {
+  ACTIVATE_MASSCHECK: 'activate_masscheck',
+  DEACTIVATE_MASSCHECK: 'deactivate_masscheck',
+};
 
-main.classList.add('main');
-buttons.value = 'verify News';
-buttons.type = 'submit';
-buttons.id = 'button';
-buttons.textContent = 'Verify';
+const appendMassCheckInterface = () => {
+  console.log('appending masscheck interface');
+};
 
-main.appendChild(buttons);
-// document.querySelector(".IC1Ck").appendChild(main);
+// Chrome API
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log('content script receiving message', { message });
 
-/* Allow toggle button to call the function */
-// document.getElementById("myCheckbox").addEventListener("click", toggleCheck);
+  const messageType = message.type;
 
-/* Toggle function */
-// function toggleCheck() {
-//     if(document.getElementById("myCheckbox").checked === true){
-//         var main = document.createElement('DIV');
-//         var buttons = document.createElement('BUTTON');
-//         main.appendChild(buttons);
-//         document.querySelector(".IC1Ck").appendChild(main);
+  if (MessageConstant.ACTIVATE_MASSCHECK === messageType) {
+    appendMassCheckInterface();
+  }
 
-//         main.classList.add('main');
-//         buttons.value = "verify News"
-//         buttons.type = 'submit';
-//         buttons.id = 'button';
-//         buttons.textContent = 'Verify';
-
-//         main.appendChild(buttons)
-//         document.querySelector(".IC1Ck").appendChild(main);
-//     }
-//     else{
-//         document.getElementById('myCheckbox').style.display = "none";
-//     }
-
-// }
+  if (message.greeting === 'hello') sendResponse({ farewell: 'goodbye' });
+});

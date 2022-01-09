@@ -7,8 +7,8 @@
   "content_scripts": [
     {
       "js": ["./src/content-script.js"],
-      "//matches": ["https://twitter.com/*", "https://mobile.twitter.com/*"],
-      "matches": ["<all_urls>"]
+      "//matches": ["*://*.twitter.com/*"],
+      "matches": ["*://*.twitter.com/*"]
     }
   ],
   "background": {
@@ -19,6 +19,6 @@
     "default_popup": "./src/popup/popup.html",
     "default_title": "MassCheck fact-checking tool"
   },
-  "permissions": ["activeTab"],
+  "permissions": ["tabs", "webRequest", "*://*.twitter.com/"],
   "content_security_policy": "script-src 'self' https://cdn.firebase.com https://apis.google.com https://www.gstatic.com; object-src 'self'"
 }

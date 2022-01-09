@@ -1,30 +1,47 @@
 console.log('phase background-js');
 
-// let user_signed_in = false;
-// let return_session = false;
-// // chrome.browserAction.onClicked.addListener(function () {
-// //   chrome.windows.create({
-// //     url:'./popup.html',
-// //     with: 300,
-// //     height: 600,
-// //     focused: true
-// // });
-// // })
+// declare variables
+let initLoading = true;
 
-// function is_user_signed_in() {}
+let timeoutHandle = null;
+const timeoutDuration = 3000; // in milliseconds
 
-// chrome.runtime.onMessage.addListener(function (requesr, sender,sendResponese) {
-//   if (request.message === 'is_user_signed_in') {
-//     sendResponse({
-//       message: 'success',
-//       payload: user_signed_in,
-//     });
-//   } else if (request.message === 'signout') {
-//     user_signed_in = false;
-//     sendResponse({ message: 'success' });
-//   } else if (request.message === 'sign_in') {
-//     user_signed_in = true;
-//     sendResponse({ message: 'success' });
-//   }
-//   return true;
-// });
+// no more network request, send to user safe to load the page
+const timeoutCallback = () => {
+  if (initLoading) {
+    initLoading = false;
+  } else {
+    // user scroll more new tweets
+  }
+
+  console.log('inform browser action');
+};
+
+// helpful function
+const resetTimer = () => {
+  window.clearTimeout(timeoutHandle);
+
+  timeoutHandle = window.setTimeout(timeoutCallback, timeoutDuration);
+};
+
+// Chrome API
+// check for incoming network request
+chrome.webRequest.onCompleted.addListener(
+  (details) => {
+    chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+      const curUrl = tabs[0] && tabs[0].url;
+      const twitterRegex = /twitter/gi;
+
+      console.log({ tabs, curUrl });
+      // only on active tab will trigger the send msg
+      if (twitterRegex.test(curUrl)) {
+        console.log(details);
+
+        resetTimer();
+      }
+    });
+  },
+  {
+    urls: ['<all_urls>'],
+  }
+);

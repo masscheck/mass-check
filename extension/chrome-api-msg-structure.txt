@@ -1,0 +1,8 @@
+[MANDATORY] type: string (constant)
+[OPTIONAL]  payload: object
+
+Below is the constant to added to each javascript file.
+const MessageConstant = {
+  ACTIVATE_MASSCHECK: 'activate_masscheck',
+  DEACTIVATE_MASSCHECK: 'deactivate_masscheck',
+};
