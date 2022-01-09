@@ -3,6 +3,7 @@
 
 Below is the constant to added to each javascript file.
 const MessageConstant = {
-  ACTIVATE_MASSCHECK: 'activate_masscheck',
-  DEACTIVATE_MASSCHECK: 'deactivate_masscheck',
+  ACTIVATE_MASSCHECK: 'ACTIVATE_MASSCHECK',
+  DEACTIVATE_MASSCHECK: 'DEACTIVATE_MASSCHECK',
+  EXT_MASSCHECK_INTERFACE_STATE: 'EXT_MASSCHECK_INTERFACE_STATE',
 };

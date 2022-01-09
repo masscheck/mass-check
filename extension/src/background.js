@@ -14,7 +14,7 @@ const timeoutCallback = () => {
     // user scroll more new tweets
   }
 
-  console.log('inform browser action');
+  console.log('DOM finished loaded. can load masscheck interface');
 };
 
 // helpful function
@@ -32,11 +32,8 @@ chrome.webRequest.onCompleted.addListener(
       const curUrl = tabs[0] && tabs[0].url;
       const twitterRegex = /twitter/gi;
 
-      console.log({ tabs, curUrl });
       // only on active tab will trigger the send msg
       if (twitterRegex.test(curUrl)) {
-        console.log(details);
-
         resetTimer();
       }
     });

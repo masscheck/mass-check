@@ -73,7 +73,7 @@ app.use('/', (req, res) => {
   res.send('MassCheck API');
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3500;
 app.listen(PORT, () => {
   logger.info('Server started! Listening on', PORT);
 });
