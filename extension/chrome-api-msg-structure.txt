@@ -19,6 +19,7 @@ const MessageConstant = {
 
 - toggle.js
 - popup.js
+- content-script.js
 const ExtensionLocalStorageConstant = {
   IS_SIGNED_IN: 'masscheck_ext_is_signed_in',
   DISPLAY_NAME: 'masscheck_ext_display_name',

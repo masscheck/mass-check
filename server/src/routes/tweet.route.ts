@@ -6,15 +6,17 @@ import TwitterModel from '../models/tweet.model';
 const router = express.Router();
 
 router.post('/create-tweet', async (req, res, next) => {
-  console.log(req.body);
-  const {hashedTweetContent, tweetContent, tweetAuthorName, tweetAuthorTag} = req.body;
+  console.log(req);
+  const { id, tweetContent, tweetAuthorName, tweetAuthorTag, submitBy } =
+    req.body;
   try {
     const createdTwitte = await new Promise((resolve, reject) => {
       new TwitterModel({
-        _id: hashedTweetContent,
+        _id: id,
         content: tweetContent,
         authorName: tweetAuthorName,
-        authorTag: tweetAuthorTag
+        authorTag: tweetAuthorTag,
+        submitBy
       }).save((err, result) => {
         if (err) reject(err);
 

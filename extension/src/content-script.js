@@ -13,6 +13,166 @@ const MessageConstant = {
   EXT_IS_ACTIVATE: 'MASSCHECK_EXT_IS_ACTIVATE',
 };
 
+// connect to masscheck website local storage
+const getId = (data) => {
+  const prefix = 'sessionAccessId-';
+  let id;
+
+  if (data && data.id && ~data.id.indexOf(prefix)) {
+    id = data.id;
+  }
+
+  return id;
+};
+
+const createId = () => {
+  const prefix = 'sessionAccessId-';
+  return prefix + Date.now();
+};
+
+const storageGuest = (source, parent) => {
+  parent = parent || document.body;
+
+  let contentWindow;
+  let callbacks = {};
+  const sessionRequests = [];
+  let connected = false;
+  let closed = true;
+  let connectedTimeout;
+  let isLoaded = false;
+
+  const iframe = document.createElement('iframe');
+  iframe.src = source;
+  iframe.width = 0;
+  iframe.height = 0;
+  iframe.style.display = 'none';
+  iframe.onload = () => {
+    isLoaded = true;
+  };
+
+  const handleMessage = (event) => {
+    const response = event.data;
+    const sessionAccessId = getId(response);
+
+    if (sessionAccessId === 'sessionAccessId-connected') {
+      connected = true;
+      return;
+    }
+
+    if (response.connectError) {
+      Object.keys(callbacks).forEach((key) => callbacks[key](response.error));
+      callbacks = {};
+      return;
+    }
+
+    const callback = callbacks[sessionAccessId];
+
+    if (sessionAccessId && callback) {
+      callback(response.error, response.data);
+    }
+  };
+
+  const openStorage = () => {
+    parent.appendChild(iframe);
+    contentWindow = iframe.contentWindow;
+    closed = false;
+
+    window.addEventListener('message', handleMessage);
+
+    checkConnected();
+  };
+
+  const close = () => {
+    clearTimeout(connectedTimeout);
+    window.removeEventListener('message', handleMessage);
+    iframe.parentNode.removeChild(iframe);
+    connected = false;
+    closed = true;
+  };
+
+  const message = (method, key, value, callback) => {
+    if (closed) {
+      openStorage();
+    }
+
+    if (!connected && method !== 'connect') {
+      sessionRequests.push([method, key, value, callback]);
+    }
+
+    const id = createId();
+
+    if (callbacks && typeof callback === 'function') {
+      callbacks[id] = callback;
+    }
+
+    if (isLoaded) {
+      contentWindow.postMessage(
+        {
+          method,
+          key,
+          value,
+          id,
+        },
+        source
+      );
+    }
+  };
+
+  const get = (key, callback) => {
+    if (!callback) {
+      throw new Error('callback required for get');
+    }
+
+    message('get', key, null, callback);
+  };
+
+  const set = (key, value, callback) => {
+    message('set', key, value, callback);
+  };
+
+  const remove = (key, callback) => {
+    message('remove', key, null, callback);
+  };
+
+  const checkConnected = () => {
+    if (connected) {
+      clearTimeout(connectedTimeout);
+      while (sessionRequests.length) {
+        message(...sessionRequests.pop());
+      }
+
+      return;
+    }
+
+    message('connect');
+
+    connectedTimeout = setTimeout(checkConnected, 125);
+  };
+
+  openStorage();
+
+  return {
+    get,
+    set,
+    remove,
+    close,
+  };
+};
+
+const massCheckStorage = storageGuest('http://localhost:3000');
+
+const getDisplayName = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.get(MessageConstant.DISPLAY_NAME, (err, value) => {
+      try {
+        resolve(value);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+};
+
 const hashCode = (s) => {
   let h;
   for (let i = 0; i < s.length; i++)
@@ -21,16 +181,18 @@ const hashCode = (s) => {
   return Math.abs(h);
 };
 
-const appendMassCheckInterface = () => {
+
+const appendMassCheckInterface = async () => {
   console.log('appending masscheck interface');
 
+  const masscheckUserDisplayName = await getDisplayName();
+  console.log({ masscheckUserDisplayName });
   const tweets = document.querySelectorAll(
     'article div.css-1dbjc4n.r-1iusvr4.r-16y2uox.r-1777fci.r-kzbkwu'
   );
   console.log({ tweets });
 
   for (let i = 0; i < tweets.length; i++) {
-    
     const tweetContentNodes = tweets[i].childNodes;
     const tweetHandler = tweetContentNodes[0].innerText;
     const tweetContent = tweetContentNodes[1].innerText;
@@ -46,13 +208,17 @@ const appendMassCheckInterface = () => {
     verifyButton.onclick = () => {
       const content = {
         id: hashedTweetContent,
-        tweetContent:tweetContent,
-        tweetAuthorName:tweetAuthorName,
-        tweetAuthorTag: tweetAuthorTag,  
+        tweetContent,
+        tweetAuthorName,
+        tweetAuthorTag,
+        submitBy: masscheckUserDisplayName,
       };
       console.log(content);
 
       fetch(`${API_ENDPOINT}/tweet/create-tweet`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
         method: 'POST',
         body: JSON.stringify(content),
       })
@@ -64,9 +230,7 @@ const appendMassCheckInterface = () => {
     };
 
     tweets[i].appendChild(verifyButton);
-   
   }
- 
 };
 
 const removeMassCheckInterface = () => {
