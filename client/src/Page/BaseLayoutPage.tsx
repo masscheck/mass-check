@@ -15,6 +15,10 @@ const BaseLayoutPage: React.FC = () => {
         origin: 'chrome-extension',
         allowedMethods: ['get', 'set', 'remove'],
       },
+      {
+        origin: 'twitter',
+        allowedMethods: ['get'],
+      },
     ]);
   }, []);
 

@@ -33,8 +33,8 @@ toggleBtn.onclick = () => {
 
     const message = {
       type: isToggle
-        ? MessageConstant.ACTIVATE_MASSCHECK
-        : MessageConstant.DEACTIVATE_MASSCHECK,
+        ? MessageConstant.EXT_ACTIVATE_MASSCHECK
+        : MessageConstant.EXT_DEACTIVATE_MASSCHECK,
     };
 
     chrome.tabs.sendMessage(tabs[0].id, message);
