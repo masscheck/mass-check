@@ -26,11 +26,14 @@ const appendMassCheckInterface = () => {
   console.log({ tweets });
 
   for (let i = 0; i < tweets.length; i++) {
+    
     const tweetContentNodes = tweets[i].childNodes;
-
     const tweetHandler = tweetContentNodes[0].innerText;
     const tweetContent = tweetContentNodes[1].innerText;
+    const tweetHandlerSplitted = tweetHandler.split('\n');
     const hashedTweetContent = hashCode(tweetContent);
+    const tweetAuthorName = tweetHandlerSplitted[0];
+    const tweetAuthorTag = tweetHandlerSplitted[1];
 
     const verifyButton = document.createElement('button');
     verifyButton.textContent = 'Verify';
@@ -39,9 +42,11 @@ const appendMassCheckInterface = () => {
     verifyButton.onclick = () => {
       const content = {
         id: hashedTweetContent,
-        tweetContent,
-        tweetHandler,
+        tweetContent:tweetContent,
+        tweetAuthorName:tweetAuthorName,
+        tweetAuthorTag: tweetAuthorTag,  
       };
+      console.log(content);
 
       fetch(`${API_ENDPOINT}/tweet/create-tweet`, {
         method: 'POST',
@@ -55,7 +60,9 @@ const appendMassCheckInterface = () => {
     };
 
     tweets[i].appendChild(verifyButton);
+   
   }
+ 
 };
 
 const removeMassCheckInterface = () => {

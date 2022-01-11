@@ -1,12 +1,36 @@
 import express from 'express';
 
 import { logger } from '../middlewares/logger';
-import AccountModel from '../models/account.model';
+import TwitterModel from '../models/tweet.model';
 
 const router = express.Router();
 
 router.post('/create-tweet', async (req, res, next) => {
-  console.log(req);
+  console.log(req.body);
+  const {hashedTweetContent, tweetContent, tweetAuthorName, tweetAuthorTag} = req.body;
+  try {
+    const createdTwitte = await new Promise((resolve, reject) => {
+      new TwitterModel({
+        _id: hashedTweetContent,
+        content: tweetContent,
+        authorName: tweetAuthorName,
+        authorTag: tweetAuthorTag
+      }).save((err, result) => {
+        if (err) reject(err);
+
+        console.log({ result });
+        resolve(result);
+      });
+    });
+
+    logger.verbose('MongoDB - Create Tweet', createdTwitte);
+
+    res.sendStatus(200);
+  } catch (err) {
+    logger.error(err);
+
+    res.sendStatus(500);
+  }
 
   // const { uid } = req.query;
 
