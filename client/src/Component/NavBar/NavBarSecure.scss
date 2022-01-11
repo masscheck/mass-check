@@ -33,6 +33,15 @@
       font-size: 1.4rem;
       text-decoration: none;
       color: $nav-secondary-color-secure;
+
+      &.button {
+        border: none;
+        background: white;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
 
     .nav-link-active {

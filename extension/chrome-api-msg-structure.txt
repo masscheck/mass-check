@@ -2,8 +2,30 @@
 [OPTIONAL]  payload: object
 
 Below is the constant to added to each javascript file.
+- content-script.js
+- toggle.js
+- popup.js
+
 const MessageConstant = {
-  ACTIVATE_MASSCHECK: 'ACTIVATE_MASSCHECK',
-  DEACTIVATE_MASSCHECK: 'DEACTIVATE_MASSCHECK',
-  EXT_MASSCHECK_INTERFACE_STATE: 'EXT_MASSCHECK_INTERFACE_STATE',
+  ACCESS_TOKEN: 'MASSCHECK_ACCESS_TOKEN',
+  REFRESH_TOKEN: 'MASSCHECK_REFRESH_TOKEN',
+  EXPIRE_TIME_TOKEN: 'MASSCHECK_EXPIRE_TIME_TOKEN',
+  DISPLAY_NAME: 'MASSCHECK_DISPLAY_NAME',
+  EXT_ACTIVATE_MASSCHECK: 'MASSCHECK_EXT_ACTIVATE_MASSCHECK',
+  EXT_DEACTIVATE_MASSCHECK: 'MASSCHECK_EXT_DEACTIVATE_MASSCHECK',
+  EXT_IS_ACTIVATE: 'MASSCHECK_EXT_IS_ACTIVATE',
 };
+
+
+- toggle.js
+- popup.js
+const ExtensionLocalStorageConstant = {
+  IS_SIGNED_IN: 'masscheck_ext_is_signed_in',
+  DISPLAY_NAME: 'masscheck_ext_display_name',
+};
+
+// TODO
+1. init loading extension background content
+2. load data on popup hit err
+3. submit tweet to server hit err
+4. provide icon for the new color

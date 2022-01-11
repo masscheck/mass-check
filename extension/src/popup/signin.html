@@ -3,26 +3,26 @@
   <head>
     <title>MassCheck</title>
     <link rel="stylesheet" href="signin.css" />
+    <script src="signin.js" defer></script>
   </head>
   <body>
     <h3>MassCheck</h3>
-    <div class="loginArea">
-      <input type="email" placeholder="Enter Username" class="uname" required />
+    <div class="login-area">
       <input
-        type="password"
-        placeholder="Enter Password"
-        class="psw"
+        id="email"
+        type="email"
+        placeholder="Enter email"
+        class="input-field email"
         required
       />
-
-      <a href="toggle.html"
-        ><button class="login-btn-auth" id="sign_in" type="signin">
-          Sign In
-        </button></a
-      >
-      <br />
-      <br />
-      <br />
+      <input
+        id="password"
+        type="password"
+        placeholder="Enter password"
+        class="input-field pwd"
+        required
+      />
+      <button class="login-btn-auth" id="signin">Sign In</button>
       <a
         class="signup"
         href="https://competent-noether-eeafa8.netlify.app/public/sign-up"

@@ -15,6 +15,7 @@ import { SignInMethodEnum } from '../Util/Constant/SignInMethodEnum';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import './SignIn.scss';
+import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 
 const signInSchema = Joi.object({
   email: Joi.string()
@@ -65,6 +66,8 @@ const SignIn: React.FC = () => {
 
   const navigateToNextPage = async (uid: any, isNewUser: any) => {
     const { displayName, xpxAddress } = await getAccInfo(uid);
+    
+    localStorage.setItem(LocalStorageEnum.DISPLAY_NAME, displayName);
 
     if (!xpxAddress && !isNewUser) {
       // User not first time sign in but dont have xpx account

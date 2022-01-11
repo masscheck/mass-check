@@ -7,18 +7,37 @@ body {
   width: 180px;
 }
 
+.login-area {
+  display: flex;
+  flex-direction: column;
+}
+
 .login-btn-auth {
   color: white;
   background-color: #2a9df4;
   border: 2px solid #2a9df4;
   border-radius: 10px;
-  padding: 0px 57px;
+  padding: 0.2rem;
+}
+
+.login-btn-auth:hover {
+  cursor: pointer;
+}
+
+.login-btn-auth a {
+  text-decoration: none;
+  color: white;
 }
 
 .signup {
   color: #4caf50;
-  margin-bottom: 50px;
-  position: absolute;
+  margin: auto;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.signup:hover {
+  cursor: pointer;
 }
 
 .container {
@@ -26,14 +45,28 @@ body {
   left: 20px;
 }
 
-.uname {
+.input-field {
+  padding: 0.2rem;
+  padding-left: 0.5rem;
+}
+
+.email {
   border: 2px solid #c9ddec41;
   border-radius: 5px;
   margin-bottom: 10px;
 }
 
-.psw {
+.pwd {
   border: 2px solid #c9ddec41;
   border-radius: 5px;
   margin-bottom: 15px;
+}
+
+.error-field {
+  border: 1px solid red;
+  color: red;
+}
+
+.error-field::placeholder {
+  color: red;
 }

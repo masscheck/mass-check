@@ -67,18 +67,18 @@ router.post('/delete-token', async (req, res, next) => {
   }
 
   logger.verbose('MongoDB - Delete Token', { refreshToken });
-  res.status(200);
+  res.sendStatus(200);
 });
 
 router.post('/refresh-token', (req, res) => {
-  if (req.body.refreshToken == null) return res.status(401); // not authorised
+  if (req.body.refreshToken == null) return res.sendStatus(401); // not authorised
 
   const { refreshToken } = req.body;
   const token = getTokenById(refreshToken);
-  if (token == null) return res.status(403); // request forbidden
+  if (token == null) return res.sendStatus(403); // request forbidden
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, uid) => {
-    if (err) return res.status(403);
+    if (err) return res.sendStatus(403);
 
     const accessToken = generateAccessToken(uid);
 
@@ -96,7 +96,7 @@ router.get('/', (req, res) => {
     console.log(err);
     if (err) return res.sendStatus(403);
 
-    res.status(200);
+    res.sendStatus(200);
   });
 });
 

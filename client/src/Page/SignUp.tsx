@@ -8,9 +8,11 @@ import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
 import { useAccountInfo } from '../Context/AccountInfoContext';
 
 import { postCreateAcc } from '../Util/API/SignUpAPI';
+import { postCreateToken } from '../Util/API/AuthAPI';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 
 import './SignUp.scss';
+import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 
 const signInSchema = Joi.object({
   username: Joi.string().alphanum().required(),
@@ -104,6 +106,8 @@ const SignUp: React.FC = () => {
 
       await postCreateAcc(uid, email, username);
 
+      await postCreateToken(uid);
+
       setAccountInfo({
         uid,
         displayName: username,
@@ -111,6 +115,7 @@ const SignUp: React.FC = () => {
         toSecureAllowable: false,
         toSignUpSuccessAllowable: true,
       });
+      localStorage.setItem(LocalStorageEnum.DISPLAY_NAME, username);
 
       history.push(RouteConstant.PUBLIC_SIGN_UP_SUCCESS);
       successToast('Sign Up Successfully');

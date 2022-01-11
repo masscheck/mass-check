@@ -8,7 +8,7 @@ const getAuth = async () => {
     try {
       const res = await getAPIModel(AUTH_API_BASE_URI);
 
-      resolve(res.data);
+      resolve(res);
     } catch (err) {
       console.error(err);
 
@@ -39,16 +39,12 @@ const postCreateToken = async (uid: string) => {
   });
 };
 
-const postDeleteToken = async (uid: string) => {
+const postDeleteToken = async (refreshToken: string) => {
   return new Promise<any>(async (resolve, reject) => {
     try {
-      const res = await postAPIModel(AUTH_API_BASE_URI + '/delete-token', {
-        uid,
+      await postAPIModel(AUTH_API_BASE_URI + '/delete-token', {
+        refreshToken,
       });
-
-      localStorage.removeItem(LocalStorageEnum.ACCESS_TOKEN);
-      localStorage.removeItem(LocalStorageEnum.REFRESH_TOKEN);
-      localStorage.removeItem(LocalStorageEnum.EXPIRE_TIME_TOKEN);
 
       resolve('delete success');
     } catch (err) {

@@ -1,9 +1,5 @@
 console.log('phase background-js');
 
-chrome.storage.sync.get('extension', (data) => {
-  console.log({ data });
-});
-
 // declare variables
 let initLoading = true;
 

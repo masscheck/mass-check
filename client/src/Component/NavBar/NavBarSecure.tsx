@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useHistory } from 'react-router-dom';
 
 import { useAuth } from '../../Context/AuthContext';
 import { useNotification } from '../../Context/NotificationContext';
@@ -8,19 +8,33 @@ import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import './NavBarSecure.scss';
 import { useAccountInfo } from '../../Context/AccountInfoContext';
 import { AccountModel } from '../../Model/AccountModel';
+import { postDeleteToken } from '../../Util/API/AuthAPI';
+import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 
 const NavBarHome: React.FC = () => {
   const { signOut } = useAuth();
-  const { warnToast } = useNotification();
+  const { warnToast, successToast } = useNotification();
   const {
     accountInfo: { displayName },
     setAccountInfo,
   } = useAccountInfo();
   const { pathname } = useLocation();
+  const history = useHistory();
 
-  const onSignOut = () => {
+  const onSignOut = async () => {
+    console.log('sign out');
+
+    const refreshToken = localStorage.getItem(LocalStorageEnum.REFRESH_TOKEN)
+    await postDeleteToken(refreshToken);
     setAccountInfo(new AccountModel());
+    window.localStorage.clear();
+
+    // TODO inform chrome extension that user has logged out
+
     signOut();
+
+    successToast('Sign Out Successfully');
+    history.push(RouteConstant.PUBLIC_SIGN_IN);
   };
 
   const onNext = (event) => {
@@ -103,14 +117,9 @@ const NavBarHome: React.FC = () => {
             <img src={require(`../../Asset/FAQ.png`).default} />
             FAQ
           </NavLink>
-          <NavLink
-            className='nav-link'
-            activeClassName='nav-link-active'
-            to={RouteConstant.PUBLIC_SIGN_IN}
-            onClick={onSignOut}
-          >
+          <button className='nav-link button' onClick={onSignOut}>
             Sign Out
-          </NavLink>
+          </button>
         </div>
       </div>
     </div>
