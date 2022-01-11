@@ -53,7 +53,7 @@ router.post('/create-tweet', async (req, res, next) => {
   //   res.sendStatus(500);
   // }
 
-  res.sendStatus(200);
+  // res.sendStatus(200);
 });
 
 export default router;
