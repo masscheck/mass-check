@@ -14,17 +14,34 @@ import {
 
 const router = express.Router();
 
+const TOKEN_DURATION_HRS = 5;
+
 const generateAccessToken = (uid) => {
-  return jwt.sign(uid, process.env.ACCESS_TOKEN, { expiresIn: '5h' });
+  return jwt.sign(
+    { uid: `${uid}${new Date().getTime()}` },
+    process.env.ACCESS_TOKEN,
+    {
+      expiresIn: `${TOKEN_DURATION_HRS}h`,
+    }
+  );
+};
+
+const getExpiredTime = () => {
+  const date = new Date();
+  const durationInMs = TOKEN_DURATION_HRS * 60 * 60 * 1000;
+  return date.getTime() + durationInMs;
 };
 
 router.post('/create-token', async (req, res, next) => {
   const { uid } = req.body;
 
-  const accessToken = generateAccessToken(uid);
-  const refreshToken = jwt.sign(uid, process.env.REFRESH_TOKEN);
+  console.log({ uid });
 
-  // ADD TO DB
+  const accessToken = generateAccessToken(uid);
+  const refreshToken = jwt.sign(
+    { uid: `${uid}${new Date().getTime()}` },
+    process.env.REFRESH_TOKEN
+  );
 
   try {
     await createTokenById(refreshToken);
@@ -35,7 +52,7 @@ router.post('/create-token', async (req, res, next) => {
   }
 
   logger.verbose('MongoDB - Create Token', { accessToken, refreshToken });
-  res.json({ accessToken, refreshToken });
+  res.json({ accessToken, refreshToken, expiredTime: getExpiredTime() });
 });
 
 router.post('/delete-token', async (req, res, next) => {
@@ -66,7 +83,7 @@ router.post('/refresh-token', (req, res) => {
     const accessToken = generateAccessToken(uid);
 
     logger.verbose('MongoDB - Refresh Token', 'Success');
-    res.json({ accessToken });
+    res.json({ accessToken, expiredTime: getExpiredTime() });
   });
 });
 
@@ -75,7 +92,7 @@ router.get('/', (req, res) => {
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN, (err, uid) => {
     console.log(err);
     if (err) return res.sendStatus(403);
 

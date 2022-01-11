@@ -9,6 +9,7 @@ import { useAccountInfo } from '../Context/AccountInfoContext';
 
 import { postCreateAcc } from '../Util/API/SignUpAPI';
 import { getAccInfo } from '../Util/API/SignInAPI';
+import { postCreateToken } from '../Util/API/AuthAPI';
 
 import { SignInMethodEnum } from '../Util/Constant/SignInMethodEnum';
 import { RouteConstant } from '../Util/Constant/RouteConstant';
@@ -123,6 +124,8 @@ const SignIn: React.FC = () => {
         await postCreateAcc(uid, email, username);
       }
 
+      await postCreateToken(uid);
+
       await navigateToNextPage(uid, isNewUser);
     } catch (err) {
       if (err.code === 'auth/popup-closed-by-user') {
@@ -143,6 +146,8 @@ const SignIn: React.FC = () => {
     try {
       setIsLoading(true);
       const { uid, isNewUser } = await emailSignIn(email, password);
+
+      await postCreateToken(uid);
 
       await navigateToNextPage(uid, isNewUser);
     } catch (err) {
@@ -245,15 +250,13 @@ const SignIn: React.FC = () => {
         onClick={(e) =>
           onExternalMethodSignIn(e, SignInMethodEnum.GOOGLE_SIGN_IN)
         }
-      >
-      </button>
+      ></button>
       <button
         className='sign-in__twitter-button'
         onClick={(e) =>
           onExternalMethodSignIn(e, SignInMethodEnum.TWITTER_SIGN_IN)
         }
-      >
-      </button>
+      ></button>
       <div className='sign-in__powered-by'>
         <img src={require(`../Asset/Powered-By.png`).default} />
       </div>
