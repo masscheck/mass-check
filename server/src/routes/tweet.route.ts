@@ -16,7 +16,7 @@ router.post('/create-tweet', async (req, res, next) => {
   } = req.body;
 
   try {
-    const createdTwitte = await new Promise((resolve, reject) => {
+    const createdTweet = await new Promise((resolve, reject) => {
       new TwitterModel({
         _id: id,
         content: tweetContent,
@@ -32,7 +32,9 @@ router.post('/create-tweet', async (req, res, next) => {
       });
     });
 
-    logger.verbose('MongoDB - Create Tweet', createdTwitte);
+    logger.verbose('MongoDB - Create Tweet', createdTweet);
+
+    // send to AI for prediction
 
     res.sendStatus(200);
   } catch (err) {

@@ -71,6 +71,7 @@ const getRandomTweetAndItsInfo = async (uid: string, phase: string) => {
         investigatorsId: { $nin: [uid] },
         'jurorsId._id': { $nin: [uid] },
         forfeitedId: { $nin: [uid] },
+        submitByUid: { $ne: uid },
         totalUserHadParticipants: { $lt: curMaxParticipantsStage },
       })
       .sort({ submitTime: 'asc' })

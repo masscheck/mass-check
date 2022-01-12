@@ -34,6 +34,7 @@ router.get('/get-job', async (req, res, next) => {
     if (!tweetInfo) {
       logger.info('No investigation task currently available')
       res.json({});
+      return;
     }
 
     const { _id } = tweetInfo;

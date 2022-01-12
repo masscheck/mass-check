@@ -41,6 +41,7 @@ router.get('/get-job', async (req, res, next) => {
     if (!tweetInfo) {
       logger.info('No verification task currently available');
       res.json({});
+      return;
     }
 
     const { _id } = tweetInfo;

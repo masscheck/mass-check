@@ -22,7 +22,6 @@ const NavBarHome: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    console.log({ pathname });
     if (pathname.includes('secure')) {
       (async () => {
         try {

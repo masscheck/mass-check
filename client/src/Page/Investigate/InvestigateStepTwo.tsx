@@ -14,9 +14,10 @@ const InvestigateStepTwo: React.FC = () => {
   const handleMatchTweet = async () => {
     return new Promise(async (resolve, reject) => {
       const tweetInfo = await getInvestigationJob(uid);
+
       setTweetModel(tweetInfo);
 
-      resolve('Done');
+      resolve(tweetInfo);
     });
   };
 
