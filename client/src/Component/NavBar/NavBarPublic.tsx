@@ -1,18 +1,51 @@
-import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import { useNotification } from '../../Context/NotificationContext';
+import { useAccountInfo } from '../../Context/AccountInfoContext';
+import { getAuth } from '../../Util/API/AuthAPI';
 
 import './NavBarPublic.scss';
-import { useAccountInfo } from '../../Context/AccountInfoContext';
+import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 
 const NavBar: React.FC = (props: any) => {
   const { pathname } = useLocation();
   const {
     accountInfo: { toSignUpSuccessAllowable },
+    setAccountInfo,
   } = useAccountInfo();
   const { warnToast } = useNotification();
+  const history = useHistory();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const xpxAddress = localStorage.getItem(LocalStorageEnum.XPX_ADDRESS);
+
+        if (!xpxAddress) {
+          return;
+        }
+
+        await getAuth();
+
+        const uid = localStorage.getItem(LocalStorageEnum.UID);
+        const displayName = localStorage.getItem(LocalStorageEnum.DISPLAY_NAME);
+
+        setAccountInfo({
+          uid,
+          displayName,
+          xpxAddress,
+          toSignUpSuccessAllowable: false,
+          toSecureAllowable: true,
+        });
+
+        history.push(RouteConstant.SECURE_HOME);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
 
   const onNext = (event) => {
     if (toSignUpSuccessAllowable) {

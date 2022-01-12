@@ -68,6 +68,7 @@ const SignIn: React.FC = () => {
     const { displayName, xpxAddress } = await getAccInfo(uid);
     
     localStorage.setItem(LocalStorageEnum.DISPLAY_NAME, displayName);
+    localStorage.setItem(LocalStorageEnum.XPX_ADDRESS, xpxAddress);
 
     if (!xpxAddress && !isNewUser) {
       // User not first time sign in but dont have xpx account

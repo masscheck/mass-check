@@ -10,9 +10,10 @@ import {
 import { RouteConstant } from '../Util/Constant/RouteConstant';
 import downloadFile from '../Util/Useful/DownloadFile';
 import { useLoadingSpinner } from '../Context/LoadingSpinnerContext';
+import { useAccountInfo } from '../Context/AccountInfoContext';
+import { LocalStorageEnum } from '../Util/Constant/LocalStorageEnum';
 
 import './SignUpSuccess.scss';
-import { useAccountInfo } from '../Context/AccountInfoContext';
 
 const SignUpSuccess: React.FC = () => {
   const [hasRemind, setHasRemind] = useState(false);
@@ -63,6 +64,7 @@ const SignUpSuccess: React.FC = () => {
       const newAccountInfo = { ...accountInfo };
       newAccountInfo.toSecureAllowable = true;
       setAccountInfo(newAccountInfo);
+      localStorage.setItem(LocalStorageEnum.XPX_ADDRESS, xpxAddress);
 
       history.push(RouteConstant.SECURE_HOME);
     } catch (err) {
