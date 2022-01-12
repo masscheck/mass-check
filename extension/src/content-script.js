@@ -218,7 +218,6 @@ const appendMassCheckInterface = async () => {
   const tweets = document.querySelectorAll(
     'article div.css-1dbjc4n.r-1iusvr4.r-16y2uox.r-1777fci.r-kzbkwu'
   );
-  console.log({ tweets });
 
   const hashedTweetIdList = [];
   for (let i = 0; i < tweets.length; i++) {
@@ -228,7 +227,6 @@ const appendMassCheckInterface = async () => {
 
     hashedTweetIdList.push(hashedTweetContent);
   }
-  console.log({ hashedTweetIdList });
 
   let tweetContentInMassCheck;
   let tweetIdInDB = [];
@@ -238,14 +236,14 @@ const appendMassCheckInterface = async () => {
       { hashedTweetIdList }
     );
 
-    tweetContentInMassCheck.tweetInfo.forEach((tweet) => {
-      tweetIdInDB.push(tweet['_id']);
-    });
+    if (tweetContentInMassCheck.tweetInfo) {
+      tweetContentInMassCheck.tweetInfo.forEach((tweet) => {
+        tweetIdInDB.push(tweet['_id']);
+      });
+    }
   } catch (err) {
     console.err(err);
   }
-
-  console.log({ tweetIdInDB });
 
   for (let i = 0; i < tweets.length; i++) {
     const tweetContentNodes = tweets[i].childNodes;
@@ -256,8 +254,12 @@ const appendMassCheckInterface = async () => {
     const tweetAuthorName = tweetHandlerSplitted[0];
     const tweetAuthorTag = tweetHandlerSplitted[1];
 
-    // TODO if hashTweetContent in the tweetIdInDB switch other id
-    // TODO else show verify
+    // TODO jason
+    if (tweetIdInDB.includes(hashedTweetContent)){
+      // TODO investigating / verifying
+    } else {
+      // TODO verifying button
+    }
 
     const verifyButton = document.createElement('button');
     verifyButton.textContent = 'Verify';
