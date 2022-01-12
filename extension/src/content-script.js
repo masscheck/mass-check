@@ -194,6 +194,21 @@ const hashCode = (s) => {
   return Math.abs(h);
 };
 
+const postData = (url, data = {}) => {
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => resolve(data))
+      .catch((err) => reject(err));
+  });
+};
+
 const appendMassCheckInterface = async () => {
   console.log('appending masscheck interface');
 
@@ -205,6 +220,33 @@ const appendMassCheckInterface = async () => {
   );
   console.log({ tweets });
 
+  const hashedTweetIdList = [];
+  for (let i = 0; i < tweets.length; i++) {
+    const tweetContentNodes = tweets[i].childNodes;
+    const tweetContent = tweetContentNodes[1].innerText;
+    const hashedTweetContent = hashCode(tweetContent);
+
+    hashedTweetIdList.push(hashedTweetContent);
+  }
+  console.log({ hashedTweetIdList });
+
+  let tweetContentInMassCheck;
+  let tweetIdInDB = [];
+  try {
+    tweetContentInMassCheck = await postData(
+      API_ENDPOINT + '/tweet/retrieve-tweet-info',
+      { hashedTweetIdList }
+    );
+
+    tweetContentInMassCheck.tweetInfo.forEach((tweet) => {
+      tweetIdInDB.push(tweet['_id']);
+    });
+  } catch (err) {
+    console.err(err);
+  }
+
+  console.log({ tweetIdInDB });
+
   for (let i = 0; i < tweets.length; i++) {
     const tweetContentNodes = tweets[i].childNodes;
     const tweetHandler = tweetContentNodes[0].innerText;
@@ -213,6 +255,9 @@ const appendMassCheckInterface = async () => {
     const hashedTweetContent = hashCode(tweetContent);
     const tweetAuthorName = tweetHandlerSplitted[0];
     const tweetAuthorTag = tweetHandlerSplitted[1];
+
+    // TODO if hashTweetContent in the tweetIdInDB switch other id
+    // TODO else show verify
 
     const verifyButton = document.createElement('button');
     verifyButton.textContent = 'Verify';

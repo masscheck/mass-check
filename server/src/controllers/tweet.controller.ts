@@ -3,6 +3,7 @@ import TweetModel from '../models/tweet.model';
 
 import { AnalysePhaseConstant } from '../constants/analyse-phase-constant';
 import { logger } from '../middlewares/logger';
+import { Types } from 'mongoose';
 
 const getTweetList = async (isVerified: boolean, queryStartDate: number) => {
   const tweetPerPage = 10;
@@ -279,6 +280,25 @@ const updateTweetTrustIndex = async (tweetId: string, trustIndex: number) => {
   logger.verbose('MongoDB - submitTweetVerification', tweetInfo);
 };
 
+const getTweetInfoByIds = async (ids: string[]) => {
+  const tweetInfoList = await new Promise((resolve, reject) => {
+    TweetModel.find(
+      {
+        _id: { $in: ids },
+      },
+      (err, result) => {
+        if (err) reject(err);
+
+        resolve(result);
+      }
+    );
+  });
+
+  logger.verbose('MongoDB - findTweetInfoByIds', tweetInfoList);
+
+  return tweetInfoList;
+};
+
 export {
   getTweetList,
   getRandomTweetAndItsInfo,
@@ -290,4 +310,5 @@ export {
   submitTweetVerification,
   getTweetInfoById,
   updateTweetTrustIndex,
+  getTweetInfoByIds,
 };
