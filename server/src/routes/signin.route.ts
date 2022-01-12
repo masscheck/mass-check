@@ -32,21 +32,22 @@ router.get('/retrieve-acc-info', async (req, res, next) => {
 router.post('/email-pwd', async (req, res, next) => {
   const { email, password } = req.body;
 
-  // try {
-  //   const result = await auth.signInWithEmailAndPassword(email, password);
+  try {
+    const result = await auth.signInWithEmailAndPassword(email, password);
 
-  //   const { additionalUserInfo, user } = result;
+    const {
+      user: { uid, displayName },
+    } = result;
 
-  //   res.json({
-  //     user,
-  //   });
-  // } catch (err) {
-  //   logger.error(err);
+    res.status(200).json({
+      uid,
+      displayName,
+    });
+  } catch (err) {
+    logger.error(err);
 
-  //   res.sendStatus(500);
-  // }
-
-  res.sendStatus(200)
+    res.sendStatus(500);
+  }
 });
 
 export default router;

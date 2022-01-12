@@ -35,8 +35,6 @@ const getExpiredTime = () => {
 router.post('/create-token', async (req, res, next) => {
   const { uid } = req.body;
 
-  console.log({ uid });
-
   const accessToken = generateAccessToken(uid);
   const refreshToken = jwt.sign(
     { uid: `${uid}${new Date().getTime()}` },
