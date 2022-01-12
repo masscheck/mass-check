@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink, useLocation, useHistory } from 'react-router-dom';
 
 import { useAuth } from '../../Context/AuthContext';
@@ -8,7 +8,7 @@ import { RouteConstant } from '../../Util/Constant/RouteConstant';
 import './NavBarSecure.scss';
 import { useAccountInfo } from '../../Context/AccountInfoContext';
 import { AccountModel } from '../../Model/AccountModel';
-import { postDeleteToken } from '../../Util/API/AuthAPI';
+import { getAuth, postDeleteToken } from '../../Util/API/AuthAPI';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 
 const NavBarHome: React.FC = () => {
@@ -21,15 +21,28 @@ const NavBarHome: React.FC = () => {
   const { pathname } = useLocation();
   const history = useHistory();
 
-  const onSignOut = async () => {
-    console.log('sign out');
+  useEffect(() => {
+    console.log({ pathname });
+    if (pathname.includes('secure')) {
+      (async () => {
+        try {
+          await getAuth();
+        } catch (error) {
+          setAccountInfo(new AccountModel());
+          localStorage.clear();
 
-    const refreshToken = localStorage.getItem(LocalStorageEnum.REFRESH_TOKEN)
+          warnToast('Session has expired!');
+          history.push(RouteConstant.PUBLIC_SIGN_IN);
+        }
+      })();
+    }
+  }, [pathname]);
+
+  const onSignOut = async () => {
+    const refreshToken = localStorage.getItem(LocalStorageEnum.REFRESH_TOKEN);
     await postDeleteToken(refreshToken);
     setAccountInfo(new AccountModel());
-    window.localStorage.clear();
-
-    // TODO inform chrome extension that user has logged out
+    localStorage.clear();
 
     signOut();
 
