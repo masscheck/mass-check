@@ -53,6 +53,7 @@ const tweetSchema = new Schema<Tweet>({
   eachStageRequiredUserNum: { type: Number, default: 5 },
   totalUserHadParticipants: { type: Number, default: 0 },
   submitBy: { type: String, required: true },
+  submitByUid: { type: String, required: true },
   submitTime: { type: Date, default: Date.now },
   trustIndex: { type: Number },
   lastAnalysedTime: { type: Date },

@@ -11,6 +11,7 @@ const MessageConstant = {
   EXT_ACTIVATE_MASSCHECK: 'MASSCHECK_EXT_ACTIVATE_MASSCHECK',
   EXT_DEACTIVATE_MASSCHECK: 'MASSCHECK_EXT_DEACTIVATE_MASSCHECK',
   EXT_IS_ACTIVATE: 'MASSCHECK_EXT_IS_ACTIVATE',
+  UID: 'MASSCHECK_UID',
 };
 
 // connect to masscheck website local storage
@@ -173,6 +174,18 @@ const getDisplayName = () => {
   });
 };
 
+const getUid = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.get(MessageConstant.UID, (err, value) => {
+      try {
+        resolve(value);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+};
+
 const hashCode = (s) => {
   let h;
   for (let i = 0; i < s.length; i++)
@@ -181,12 +194,12 @@ const hashCode = (s) => {
   return Math.abs(h);
 };
 
-
 const appendMassCheckInterface = async () => {
   console.log('appending masscheck interface');
 
   const masscheckUserDisplayName = await getDisplayName();
-  console.log({ masscheckUserDisplayName });
+  const masscheckUserUid = await getUid();
+
   const tweets = document.querySelectorAll(
     'article div.css-1dbjc4n.r-1iusvr4.r-16y2uox.r-1777fci.r-kzbkwu'
   );
@@ -212,6 +225,7 @@ const appendMassCheckInterface = async () => {
         tweetAuthorName,
         tweetAuthorTag,
         submitBy: masscheckUserDisplayName,
+        submitByUid: masscheckUserUid,
       };
       console.log(content);
 

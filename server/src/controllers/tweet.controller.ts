@@ -62,6 +62,8 @@ const getRandomTweetAndItsInfo = async (uid: string, phase: string) => {
   let curMaxParticipantsStage = 5;
   curMaxParticipantsStage += phase === AnalysePhaseConstant.VERIFYING ? 5 : 0;
 
+  // TODO add submittedByUid not equal to the cur user
+  // TODO clean DB first
   const tweetInfo = await new Promise<TweetInterface>((resolve, reject) => {
     TweetModel.aggregate()
       .match({

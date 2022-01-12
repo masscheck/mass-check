@@ -26,6 +26,7 @@ const postCreateToken = async (uid: string) => {
 
       const { accessToken, refreshToken, expiredTime } = res.data;
 
+      localStorage.setItem(LocalStorageEnum.UID, uid);
       localStorage.setItem(LocalStorageEnum.ACCESS_TOKEN, accessToken);
       localStorage.setItem(LocalStorageEnum.REFRESH_TOKEN, refreshToken);
       localStorage.setItem(LocalStorageEnum.EXPIRE_TIME_TOKEN, expiredTime);

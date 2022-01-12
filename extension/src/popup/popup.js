@@ -7,15 +7,16 @@ const MessageConstant = {
   EXT_ACTIVATE_MASSCHECK: 'MASSCHECK_EXT_ACTIVATE_MASSCHECK',
   EXT_DEACTIVATE_MASSCHECK: 'MASSCHECK_EXT_DEACTIVATE_MASSCHECK',
   EXT_IS_ACTIVATE: 'MASSCHECK_EXT_IS_ACTIVATE',
+  UID: 'MASSCHECK_UID',
 };
 
 const ExtensionLocalStorageConstant = {
   IS_SIGNED_IN: 'masscheck_ext_is_signed_in',
   DISPLAY_NAME: 'masscheck_ext_display_name',
+  UID: 'masscheck_ext_uid',
 };
 
 const API_ENDPOINT = 'http://localhost:3500/api';
-
 
 // connect to masscheck website local storage
 const getId = (data) => {
@@ -189,6 +190,18 @@ const getDisplayName = () => {
   });
 };
 
+const getUid = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.get(MessageConstant.UID, (err, value) => {
+      try {
+        resolve(value);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+};
+
 const init = async () => {
   console.log('check got user signed in');
   let isSignedIn = false;
@@ -196,6 +209,7 @@ const init = async () => {
   try {
     const accessToken = await getAccessToken();
     const displayName = await getDisplayName();
+    const uid = await getUid();
 
     if (accessToken) {
       const isValidToken = await fetch(`${API_ENDPOINT}/auth/`, {
@@ -207,14 +221,17 @@ const init = async () => {
 
       isSignedIn = isValidToken.status === 200;
 
-      localStorage.setItem(
-        ExtensionLocalStorageConstant.IS_SIGNED_IN,
-        isSignedIn
-      );
-      localStorage.setItem(
-        ExtensionLocalStorageConstant.DISPLAY_NAME,
-        displayName
-      );
+      if (isSignedIn) {
+        localStorage.setItem(
+          ExtensionLocalStorageConstant.IS_SIGNED_IN,
+          isSignedIn
+        );
+        localStorage.setItem(
+          ExtensionLocalStorageConstant.DISPLAY_NAME,
+          displayName
+        );
+        localStorage.setItem(ExtensionLocalStorageConstant.UID, uid);
+      }
     }
   } catch (err) {
     console.error(err);
@@ -223,6 +240,7 @@ const init = async () => {
     setTimeout(() => {
       const loadingNode = document.getElementById('loading-spinner');
       loadingNode.classList.remove('loader-container-page-layout');
+
       if (isSignedIn) {
         window.location.href = 'toggle.html';
       } else {

@@ -18,6 +18,7 @@ export default interface TweetInterface {
   eachStageRequiredUserNum: number;
   totalUserHadParticipants: number;
   submitBy: string;
+  submitByUid: string;
   submitTime: SchemaDefinitionProperty<DateConstructor>;
   trustIndex: number;
   lastAnalysedTime: SchemaDefinitionProperty<DateConstructor>;
