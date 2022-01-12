@@ -58,14 +58,13 @@ router.post('/delete-token', async (req, res, next) => {
 
   try {
     await deleteTokenById(refreshToken);
+
+    res.sendStatus(200);
   } catch (err) {
     logger.error(err);
 
     res.sendStatus(500);
   }
-
-  logger.verbose('MongoDB - Delete Token', { refreshToken });
-  res.sendStatus(200);
 });
 
 router.post('/refresh-token', (req, res) => {
