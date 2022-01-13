@@ -8,6 +8,7 @@ import { getAuth } from '../../Util/API/AuthAPI';
 
 import './NavBarPublic.scss';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
+import { AccountModel } from '../../Model/AccountModel';
 
 const NavBar: React.FC = (props: any) => {
   const { pathname } = useLocation();
@@ -20,12 +21,12 @@ const NavBar: React.FC = (props: any) => {
   let token = '';
 
   const validateUserAuthToken = async () => {
-    console.log('validate auth');
-
     try {
       const xpxAddress = localStorage.getItem(LocalStorageEnum.XPX_ADDRESS);
+      console.log({ xpxAddress });
 
       if (!xpxAddress) {
+        setAccountInfo(new AccountModel());
         history.push(RouteConstant.PUBLIC_SIGN_IN);
         return;
       }
@@ -43,9 +44,12 @@ const NavBar: React.FC = (props: any) => {
         toSecureAllowable: true,
       });
 
+      console.log('to next page');
+
       history.push(RouteConstant.SECURE_HOME);
     } catch (err) {
       console.error(err);
+      setAccountInfo(new AccountModel());
       history.push(RouteConstant.PUBLIC_SIGN_IN);
     }
   };

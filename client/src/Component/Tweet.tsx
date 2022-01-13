@@ -12,6 +12,7 @@ interface TweetInfo {
   stage: string;
   currentPhaseTotalPplList: string[];
   maxPhaseTotalPpl: number;
+  trustIndex?: number;
 }
 
 const Tweet: React.FC<TweetInfo> = ({
@@ -24,6 +25,7 @@ const Tweet: React.FC<TweetInfo> = ({
   stage,
   currentPhaseTotalPplList,
   maxPhaseTotalPpl,
+  trustIndex,
 }) => {
   const formatDate = (inputDate) => {
     const date = new Date(inputDate);
@@ -32,6 +34,16 @@ const Tweet: React.FC<TweetInfo> = ({
     const year = date.toLocaleString('en-US', { year: 'numeric' });
 
     return `${day} ${month} ${year}`;
+  };
+
+  const getAuthenticityScore = () => {
+    if (stage !== 'Completed') {
+      return authenticityScore
+        ? `${(authenticityScore * 100).toFixed(1)}\% Real (predicted by AI)`
+        : 'AI Predicting...';
+    } else {
+      return trustIndex;
+    }
   };
 
   return (
@@ -47,9 +59,7 @@ const Tweet: React.FC<TweetInfo> = ({
         <div className='tweet__detail__left'>
           <div className='tweet__detail__left__box'>
             <span className='tweet__detail__left__box__authenticity-score'>
-              {authenticityScore
-                ? `${authenticityScore}\% Real`
-                : 'AI Predicting...'}
+              {getAuthenticityScore()}
             </span>
             <span className='tweet__detail__left__box__stage'>
               {` | ${stage}`}

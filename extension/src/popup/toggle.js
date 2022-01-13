@@ -226,6 +226,31 @@ const clearExpireTimeToken = () => {
   });
 };
 
+const clearUid = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.remove(MessageConstant.UID, (err, value) => {
+      try {
+        resolve(value);
+      } catch (error) {
+        reject(err);
+      }
+    });
+  });
+};
+
+const clearXpxAddress = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.remove(MessageConstant.XPX_ADDRESS, (err, value) => {
+      try {
+        resolve(value);
+      } catch (error) {
+        reject(err);
+      }
+    });
+  });
+};
+
+
 const displayName = localStorage.getItem(
   ExtensionLocalStorageConstant.DISPLAY_NAME
 );
@@ -290,6 +315,8 @@ signOutBtn.onclick = async () => {
         await clearAccessToken();
         await clearRefreshToken();
         await clearExpireTimeToken();
+        await clearUid();
+        await clearXpxAddress();
 
         window.location.href = 'signin.html';
       });

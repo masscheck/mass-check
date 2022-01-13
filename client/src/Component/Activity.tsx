@@ -32,6 +32,7 @@ const Activity = ({ activityList }) => {
             eachStageRequiredUserNum,
             investigatorsId,
             jurorsId,
+            trustIndex,
           } = tweet;
 
           let credibilityScoreRewardText = 'PENDING';
@@ -64,6 +65,7 @@ const Activity = ({ activityList }) => {
                       ? investigatorsId
                       : jurorsId
                   }
+                  trustIndex={trustIndex}
                 />
               </div>
               <div className='activity-details'>

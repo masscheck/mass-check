@@ -182,6 +182,18 @@ const setAccessToken = (accessToken) => {
   });
 };
 
+const setUid = (uid) => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.set(MessageConstant.UID, uid, (err, value) => {
+      try {
+        resolve(value);
+      } catch (error) {
+        reject(err);
+      }
+    });
+  });
+};
+
 const setDisplayName = (displayName) => {
   return new Promise((resolve, reject) => {
     massCheckStorage.set(
@@ -342,11 +354,12 @@ signInBtn.onclick = async () => {
     localStorage.setItem(ExtensionLocalStorageConstant.IS_SIGNED_IN, true);
     localStorage.setItem(ExtensionLocalStorageConstant.UID, uid);
 
+    await setXpxAddress(xpxAddress);
+    await setUid(uid);
     await setDisplayName(displayName);
-    await setAccessToken(accessToken);
     await setRefreshToken(refreshToken);
     await setExpiredTimeToken(expiredTime);
-    await setXpxAddress(xpxAddress);
+    await setAccessToken(accessToken);
 
     window.location.href = 'toggle.html';
   } catch (err) {

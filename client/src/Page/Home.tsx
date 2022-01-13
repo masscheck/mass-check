@@ -91,6 +91,7 @@ const Home: React.FC = () => {
           investigatorsId,
           jurorsId,
           eachStageRequiredUserNum,
+          trustIndex
         } = tweet;
 
         return (
@@ -104,6 +105,7 @@ const Home: React.FC = () => {
               authenticityScore={aiScore}
               stage={curAnalysedPhase}
               maxPhaseTotalPpl={eachStageRequiredUserNum}
+              trustIndex={trustIndex}
               currentPhaseTotalPplList={
                 curAnalysedPhase === 'Investigating'
                   ? investigatorsId
