@@ -8,7 +8,8 @@
     {
       "js": ["./src/content-script.js"],
       "//matches": ["*://*.twitter.com/*"],
-      "matches": ["*://*.twitter.com/*"]
+      "matches": ["*://*.twitter.com/*"],
+      "css": ["./src/content-script.css"]
     }
   ],
   "background": {

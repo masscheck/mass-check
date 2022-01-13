@@ -222,6 +222,7 @@ const appendMassCheckInterface = async () => {
 
   const hashedTweetIdList = [];
   for (let i = 0; i < tweets.length; i++) {
+    
     const tweetContentNodes = tweets[i].childNodes;
     const tweetContent = tweetContentNodes[1].innerText;
     const hashedTweetContent = hashCode(tweetContent);
@@ -247,6 +248,7 @@ const appendMassCheckInterface = async () => {
   }
 
   for (let i = 0; i < tweets.length; i++) {
+    
     const tweetContentNodes = tweets[i].childNodes;
     const tweetHandler = tweetContentNodes[0].innerText;
     const tweetContent = tweetContentNodes[1].innerText;
@@ -258,41 +260,88 @@ const appendMassCheckInterface = async () => {
     // TODO jason
     if (tweetIdInDB.includes(hashedTweetContent)){
       // TODO investigating / verifying
+      const aiScore = document.createElement('button');
+      const status = document.createElement('button');
+      aiScore.textContent = "Hello";
+      status.textContent = "Text";
     } else {
+      const verifyButton = document.createElement('button');
+      verifyButton.textContent = 'Verify';
+      verifyButton.style.cssText = 'cursor: pointer; color: white;';
+      // verifyButton.style.maxWidth = '50px';
+     
+      verifyButton.classList.add('masscheck');
       // TODO verifying button
+      verifyButton.onclick = () => {
+        const content = {
+          id: hashedTweetContent,
+          tweetContent,
+          tweetAuthorName,
+          tweetAuthorTag,
+          submitBy: masscheckUserDisplayName,
+          submitByUid: masscheckUserUid,
+        };
+        console.log(content);
+  
+  
+        fetch(`${API_ENDPOINT}/tweet/create-tweet`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify(content),
+        })
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err))
+          .finally(() => {
+            console.log('ended');
+          });
+      };
+      tweets[i].appendChild(verifyButton);
     }
 
-    const verifyButton = document.createElement('button');
-    verifyButton.textContent = 'Verify';
-    verifyButton.style.cssText = 'cursor: pointer; color: blue;';
-    verifyButton.classList.add('masscheck'); // unique id for masscheck element in DOM
-    verifyButton.onclick = () => {
-      const content = {
-        id: hashedTweetContent,
-        tweetContent,
-        tweetAuthorName,
-        tweetAuthorTag,
-        submitBy: masscheckUserDisplayName,
-        submitByUid: masscheckUserUid,
-      };
-      console.log(content);
+ 
 
-      fetch(`${API_ENDPOINT}/tweet/create-tweet`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify(content),
-      })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
-        .finally(() => {
-          console.log('ended');
-        });
-    };
+    // const verifyButton = document.createElement('button');
+    // verifyButton.textContent = 'Verify';
+    // verifyButton.style.cssText = 'cursor: pointer; color: white;';
+    // // verifyButton.style.maxWidth = '50px';
+   
+    // verifyButton.classList.add('masscheck'); // unique id for masscheck element in DOM
+    // verifyButton.onclick = () => {
+    //   const content = {
+    //     id: hashedTweetContent,
+    //     tweetContent,
+    //     tweetAuthorName,
+    //     tweetAuthorTag,
+    //     submitBy: masscheckUserDisplayName,
+    //     submitByUid: masscheckUserUid,
+    //   };
+    //   console.log(content);
 
-    tweets[i].appendChild(verifyButton);
+    //   const verify = document.createElement('button');
+
+
+    //   fetch(`${API_ENDPOINT}/tweet/create-tweet`, {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     method: 'POST',
+    //     body: JSON.stringify(content),
+    //   })
+    //     .then((res) => console.log(res))
+    //     .catch((err) => console.log(err))
+    //     .finally(() => {
+    //       console.log('ended');
+    //     });
+
+    // };
+   
+   
+    //  tweets[i].appendChild(verifyButton);
+   
   }
+  
 };
 
 const removeMassCheckInterface = () => {
