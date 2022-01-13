@@ -27,7 +27,7 @@ import {
   modifyUserCredibilityScoreAndInsertRecord,
   getAccountInfoById,
 } from '../controllers/account.controller';
-import { getAIScore } from 'src/controllers/ai.controller';
+import { getAIScore } from '../controllers/ai.controller';
 
 const router = express.Router();
 
