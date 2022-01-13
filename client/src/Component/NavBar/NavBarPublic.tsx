@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 
 import { RouteConstant } from '../../Util/Constant/RouteConstant';
@@ -17,34 +17,52 @@ const NavBar: React.FC = (props: any) => {
   } = useAccountInfo();
   const { warnToast } = useNotification();
   const history = useHistory();
+  let token = '';
+
+  const validateUserAuthToken = async () => {
+    console.log('validate auth');
+
+    try {
+      const xpxAddress = localStorage.getItem(LocalStorageEnum.XPX_ADDRESS);
+
+      if (!xpxAddress) {
+        history.push(RouteConstant.PUBLIC_SIGN_IN);
+        return;
+      }
+
+      await getAuth();
+
+      const uid = localStorage.getItem(LocalStorageEnum.UID);
+      const displayName = localStorage.getItem(LocalStorageEnum.DISPLAY_NAME);
+
+      setAccountInfo({
+        uid,
+        displayName,
+        xpxAddress,
+        toSignUpSuccessAllowable: false,
+        toSecureAllowable: true,
+      });
+
+      history.push(RouteConstant.SECURE_HOME);
+    } catch (err) {
+      console.error(err);
+      history.push(RouteConstant.PUBLIC_SIGN_IN);
+    }
+  };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const xpxAddress = localStorage.getItem(LocalStorageEnum.XPX_ADDRESS);
+    validateUserAuthToken();
 
-        if (!xpxAddress) {
-          return;
-        }
+    window.addEventListener('storage', () => {
+      const accessToken = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
 
-        await getAuth();
-
-        const uid = localStorage.getItem(LocalStorageEnum.UID);
-        const displayName = localStorage.getItem(LocalStorageEnum.DISPLAY_NAME);
-
-        setAccountInfo({
-          uid,
-          displayName,
-          xpxAddress,
-          toSignUpSuccessAllowable: false,
-          toSecureAllowable: true,
-        });
-
-        history.push(RouteConstant.SECURE_HOME);
-      } catch (err) {
-        console.error(err);
+      if (accessToken !== token) {
+        validateUserAuthToken();
+        token = accessToken;
+      } else if (!accessToken) {
+        history.push(RouteConstant.PUBLIC_SIGN_IN);
       }
-    })();
+    });
   }, []);
 
   const onNext = (event) => {
