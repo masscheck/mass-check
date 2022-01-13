@@ -6,7 +6,6 @@ const MessageConstant = {
   XPX_ADDRESS: 'MASSCHECK_XPX_ADDRESS',
   EXT_ACTIVATE_MASSCHECK: 'MASSCHECK_EXT_ACTIVATE_MASSCHECK',
   EXT_DEACTIVATE_MASSCHECK: 'MASSCHECK_EXT_DEACTIVATE_MASSCHECK',
-  EXT_IS_ACTIVATE: 'MASSCHECK_EXT_IS_ACTIVATE',
   UID: 'MASSCHECK_UID',
 };
 
@@ -14,6 +13,7 @@ const ExtensionLocalStorageConstant = {
   IS_SIGNED_IN: 'masscheck_ext_is_signed_in',
   DISPLAY_NAME: 'masscheck_ext_display_name',
   UID: 'masscheck_ext_uid',
+  EXT_IS_ACTIVATE: 'ext_is_activate',
 };
 
 const API_ENDPOINT = 'http://localhost:3500/api';
@@ -257,14 +257,14 @@ const displayName = localStorage.getItem(
 const displayNameNode = document.getElementById('display-name');
 displayNameNode.innerHTML = displayName || '[UNKNOWN NAME]';
 
-const savedIsToggle = localStorage.getItem(MessageConstant.EXT_IS_ACTIVATE);
+const savedIsToggle = localStorage.getItem(ExtensionLocalStorageConstant.EXT_IS_ACTIVATE);
 let isToggle = savedIsToggle === 'true';
 
 const toggleBtn = document.getElementById('toggle-btn');
 toggleBtn.checked = isToggle;
 toggleBtn.onclick = () => {
   isToggle = !isToggle;
-  localStorage.setItem(MessageConstant.EXT_IS_ACTIVATE, isToggle);
+  localStorage.setItem(ExtensionLocalStorageConstant.EXT_IS_ACTIVATE, isToggle);
 
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
     console.log('toggle -> content script');

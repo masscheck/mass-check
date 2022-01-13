@@ -6,7 +6,6 @@ const MessageConstant = {
   DISPLAY_NAME: 'MASSCHECK_DISPLAY_NAME',
   EXT_ACTIVATE_MASSCHECK: 'MASSCHECK_EXT_ACTIVATE_MASSCHECK',
   EXT_DEACTIVATE_MASSCHECK: 'MASSCHECK_EXT_DEACTIVATE_MASSCHECK',
-  EXT_IS_ACTIVATE: 'MASSCHECK_EXT_IS_ACTIVATE',
   UID: 'MASSCHECK_UID',
 };
 
@@ -14,6 +13,7 @@ const ExtensionLocalStorageConstant = {
   IS_SIGNED_IN: 'masscheck_ext_is_signed_in',
   DISPLAY_NAME: 'masscheck_ext_display_name',
   UID: 'masscheck_ext_uid',
+  EXT_IS_ACTIVATE: 'ext_is_activate',
 };
 
 const API_ENDPOINT = 'http://localhost:3500/api';
