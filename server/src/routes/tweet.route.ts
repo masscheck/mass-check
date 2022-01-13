@@ -17,10 +17,17 @@ router.post('/create-tweet', async (req, res, next) => {
     submitByUid,
   } = req.body;
 
-  try {
-    const aiScore = await getAIScore(tweetContent);
-    logger.verbose('AI Server - Retrieve Score', aiScore);
+  let aiScore = null;
 
+  try {
+    aiScore = await getAIScore(tweetContent);
+    logger.verbose('AI Server - Retrieve Score', aiScore);
+  } catch (err) {
+    logger.verbose('AI Server - Failed from to get AI Score');
+    logger.error(err);
+  }
+
+  try {
     const createdTweet = await new Promise((resolve, reject) => {
       new TwitterModel({
         _id: id,
