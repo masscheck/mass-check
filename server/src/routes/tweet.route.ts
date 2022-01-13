@@ -3,6 +3,7 @@ import express from 'express';
 import { logger } from '../middlewares/logger';
 import TwitterModel from '../models/tweet.model';
 import { getTweetInfoByIds } from '../controllers/tweet.controller';
+import { getAIScore } from '../controllers/ai.controller';
 
 const router = express.Router();
 
@@ -17,6 +18,9 @@ router.post('/create-tweet', async (req, res, next) => {
   } = req.body;
 
   try {
+    const aiScore = await getAIScore(tweetContent);
+    logger.verbose('AI Server - Retrieve Score', aiScore);
+
     const createdTweet = await new Promise((resolve, reject) => {
       new TwitterModel({
         _id: id,
@@ -25,6 +29,7 @@ router.post('/create-tweet', async (req, res, next) => {
         authorTag: tweetAuthorTag,
         submitBy,
         submitByUid,
+        aiScore,
       }).save((err, result) => {
         if (err) reject(err);
 
@@ -32,10 +37,7 @@ router.post('/create-tweet', async (req, res, next) => {
         resolve(result);
       });
     });
-
     logger.verbose('MongoDB - Create Tweet', createdTweet);
-
-    // TODO send to AI for prediction
 
     res.sendStatus(200);
   } catch (err) {
