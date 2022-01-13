@@ -275,7 +275,26 @@ const updateTweetTrustIndex = async (tweetId: string, trustIndex: number) => {
   });
 
   const tweetInfo = await getTweetInfoById(tweetId);
-  logger.verbose('MongoDB - submitTweetVerification', tweetInfo);
+  logger.verbose('MongoDB - updateTweetTrustIndex', tweetInfo);
+};
+
+const updateAiScore = async (tweetId: string, aiScore: number) => {
+  await new Promise((resolve, reject) => {
+    TweetModel.findByIdAndUpdate(
+      tweetId,
+      {
+        aiScore,
+      },
+      (err, result) => {
+        if (err) reject(err);
+
+        resolve(result);
+      }
+    );
+  });
+
+  const tweetInfo = await getTweetInfoById(tweetId);
+  logger.verbose('MongoDB - updateAiScore', tweetInfo);
 };
 
 const getTweetInfoByIds = async (ids: string[]) => {
@@ -309,4 +328,5 @@ export {
   getTweetInfoById,
   updateTweetTrustIndex,
   getTweetInfoByIds,
+  updateAiScore
 };

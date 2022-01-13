@@ -3,7 +3,7 @@ interface TrustIndexInterface {
   voteIsReal: boolean;
 }
 
-const calculateTrustIndex = (data: TrustIndexInterface[]) => {
+const calculateTrustIndex = (data: TrustIndexInterface[], aiScore: number) => {
   let totalCredibilityScore = 0;
   let trustIndex = 0;
 
@@ -17,7 +17,7 @@ const calculateTrustIndex = (data: TrustIndexInterface[]) => {
       voteValue * (element.credibilityScore / totalCredibilityScore);
   });
 
-  return trustIndex;
+  return trustIndex * 0.7 + aiScore * 0.3;
 };
 
 export { calculateTrustIndex, TrustIndexInterface };

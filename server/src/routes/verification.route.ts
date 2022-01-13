@@ -18,6 +18,7 @@ import {
   submitTweetVerification,
   getTweetInfoById,
   updateTweetTrustIndex,
+  updateAiScore,
 } from '../controllers/tweet.controller';
 import {
   addUserToAccountWIP,
@@ -26,6 +27,7 @@ import {
   modifyUserCredibilityScoreAndInsertRecord,
   getAccountInfoById,
 } from '../controllers/account.controller';
+import { getAIScore } from 'src/controllers/ai.controller';
 
 const router = express.Router();
 
@@ -117,6 +119,20 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
 
     const { curAnalysedPhase, jurorsId } = tweetInfo;
 
+    let aiScore = tweetInfo.aiScore;
+    // if dont have aiScore calculate it
+    if (!tweetInfo.aiScore) {
+      try {
+        aiScore = await getAIScore(tweetInfo.content);
+        logger.verbose('AI Server - Retrieve Score', aiScore);
+
+        await updateAiScore(tweetId, aiScore);
+      } catch (err) {
+        logger.verbose('AI Server - Failed from to get AI Score');
+        logger.error(err);
+      }
+    }
+
     if (curAnalysedPhase === AnalysePhaseConstant.COMPLETED) {
       const { VERIFY_ANS_CORRECT, VERIFY_ANS_WRONG } =
         CredibilityScoreSystemConstant;
@@ -164,7 +180,7 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
           }
         });
 
-        const curTweetTrustIndex = calculateTrustIndex(trustIndexArr);
+        const curTweetTrustIndex = calculateTrustIndex(trustIndexArr, aiScore);
         await updateTweetTrustIndex(tweetId, curTweetTrustIndex);
 
         resolve(null);
