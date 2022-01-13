@@ -42,7 +42,27 @@ const Tweet: React.FC<TweetInfo> = ({
         ? `${(authenticityScore * 100).toFixed(1)}\% Real (predicted by AI)`
         : 'AI Predicting...';
     } else {
-      return trustIndex;
+      return trustIndex.toFixed(1);
+    }
+  };
+
+  const getAuthenticityScoreColor = () => {
+    // Don't have AI score
+    if (!authenticityScore) {
+      return 'high';
+    }
+
+    let score = (stage !== 'Completed' ? authenticityScore : trustIndex) * 100;
+
+    const HIGH_TRUST_BOUNDARY = 70;
+    const MID_TRUST_BOUNDARY = 30;
+
+    if (score >= HIGH_TRUST_BOUNDARY) {
+      return 'high';
+    } else if (score >= MID_TRUST_BOUNDARY) {
+      return 'medium';
+    } else {
+      return 'low';
     }
   };
 
@@ -57,11 +77,17 @@ const Tweet: React.FC<TweetInfo> = ({
       <div className='tweet__content'>{content}</div>
       <div className='tweet__detail'>
         <div className='tweet__detail__left'>
-          <div className='tweet__detail__left__box'>
-            <span className='tweet__detail__left__box__authenticity-score'>
+          <div
+            className={`tweet__detail__left__box ${getAuthenticityScoreColor()}`}
+          >
+            <span
+              className={`tweet__detail__left__box__authenticity-score ${getAuthenticityScoreColor()}`}
+            >
               {getAuthenticityScore()}
             </span>
-            <span className='tweet__detail__left__box__stage'>
+            <span
+              className={`tweet__detail__left__box__stage ${getAuthenticityScoreColor()}`}
+            >
               {` | ${stage}`}
               {stage !== 'Completed' &&
                 ` (${currentPhaseTotalPplList.length}/${maxPhaseTotalPpl})`}

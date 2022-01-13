@@ -47,13 +47,26 @@
 
         &__authenticity-score {
           margin-left: 0.3rem;
-          color: $high-auth-color;
           font-weight: 600;
         }
 
         &__stage {
           margin-right: 0.2rem;
+        }
+
+        &.high {
+          background-image: $high-auth-background-color;
           color: $high-auth-color;
+        }
+
+        &.medium {
+          background-image: $med-auth-background-color;
+          color: $med-auth-color;
+        }
+
+        &.low {
+          background-image: $low-auth-background-color;
+          color: $low-auth-color;
         }
       }
     }
