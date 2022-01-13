@@ -5,6 +5,7 @@ const MessageConstant = {
   REFRESH_TOKEN: 'MASSCHECK_REFRESH_TOKEN',
   EXPIRE_TIME_TOKEN: 'MASSCHECK_EXPIRE_TIME_TOKEN',
   DISPLAY_NAME: 'MASSCHECK_DISPLAY_NAME',
+  XPX_ADDRESS: 'MASSCHECK_XPX_ADDRESS',
   EXT_ACTIVATE_MASSCHECK: 'MASSCHECK_EXT_ACTIVATE_MASSCHECK',
   EXT_DEACTIVATE_MASSCHECK: 'MASSCHECK_EXT_DEACTIVATE_MASSCHECK',
   EXT_IS_ACTIVATE: 'MASSCHECK_EXT_IS_ACTIVATE',
@@ -229,6 +230,22 @@ const setExpiredTimeToken = (expiredTimeToken) => {
   });
 };
 
+const setXpxAddress = (xpxAddress) => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.set(
+      MessageConstant.XPX_ADDRESS,
+      xpxAddress,
+      (err, value) => {
+        try {
+          resolve(value);
+        } catch (error) {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const postData = (url, data = {}) => {
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -304,7 +321,7 @@ signInBtn.onclick = async () => {
       password: pwdValue,
     });
 
-    const { displayName } = await getData(
+    const { displayName, xpxAddress } = await getData(
       `${API_ENDPOINT}/signin/retrieve-acc-info`,
       {
         uid,
@@ -329,6 +346,7 @@ signInBtn.onclick = async () => {
     await setAccessToken(accessToken);
     await setRefreshToken(refreshToken);
     await setExpiredTimeToken(expiredTime);
+    await setXpxAddress(xpxAddress);
 
     window.location.href = 'toggle.html';
   } catch (err) {
