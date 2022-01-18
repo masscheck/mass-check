@@ -152,3 +152,34 @@ body {
 .not-twitter-page.hide-page {
   display: none;
 }
+
+.twitter-only {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  color: #665f77;
+}
+
+.visit-twitter-btn {
+  background: #8e58ff;
+  box-shadow: 0px 0px 12px -1px rgba(133, 124, 153, 0.25);
+  border-radius: 5px;
+  border: 2px solid;
+  color: white;
+  height: 33px;
+  width: 180px;
+  margin: auto;
+  display: block;
+  margin-top: 6.8rem;
+}
+
+.visit-twitter-btn:hover {
+  cursor: pointer;
+}
+
+.visit-twitter-btn a {
+  text-decoration: none;
+  color: white;
+}

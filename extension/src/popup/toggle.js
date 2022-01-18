@@ -267,6 +267,18 @@ const clearXpxAddress = () => {
   });
 };
 
+const clearExtIsActive = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.remove(MessageConstant.EXT_IS_ACTIVATE, (err, value) => {
+      try {
+        resolve(value);
+      } catch (error) {
+        reject(err);
+      }
+    });
+  });
+};
+
 const displayName = localStorage.getItem(
   ExtensionLocalStorageConstant.DISPLAY_NAME
 );
@@ -353,6 +365,7 @@ signOutBtn.onclick = async () => {
         await clearExpireTimeToken();
         await clearUid();
         await clearXpxAddress();
+        await clearExtIsActive();
 
         window.location.href = 'signin.html';
       });

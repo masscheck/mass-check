@@ -399,7 +399,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (MessageConstant.EXT_ACTIVATE_MASSCHECK === messageType) {
     activateMassCheck();
-    // appendMassCheckInterface();
   } else if (MessageConstant.EXT_DEACTIVATE_MASSCHECK === messageType) {
     removeMassCheckInterface();
     deactivateMassCheck();
