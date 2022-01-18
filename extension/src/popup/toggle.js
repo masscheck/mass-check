@@ -6,6 +6,7 @@ const MessageConstant = {
   XPX_ADDRESS: 'MASSCHECK_XPX_ADDRESS',
   EXT_ACTIVATE_MASSCHECK: 'MASSCHECK_EXT_ACTIVATE_MASSCHECK',
   EXT_DEACTIVATE_MASSCHECK: 'MASSCHECK_EXT_DEACTIVATE_MASSCHECK',
+  EXT_IS_ACTIVATE: 'MASSCHECK_EXT_IS_ACTIVATE',
   UID: 'MASSCHECK_UID',
 };
 
@@ -166,6 +167,22 @@ const storageGuest = (source, parent) => {
 
 const massCheckStorage = storageGuest('http://localhost:3000');
 
+const setExtIsActive = (isActive) => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.set(
+      MessageConstant.EXT_IS_ACTIVATE,
+      isActive,
+      (err, value) => {
+        try {
+          resolve(value);
+        } catch (error) {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const getRefreshToken = () => {
   return new Promise((resolve, reject) => {
     massCheckStorage.get(MessageConstant.REFRESH_TOKEN, (err, value) => {
@@ -257,7 +274,9 @@ const displayName = localStorage.getItem(
 const displayNameNode = document.getElementById('display-name');
 displayNameNode.innerHTML = 'Hello, ' + displayName || '[UNKNOWN NAME]';
 
-const savedIsToggle = localStorage.getItem(ExtensionLocalStorageConstant.EXT_IS_ACTIVATE);
+const savedIsToggle = localStorage.getItem(
+  ExtensionLocalStorageConstant.EXT_IS_ACTIVATE
+);
 let isToggle = savedIsToggle === 'true';
 
 const displayBackgroundColor = document.getElementById(
@@ -277,9 +296,10 @@ const setDisplayStatusStyle = (isToggle) => {
 setDisplayStatusStyle(isToggle);
 const toggleBtn = document.getElementById('toggle-btn');
 toggleBtn.checked = isToggle;
-toggleBtn.onclick = () => {
+toggleBtn.onclick = async () => {
   isToggle = !isToggle;
-  localStorage.setItem(MessageConstant.EXT_IS_ACTIVATE, isToggle);
+  localStorage.setItem(ExtensionLocalStorageConstant.EXT_IS_ACTIVATE, isToggle);
+  await setExtIsActive(isToggle);
   setDisplayStatusStyle(isToggle);
 
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {

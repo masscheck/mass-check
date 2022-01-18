@@ -6,6 +6,7 @@ const MessageConstant = {
   DISPLAY_NAME: 'MASSCHECK_DISPLAY_NAME',
   EXT_ACTIVATE_MASSCHECK: 'MASSCHECK_EXT_ACTIVATE_MASSCHECK',
   EXT_DEACTIVATE_MASSCHECK: 'MASSCHECK_EXT_DEACTIVATE_MASSCHECK',
+  EXT_IS_ACTIVATE: 'MASSCHECK_EXT_IS_ACTIVATE',
   UID: 'MASSCHECK_UID',
 };
 
@@ -202,6 +203,18 @@ const getUid = () => {
   });
 };
 
+const getExtIsActive = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.get(MessageConstant.EXT_IS_ACTIVATE, (err, value) => {
+      try {
+        resolve(value);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+};
+
 const init = async () => {
   console.log('check got user signed in');
   let isSignedIn = false;
@@ -210,6 +223,7 @@ const init = async () => {
     const accessToken = await getAccessToken();
     const displayName = await getDisplayName();
     const uid = await getUid();
+    const isExtActive = await getExtIsActive();
 
     if (accessToken) {
       const isValidToken = await fetch(`${API_ENDPOINT}/auth/`, {
@@ -231,6 +245,10 @@ const init = async () => {
           displayName
         );
         localStorage.setItem(ExtensionLocalStorageConstant.UID, uid);
+        localStorage.setItem(
+          ExtensionLocalStorageConstant.EXT_IS_ACTIVATE,
+          isExtActive
+        );
       }
     }
   } catch (err) {

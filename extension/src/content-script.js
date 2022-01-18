@@ -187,6 +187,34 @@ const getUid = () => {
   });
 };
 
+const getExtIsActive = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.get(MessageConstant.EXT_IS_ACTIVATE, (err, value) => {
+      try {
+        resolve(value);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+};
+
+const setExtIsInactive = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.set(
+      MessageConstant.EXT_IS_ACTIVATE,
+      false,
+      (err, value) => {
+        try {
+          resolve(value);
+        } catch (err) {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const hashCode = (s) => {
   let h;
   for (let i = 0; i < s.length; i++)
@@ -222,7 +250,6 @@ const appendMassCheckInterface = async () => {
 
   const hashedTweetIdList = [];
   for (let i = 0; i < tweets.length; i++) {
-    
     const tweetContentNodes = tweets[i].childNodes;
     const tweetContent = tweetContentNodes[1].innerText;
     const hashedTweetContent = hashCode(tweetContent);
@@ -246,11 +273,8 @@ const appendMassCheckInterface = async () => {
   } catch (err) {
     console.err(err);
   }
-  console.log({tweetContentInMassCheck});
- 
 
   for (let i = 0; i < tweets.length; i++) {
-    
     const tweetContentNodes = tweets[i].childNodes;
     const tweetHandler = tweetContentNodes[0].innerText;
     const tweetContent = tweetContentNodes[1].innerText;
@@ -259,37 +283,27 @@ const appendMassCheckInterface = async () => {
     const tweetAuthorName = tweetHandlerSplitted[0];
     const tweetAuthorTag = tweetHandlerSplitted[1];
 
-
-    // console.log({curHashTweetCotent: hashedTweetContent})
-    console.log(tweetContentInMassCheck.tweetInfo[i])
-
     // TODO jason
-    if (tweetIdInDB.includes(hashedTweetContent.toString())){
- 
+    if (tweetIdInDB.includes(hashedTweetContent.toString())) {
       // TODO investigating / verifying
       const aiTweetScore = document.createElement('button');
       aiTweetScore.classList.add('aiScore');
-      // const tweetStatus = document.createElement('button');
-      // tweetStatus.classList.add('tweetStatus');  
+
       if (tweetContentInMassCheck.tweetInfo) {
         tweetContentInMassCheck.tweetInfo.forEach((tweet) => {
-          if(tweet["_id"] === hashedTweetContent.toString()) {
-            aiTweetScore.textContent = "AI predicted " + (tweet["aiScore"] * 100).toFixed(1) + "% Real" ;
-            // tweetStatus.textContent = tweet["curAnalysedPhase"];
+          if (tweet['_id'] === hashedTweetContent.toString()) {
+            aiTweetScore.textContent =
+              'AI predicted ' + (tweet['aiScore'] * 100).toFixed(1) + '% Real';
           }
         });
       }
-    
-      tweets[i].appendChild(aiTweetScore);
-      // tweets[i].appendChild(tweetStatus);
 
+      tweets[i].appendChild(aiTweetScore);
     } else {
-   
       const verifyButton = document.createElement('button');
       verifyButton.textContent = 'Verify This Tweet';
       verifyButton.style.cssText = 'cursor: pointer; color: white;';
-  
-     
+
       verifyButton.classList.add('masscheck');
       // TODO verifying button
       verifyButton.onclick = () => {
@@ -301,8 +315,7 @@ const appendMassCheckInterface = async () => {
           submitBy: masscheckUserDisplayName,
           submitByUid: masscheckUserUid,
         };
-        console.log(content);
-  
+
         fetch(`${API_ENDPOINT}/tweet/create-tweet`, {
           headers: {
             'Content-Type': 'application/json',
@@ -312,55 +325,11 @@ const appendMassCheckInterface = async () => {
         })
           .then((res) => console.log(res))
           .catch((err) => console.log(err))
-          .finally(() => {
-            console.log('ended');
-          });
+          .finally(() => {});
       };
       tweets[i].appendChild(verifyButton);
     }
-
- 
-
-    // const verifyButton = document.createElement('button');
-    // verifyButton.textContent = 'Verify';
-    // verifyButton.style.cssText = 'cursor: pointer; color: white;';
-    // // verifyButton.style.maxWidth = '50px';
-   
-    // verifyButton.classList.add('masscheck'); // unique id for masscheck element in DOM
-    // verifyButton.onclick = () => {
-    //   const content = {
-    //     id: hashedTweetContent,
-    //     tweetContent,
-    //     tweetAuthorName,
-    //     tweetAuthorTag,
-    //     submitBy: masscheckUserDisplayName,
-    //     submitByUid: masscheckUserUid,
-    //   };
-    //   console.log(content);
-
-    //   const verify = document.createElement('button');
-
-
-    //   fetch(`${API_ENDPOINT}/tweet/create-tweet`, {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     method: 'POST',
-    //     body: JSON.stringify(content),
-    //   })
-    //     .then((res) => console.log(res))
-    //     .catch((err) => console.log(err))
-    //     .finally(() => {
-    //       console.log('ended');
-    //     });
-
-    // };
-   
-   
-    //  tweets[i].appendChild(verifyButton);
-   
   }
-  
 };
 
 const removeMassCheckInterface = () => {
@@ -376,6 +345,52 @@ const removeMassCheckInterface = () => {
   }
 };
 
+const activateMassCheck = () => {
+  const reactRootNode = document.getElementById('react-root');
+
+  const massCheckIcon = document.createElement('img');
+  massCheckIcon.src =
+    'https://firebasestorage.googleapis.com/v0/b/masscheck-d8ece.appspot.com/o/Logo-White-Glow-07.png?alt=media&token=8c33eaef-849e-4ca6-825c-dd5f6b797e8c';
+
+  const iconContainer = document.createElement('div');
+  iconContainer.appendChild(massCheckIcon);
+  iconContainer.classList.add('img-container');
+  iconContainer.classList.add('masscheck-floating-btn');
+
+  const floatingButton = document.createElement('div');
+  floatingButton.appendChild(iconContainer);
+  floatingButton.classList.add('floating-button');
+
+  floatingButton.onclick = () => {
+    removeMassCheckInterface();
+
+    appendMassCheckInterface();
+  };
+
+  reactRootNode.appendChild(floatingButton);
+};
+
+const deactivateMassCheck = async () => {
+  const masscheckFloatingBtn = document.querySelector(
+    '.masscheck-floating-btn'
+  );
+
+  const parentNode = masscheckFloatingBtn.parentNode;
+
+  parentNode.removeChild(masscheckFloatingBtn);
+
+  await setExtIsInactive();
+};
+
+// if extension interface is active
+const init = async () => {
+  const isActive = await getExtIsActive();
+
+  if (isActive === 'true') {
+    activateMassCheck();
+  }
+};
+
 // Chrome API
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('content script receiving message', { message });
@@ -383,8 +398,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const messageType = message.type;
 
   if (MessageConstant.EXT_ACTIVATE_MASSCHECK === messageType) {
-    appendMassCheckInterface();
+    activateMassCheck();
+    // appendMassCheckInterface();
   } else if (MessageConstant.EXT_DEACTIVATE_MASSCHECK === messageType) {
     removeMassCheckInterface();
+    deactivateMassCheck();
   }
 });
+
+init();
