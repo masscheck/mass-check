@@ -283,29 +283,73 @@ const appendMassCheckInterface = async () => {
     const tweetAuthorName = tweetHandlerSplitted[0];
     const tweetAuthorTag = tweetHandlerSplitted[1];
 
+    const masscheckScore = document.createElement('button');
+    masscheckScore.classList.add('masscheck');
+
+    const icon = document.createElement('img');
+    icon.classList.add('score-icon');
+    const scoreDesc = document.createElement('div');
+    scoreDesc.classList.add('score-desc');
+    const masscheckIcon = document.createElement('img');
+    masscheckIcon.classList.add('masscheck-icon');
+    masscheckIcon.src =
+      'https://firebasestorage.googleapis.com/v0/b/masscheck-d8ece.appspot.com/o/masscheck_logo.png?alt=media&token=949e28da-158e-415e-a632-f1352c46fbb2';
+
     if (tweetIdInDB.includes(hashedTweetContent.toString())) {
-      const aiTweetScore = document.createElement('button');
-      aiTweetScore.classList.add('masscheck');
-      aiTweetScore.classList.add('aiScore');
+      // investigating or verified
+      console.log({ tweetContentInMassCheck });
 
-      if (tweetContentInMassCheck.tweetInfo) {
-        tweetContentInMassCheck.tweetInfo.forEach((tweet) => {
-          if (tweet['_id'] === hashedTweetContent.toString()) {
-            aiTweetScore.textContent =
-              'AI predicted ' + (tweet['aiScore'] * 100).toFixed(1) + '% Real';
+      const { tweetInfo } = tweetContentInMassCheck;
+
+      for (let i = 0; i < tweetInfo.length; i++) {
+        const tweet = tweetInfo[i];
+
+        if (tweet['_id'] !== hashedTweetContent.toString()) {
+          continue;
+        } else {
+          const { curAnalysedPhase } = tweet;
+          const isCompletedStage = curAnalysedPhase === 'completed';
+          icon.src = isCompletedStage
+            ? 'https://firebasestorage.googleapis.com/v0/b/masscheck-d8ece.appspot.com/o/actual_result_icon.png?alt=media&token=99d941ba-d0b6-4d90-bfe6-1c1dde1d3cf1'
+            : 'https://firebasestorage.googleapis.com/v0/b/masscheck-d8ece.appspot.com/o/ai_result_icon.png?alt=media&token=d58f147b-b03e-4b55-ab46-6f65f469d736';
+
+          const note = document.createElement('span');
+          const score = document.createElement('span');
+
+          let trustIndexOrAI;
+
+          if (isCompletedStage) {
+            note.innerHTML = 'Found to be ';
+            trustIndexOrAI = (tweet['trustindex'] * 100).toFixed(1);
+          } else {
+            note.innerHTML = 'AI predicted ';
+            trustIndexOrAI = (tweet['aiScore'] * 100).toFixed(1);
           }
-        });
+          score.innerHTML = trustIndexOrAI + '% Real';
+
+          if (trustIndexOrAI >= 70) {
+            score.classList.add('high-score');
+          } else if (trustIndexOrAI >= 30) {
+            score.classList.add('medium-score');
+          } else {
+            score.classList.add('low-score');
+          }
+
+          scoreDesc.appendChild(note);
+          scoreDesc.appendChild(score);
+          masscheckScore.classList.add('disabled-hover');
+        }
       }
-
-      tweets[i].appendChild(aiTweetScore);
     } else {
-      const verifyButton = document.createElement('button');
-      verifyButton.textContent = 'Verify This Tweet';
-      verifyButton.style.cssText = 'cursor: pointer; color: white;';
+      icon.src =
+        'https://firebasestorage.googleapis.com/v0/b/masscheck-d8ece.appspot.com/o/search_icon.png?alt=media&token=f6deaddd-a915-4e08-8732-1b0729fb957d';
 
-      verifyButton.classList.add('masscheck');
-      // TODO verifying button
-      verifyButton.onclick = () => {
+      const verifyDesc = document.createElement('p');
+      verifyDesc.innerHTML = 'Verify this Tweet';
+
+      scoreDesc.appendChild(verifyDesc);
+
+      masscheckScore.onclick = () => {
         const content = {
           id: hashedTweetContent,
           tweetContent,
@@ -330,8 +374,13 @@ const appendMassCheckInterface = async () => {
           .catch((err) => console.log(err))
           .finally(() => {});
       };
-      tweets[i].appendChild(verifyButton);
     }
+
+    masscheckScore.appendChild(icon);
+    masscheckScore.appendChild(scoreDesc);
+    masscheckScore.appendChild(masscheckIcon);
+
+    tweets[i].appendChild(masscheckScore);
   }
 };
 
@@ -349,7 +398,7 @@ const removeMassCheckInterface = () => {
 };
 
 const activateMassCheck = () => {
-  console.log('activate masscheck')
+  console.log('activate masscheck');
   const reactRootNode = document.getElementById('react-root');
 
   const massCheckIcon = document.createElement('img');
