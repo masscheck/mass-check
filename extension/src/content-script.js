@@ -269,26 +269,26 @@ const appendMassCheckInterface = async () => {
       // TODO investigating / verifying
       const aiTweetScore = document.createElement('button');
       aiTweetScore.classList.add('aiScore');
-      const tweetStatus = document.createElement('button');
-      tweetStatus.classList.add('tweetStatus');  
+      // const tweetStatus = document.createElement('button');
+      // tweetStatus.classList.add('tweetStatus');  
       if (tweetContentInMassCheck.tweetInfo) {
         tweetContentInMassCheck.tweetInfo.forEach((tweet) => {
           if(tweet["_id"] === hashedTweetContent.toString()) {
-            aiTweetScore.textContent = "Predicted " + (tweet["aiScore"] * 100).toFixed(1) + "% Real" ;
-            tweetStatus.textContent = tweet["curAnalysedPhase"];
+            aiTweetScore.textContent = "AI predicted " + (tweet["aiScore"] * 100).toFixed(1) + "% Real" ;
+            // tweetStatus.textContent = tweet["curAnalysedPhase"];
           }
         });
       }
     
       tweets[i].appendChild(aiTweetScore);
-      tweets[i].appendChild(tweetStatus);
+      // tweets[i].appendChild(tweetStatus);
 
     } else {
    
       const verifyButton = document.createElement('button');
-      verifyButton.textContent = 'Verify';
+      verifyButton.textContent = 'Verify This Tweet';
       verifyButton.style.cssText = 'cursor: pointer; color: white;';
-      // verifyButton.style.maxWidth = '50px';
+  
      
       verifyButton.classList.add('masscheck');
       // TODO verifying button

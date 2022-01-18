@@ -1,26 +1,27 @@
 .masscheck {
-  max-width: 80px;
+  height: 40px;
   display: flex;
-  background-color: #55acee;
+  background-color: #2f3336;
   color: #ffff;
   border: 2px solid #ffff;
   border-radius: 12px;
   padding-left: 20px;
   padding-right: 15px;
-  padding-top: 5px;
+  padding-top: 10px;
   padding-bottom: 5px;
   margin-top: 10px;
 }
 
 .aiScore {
-  max-width: 180px;
-  background-color: #ffff;
-  color: #4caf50;
-  border: 2px solid #4caf50;
+  height: 40px;
+  display: flex;
+  background-color: #2f3336;
+  color: #ffff;
+  border: 2px solid #ffff;
   border-radius: 12px;
   padding-left: 20px;
   padding-right: 15px;
-  padding-top: 5px;
+  padding-top: 10px;
   padding-bottom: 5px;
   margin-top: 10px;
 }

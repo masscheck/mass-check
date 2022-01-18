@@ -1,10 +1,15 @@
+.signinpage {
+  display: none;
+}
+
 h3 {
-  text-align: center;
+  color: #665f77;
 }
 
 body {
-  height: 190px;
+  height: 260px;
   width: 180px;
+  margin: 10px;
 }
 
 .login-area {
@@ -13,11 +18,26 @@ body {
 }
 
 .login-btn-auth {
+  height: 33px;
   color: white;
-  background-color: #2a9df4;
-  border: 2px solid #2a9df4;
-  border-radius: 10px;
+  background: linear-gradient(87.34deg, #6932e3 -13.57%, #a880ff 102.24%);
+  border: 2px solid;
+  border-radius: 5px;
   padding: 0.2rem;
+  margin-bottom: 5px;
+}
+
+.signup-btn-auth {
+  color: #6932e3;
+  border: 1px solid #c9ddec41;
+  border-radius: 5px;
+  padding: 0.2rem;
+  background: #ffffff;
+  box-shadow: 0px 0px 12px -1px rgba(133, 124, 153, 0.25);
+}
+
+#signup-link {
+  text-decoration: none;
 }
 
 .login-btn-auth:hover {
@@ -62,6 +82,13 @@ body {
   margin-bottom: 15px;
 }
 
+.proximaX-logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
+
 .error-field {
   border: 1px solid red;
   color: red;
@@ -69,4 +96,59 @@ body {
 
 .error-field::placeholder {
   color: red;
+}
+
+.loader-container-page-layout {
+  position: absolute;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.5);
+  height: 190px;
+  width: 180px;
+}
+
+.loader-container-page-layout .loader-container > * {
+  position: absolute;
+  top: calc(50% - 1.5rem);
+  left: -0.75rem;
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #6932e3;
+  border-radius: 50%;
+  animation: loading 3s infinite;
+  transform: scale(0.5);
+  opacity: 0;
+  z-index: 200;
+}
+.loader-container-page-layout .loader-container > *:nth-child(1) {
+  animation-delay: 0.6s;
+}
+.loader-container-page-layout .loader-container > *:nth-child(2) {
+  animation-delay: 1.2s;
+}
+.loader-container-page-layout .loader-container > *:nth-child(3) {
+  animation-delay: 1.8s;
+}
+.loader-container-page-layout .loader-container > *:nth-child(4) {
+  animation-delay: 2.4s;
+}
+@keyframes loading {
+  45% {
+    transform: scale(1.25);
+    left: 45%;
+    opacity: 0.8;
+  }
+  90% {
+    transform: scale(0);
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+.not-twitter-page {
+  display: block;
+}
+
+.not-twitter-page.hide-page {
+  display: none;
 }

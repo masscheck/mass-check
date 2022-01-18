@@ -6,32 +6,42 @@
     <script src="signin.js" defer></script>
   </head>
   <body>
-    <h3>MassCheck</h3>
-    <div class="login-area">
-      <input
-        id="email"
-        type="email"
-        placeholder="Enter email"
-        class="input-field email"
-        required
-      />
-      <input
-        id="password"
-        type="password"
-        placeholder="Enter password"
-        class="input-field pwd"
-        required
-      />
-      <button class="login-btn-auth" id="signin">Sign In</button>
-      <a
-        class="signup"
-        href="https://competent-noether-eeafa8.netlify.app/public/sign-up"
-        target="_blank"
-        >Sign Up for a New Account</a
-      >
+    <img src="../../public/masscheck_logo.png">
+    <div id="loading-spinner" class="loader-container-page-layout">
+      <div class="loader-container">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <div class="signinpage">
+      <h3>MassCheck is disabled, </br> sign in to continue.</h4>
+      <div class="login-area">
+        <input
+          id="email"
+          type="email"
+          placeholder="Email"
+          class="input-field email"
+          required
+        />
+        <input
+          id="password"
+          type="password"
+          placeholder="Password"
+          class="input-field pwd"
+          required
+        />
+        <button class="login-btn-auth" id="signin"><strong>Sign In</strong></button>
+        <button class="signup-btn-auth" id="signup"><a id = "signup-link" href="https://competent-noether-eeafa8.netlify.app/public/sign-up" target="_blank">sign up for a new account</a></button>
+      </div>
+  
+      <img class= "proximaX-logo" src="../../public/proximaX_logo.png">
+    </div>
+    <div class="not-twitter-page hide-page">
+      <p>MassCheck only available on Twitter.</p>
+      <p>Please visit <a href="https://twitter.com" target="_blank">Twitter</a>  to activate the MassCheck.</p>
     </div>
   </body>
-
-  <!-- <script src="firebase.js"></script>
-  <script src="auth.js"></script> -->
 </html>
