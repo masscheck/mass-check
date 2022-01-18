@@ -3,9 +3,10 @@
   <head>
     <link rel="stylesheet" href="popup.css" />
     <script src="popup.js" defer></script>
-    <title>MassCheck</title>
+    <title>MassCheck</title> 
   </head>
   <body>
+    <img src="../../public/masscheck_logo.png">
     <div id="loading-spinner" class="loader-container-page-layout">
       <div class="loader-container">
         <div></div>
@@ -24,8 +25,8 @@
           <strong class="highlight">disabled</strong>. <br />Sign in to
           <br />continue.
         </p>
-        <button class="button login-button">
-          <a href="signin.html">sign in</a>
+        <button class="login-button" id="login-button">
+          <a id = "signin-route" href="signin.html"><strong>sign in</strong></a>
         </button>
       </div>
     </div>

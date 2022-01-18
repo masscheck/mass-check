@@ -254,17 +254,30 @@ const clearXpxAddress = () => {
 const displayName = localStorage.getItem(
   ExtensionLocalStorageConstant.DISPLAY_NAME
 );
+
+
 const displayNameNode = document.getElementById('display-name');
-displayNameNode.innerHTML = displayName || '[UNKNOWN NAME]';
+
+displayNameNode.innerHTML = "Hello,"+ displayName || '[UNKNOWN NAME]';
 
 const savedIsToggle = localStorage.getItem(MessageConstant.EXT_IS_ACTIVATE);
 let isToggle = savedIsToggle === 'true';
+
+
+const displayBackgroundColor = document.getElementById('switch-backgroundColor');
+
+const displayStatusNode = document.getElementById('display-status');
+displayStatusNode.innerHTML = status;
 
 const toggleBtn = document.getElementById('toggle-btn');
 toggleBtn.checked = isToggle;
 toggleBtn.onclick = () => {
   isToggle = !isToggle;
   localStorage.setItem(MessageConstant.EXT_IS_ACTIVATE, isToggle);
+  displayStatusNode.innerHTML = isToggle ? "ON" : "OFF";
+  displayStatusNode.style.color = "#6932E3";
+  displayBackgroundColor.style.backgroundColor = isToggle ? "#E1D2FF" : "#EBEBEB";
+  displayBackgroundColor.style.borderColor = isToggle ? "#E1D2FF" : "#EBEBEB";
 
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
     console.log('toggle -> content script');
