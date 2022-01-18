@@ -1,4 +1,5 @@
-const API_ENDPOINT = 'http://localhost:3500/api';
+const API_ENDPOINT = 'http://localhost:3500/api'; // dev
+// const API_ENDPOINT = 'https://competent-noether-eeafa8.netlify.app/'; // prod
 
 const MessageConstant = {
   ACCESS_TOKEN: 'MASSCHECK_ACCESS_TOKEN',
