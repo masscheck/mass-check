@@ -314,6 +314,8 @@ toggleBtn.onclick = async () => {
   await setExtIsActive(isToggle);
   setDisplayStatusStyle(isToggle);
 
+  console.log({ isToggle });
+
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
     console.log('toggle -> content script');
 

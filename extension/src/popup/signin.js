@@ -8,6 +8,7 @@ const MessageConstant = {
   XPX_ADDRESS: 'MASSCHECK_XPX_ADDRESS',
   EXT_ACTIVATE_MASSCHECK: 'MASSCHECK_EXT_ACTIVATE_MASSCHECK',
   EXT_DEACTIVATE_MASSCHECK: 'MASSCHECK_EXT_DEACTIVATE_MASSCHECK',
+  EXT_IS_ACTIVATE: 'MASSCHECK_EXT_IS_ACTIVATE',
   UID: 'MASSCHECK_UID',
 };
 
@@ -294,6 +295,18 @@ const getUid = () => {
   });
 };
 
+const getExtIsActive = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.get(MessageConstant.EXT_IS_ACTIVATE, (err, value) => {
+      try {
+        resolve(value);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+};
+
 const postData = (url, data = {}) => {
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -390,7 +403,7 @@ signInBtn.onclick = async () => {
     );
     localStorage.setItem(ExtensionLocalStorageConstant.IS_SIGNED_IN, true);
     localStorage.setItem(ExtensionLocalStorageConstant.UID, uid);
-    localStorage.setItem(ExtensionLocalStorageConstant.EXT_IS_ACTIVATE, false);
+    // localStorage.setItem(ExtensionLocalStorageConstant.EXT_IS_ACTIVATE, false);
 
     await setXpxAddress(xpxAddress);
     await setUid(uid);
@@ -428,6 +441,7 @@ const init = async () => {
     const accessToken = await getAccessToken();
     const displayName = await getDisplayName();
     const uid = await getUid();
+    const extIsActive = await getExtIsActive();
 
     if (accessToken) {
       const isValidToken = await fetch(`${API_ENDPOINT}/auth/`, {
@@ -449,6 +463,10 @@ const init = async () => {
           displayName
         );
         localStorage.setItem(ExtensionLocalStorageConstant.UID, uid);
+        localStorage.setItem(
+          ExtensionLocalStorageConstant.EXT_IS_ACTIVATE,
+          extIsActive
+        );
       }
     }
   } catch (err) {

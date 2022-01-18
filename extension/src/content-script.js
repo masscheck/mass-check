@@ -349,6 +349,7 @@ const removeMassCheckInterface = () => {
 };
 
 const activateMassCheck = () => {
+  console.log('activate masscheck')
   const reactRootNode = document.getElementById('react-root');
 
   const massCheckIcon = document.createElement('img');
