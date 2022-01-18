@@ -450,7 +450,7 @@ const init = async () => {
 
         signinPageNode.classList.remove('signinpage');
       }
-    }, 2000);
+    }, 1000);
   }
 };
 
