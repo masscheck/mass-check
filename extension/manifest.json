@@ -17,7 +17,7 @@
   },
   "browser_action": {
     "default_icon": "./public/masscheck_logo.png",
-    "default_popup": "./src/popup/popup.html",
+    "default_popup": "./src/popup/signin.html",
     "default_title": "MassCheck fact-checking tool"
   },
   "permissions": ["tabs", "webRequest", "*://*.twitter.com/"],

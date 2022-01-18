@@ -258,6 +258,42 @@ const setXpxAddress = (xpxAddress) => {
   });
 };
 
+const getAccessToken = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.get(MessageConstant.ACCESS_TOKEN, (err, value) => {
+      try {
+        resolve(value);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+};
+
+const getDisplayName = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.get(MessageConstant.DISPLAY_NAME, (err, value) => {
+      try {
+        resolve(value);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+};
+
+const getUid = () => {
+  return new Promise((resolve, reject) => {
+    massCheckStorage.get(MessageConstant.UID, (err, value) => {
+      try {
+        resolve(value);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+};
+
 const postData = (url, data = {}) => {
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -367,3 +403,55 @@ signInBtn.onclick = async () => {
     alert('Invalid username/password');
   }
 };
+
+const init = async () => {
+  console.log('check got user signed in');
+  let isSignedIn = false;
+
+  try {
+    const accessToken = await getAccessToken();
+    const displayName = await getDisplayName();
+    const uid = await getUid();
+
+    if (accessToken) {
+      const isValidToken = await fetch(`${API_ENDPOINT}/auth/`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      isSignedIn = isValidToken.status === 200;
+
+      if (isSignedIn) {
+        localStorage.setItem(
+          ExtensionLocalStorageConstant.IS_SIGNED_IN,
+          isSignedIn
+        );
+        localStorage.setItem(
+          ExtensionLocalStorageConstant.DISPLAY_NAME,
+          displayName
+        );
+        localStorage.setItem(ExtensionLocalStorageConstant.UID, uid);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    // clear loading - delay 2 seconds after code executed completed to improve UX
+    setTimeout(() => {
+      const loadingNode = document.getElementById('loading-spinner');
+      loadingNode.classList.remove('loader-container-page-layout');
+
+      if (isSignedIn) {
+        window.location.href = 'toggle.html';
+      } else {
+        const signinPageNode = document.querySelector('.signinpage');
+
+        signinPageNode.classList.remove('signinpage');
+      }
+    }, 2000);
+  }
+};
+
+init();

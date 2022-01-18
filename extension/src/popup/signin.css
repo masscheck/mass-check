@@ -1,3 +1,7 @@
+.signinpage {
+  display: none;
+}
+
 h3 {
   color: #665f77;
 }
@@ -91,4 +95,51 @@ body {
 
 .error-field::placeholder {
   color: red;
+}
+
+.loader-container-page-layout {
+  position: absolute;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.5);
+  height: 190px;
+  width: 180px;
+}
+
+.loader-container-page-layout .loader-container > * {
+  position: absolute;
+  top: calc(50% - 1.5rem);
+  left: -0.75rem;
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #6932e3;
+  border-radius: 50%;
+  animation: loading 3s infinite;
+  transform: scale(0.5);
+  opacity: 0;
+  z-index: 200;
+}
+.loader-container-page-layout .loader-container > *:nth-child(1) {
+  animation-delay: 0.6s;
+}
+.loader-container-page-layout .loader-container > *:nth-child(2) {
+  animation-delay: 1.2s;
+}
+.loader-container-page-layout .loader-container > *:nth-child(3) {
+  animation-delay: 1.8s;
+}
+.loader-container-page-layout .loader-container > *:nth-child(4) {
+  animation-delay: 2.4s;
+}
+@keyframes loading {
+  45% {
+    transform: scale(1.25);
+    left: 45%;
+    opacity: 0.8;
+  }
+  90% {
+    transform: scale(0);
+    left: 100%;
+    opacity: 0;
+  }
 }
