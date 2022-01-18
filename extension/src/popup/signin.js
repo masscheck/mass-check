@@ -326,6 +326,7 @@ const getData = (url, data = {}) => {
 const signInBtn = document.getElementById('signin');
 const emailNode = document.getElementById('email');
 const pwdNode = document.getElementById('password');
+const notTwitterPageNode = document.querySelector('.not-twitter-page');
 
 const errorFieldClass = 'error-field';
 
@@ -407,8 +408,22 @@ signInBtn.onclick = async () => {
 const init = async () => {
   console.log('check got user signed in');
   let isSignedIn = false;
+  let isTwitterWebsite = false;
 
   try {
+    isTwitterWebsite = await new Promise((resolve, reject) => {
+      chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+        const curUrl = tabs[0] && tabs[0].url;
+        const twitterRegex = /twitter/gi;
+
+        resolve(twitterRegex.test(curUrl));
+      });
+    });
+
+    if (!isTwitterWebsite) {
+      throw Error('Not Twitter Website');
+    }
+
     const accessToken = await getAccessToken();
     const displayName = await getDisplayName();
     const uid = await getUid();
@@ -445,9 +460,10 @@ const init = async () => {
 
       if (isSignedIn) {
         window.location.href = 'toggle.html';
+      } else if (!isTwitterWebsite) {
+        notTwitterPageNode.classList.remove('hide-page');
       } else {
         const signinPageNode = document.querySelector('.signinpage');
-
         signinPageNode.classList.remove('signinpage');
       }
     }, 1000);

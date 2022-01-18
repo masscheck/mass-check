@@ -20,7 +20,7 @@ body {
 .login-btn-auth {
   height: 33px;
   color: white;
-  background: linear-gradient(87.34deg, #6932E3 -13.57%, #A880FF 102.24%);
+  background: linear-gradient(87.34deg, #6932e3 -13.57%, #a880ff 102.24%);
   border: 2px solid;
   border-radius: 5px;
   padding: 0.2rem;
@@ -143,4 +143,12 @@ body {
     left: 100%;
     opacity: 0;
   }
+}
+
+.not-twitter-page {
+  display: block;
+}
+
+.not-twitter-page.hide-page {
+  display: none;
 }
