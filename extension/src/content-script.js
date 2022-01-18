@@ -283,10 +283,9 @@ const appendMassCheckInterface = async () => {
     const tweetAuthorName = tweetHandlerSplitted[0];
     const tweetAuthorTag = tweetHandlerSplitted[1];
 
-    // TODO jason
     if (tweetIdInDB.includes(hashedTweetContent.toString())) {
-      // TODO investigating / verifying
       const aiTweetScore = document.createElement('button');
+      aiTweetScore.classList.add('masscheck');
       aiTweetScore.classList.add('aiScore');
 
       if (tweetContentInMassCheck.tweetInfo) {
@@ -323,7 +322,11 @@ const appendMassCheckInterface = async () => {
           method: 'POST',
           body: JSON.stringify(content),
         })
-          .then((res) => console.log(res))
+          .then((res) => {
+            console.log(res);
+            removeMassCheckInterface();
+            appendMassCheckInterface();
+          })
           .catch((err) => console.log(err))
           .finally(() => {});
       };
@@ -363,7 +366,6 @@ const activateMassCheck = () => {
 
   floatingButton.onclick = () => {
     removeMassCheckInterface();
-
     appendMassCheckInterface();
   };
 
