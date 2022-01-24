@@ -13,10 +13,22 @@
 This is a collaboration capstone project for final years students between Taylor's University and ProximaX.
 
 ## Project Structure
-
 - Extension
 - Client
 - Server
+- AI
+
+## Team Members
+- Yong Ming-Jia
+- Kevin Chow Kye Ven
+- Pun Le Jon
+- Jason Goay Chee Pheng
+
+## Academic Supervisor
+- Mr. Tee Wee Jing
+
+## Industry Supervisor
+- Mr. Joe Chai Choo Earn
 
 ## Credits
 
@@ -27,3 +39,4 @@ Industry Partner: [ProximaX](https://www.proximax.io)
 ## Contacts
 
 Email: masscheck2021@gmail.com
+
