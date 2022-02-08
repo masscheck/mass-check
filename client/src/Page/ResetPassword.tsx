@@ -94,8 +94,13 @@ const ResetPassword: React.FC = () => {
       onSubmit={(e) => onEmailSignIn(e)}
       noValidate
     >
+      <div className='background'>
+        <img src={require(`../Asset/Background.png`).default} />
+      </div>
+      <div className='masscheck-glow'>
+        <img src={require(`../Asset/Logo-White-Glow.png`).default} />
+      </div>
       <div>
-        <label htmlFor='email'>Email Address</label>
         <input
           name='email'
           type='email'

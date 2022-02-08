@@ -77,6 +77,12 @@ const SignUpSuccess: React.FC = () => {
 
   return (
     <div className='sign-up-success'>
+      <div className='background'>
+        <img src={require(`../Asset/Background.png`).default} />
+      </div>
+      <div className='masscheck-glow'>
+        <img src={require(`../Asset/Logo-White-Glow.png`).default} />
+      </div>
       <p className='sign-up-success__description'>
         You have successfully signed up for a MassCheck account! Before you
         proceed, please ensure to download your{' '}

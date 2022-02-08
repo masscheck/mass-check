@@ -80,7 +80,8 @@ const Header: React.FC = () => {
       <h1 className=
         {title === 'Sign In' ? 'public' :
         (title ==='Sign Up' ? 'public' : 
-        (title ==='Frequently Asked:' ? 'public' : 'secure')
+        (title ==='Frequently Asked:' ? 'public' :
+        (title ==='Reset Your Password' ? 'public' : 'secure'))
         )
         }>{title}</h1>
     </div>

@@ -9,19 +9,39 @@
   color: white;
 }
 
+.background {
+  img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: -10;
+  }
+}
+
+.masscheck-glow {
+  img {
+    position: fixed;
+    top: 0;
+    left: 40%;
+    height: 100vh;
+    z-index: -10;
+  }
+}
+
 .sign-up-success {
   width: 60%;
 
   &__description {
     font-weight: 400;
-    color: $light-text-color;
+    color: $white-text-color;
     text-align: center;
     font-size: 1.875rem;
   }
 
   &__note {
     font-weight: 600;
-    color: $light-text-color;
+    color: $white-text-color;
     text-align: center;
   }
 
