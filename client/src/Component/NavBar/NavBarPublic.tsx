@@ -9,6 +9,7 @@ import { getAuth } from '../../Util/API/AuthAPI';
 import './NavBarPublic.scss';
 import { LocalStorageEnum } from '../../Util/Constant/LocalStorageEnum';
 import { AccountModel } from '../../Model/AccountModel';
+import useDebounce from '../../CustomHooks/useDebounce';
 
 const NavBar: React.FC = (props: any) => {
   const { pathname } = useLocation();
@@ -18,9 +19,11 @@ const NavBar: React.FC = (props: any) => {
   } = useAccountInfo();
   const { warnToast } = useNotification();
   const history = useHistory();
+  const [count, setCount] = useState(0);
   let token = '';
 
   const validateUserAuthToken = async () => {
+    console.log('validateUserAuthToken')
     try {
       const xpxAddress = localStorage.getItem(LocalStorageEnum.XPX_ADDRESS);
       console.log({ xpxAddress });
@@ -54,14 +57,26 @@ const NavBar: React.FC = (props: any) => {
     }
   };
 
+  useDebounce(validateUserAuthToken, 1000, [count]);
+
   useEffect(() => {
-    validateUserAuthToken();
+    console.log({ pathname });
+    if (RouteConstant.PUBLIC_SIGN_UP_SUCCESS.includes(pathname)) {
+      return;
+    }
+
+    setCount(count + 1);
+    // validateUserAuthToken();
 
     window.addEventListener('storage', () => {
       const accessToken = localStorage.getItem(LocalStorageEnum.ACCESS_TOKEN);
 
-      if (accessToken !== token) {
-        validateUserAuthToken();
+      if (RouteConstant.PUBLIC_SIGN_UP_SUCCESS.includes(pathname)) {
+        console.log('exit exit');
+        return;
+      } else if (accessToken !== token) {
+        setCount(count + 1);
+        // validateUserAuthToken();
         token = accessToken;
       } else if (!accessToken) {
         history.push(RouteConstant.PUBLIC_SIGN_IN);
