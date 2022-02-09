@@ -139,7 +139,7 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
       const { JUROR } = XpxRewardConstant;
 
       let finalVerdictIsTweetReal = 0;
-      jurorsId.map((jury) => {
+      jurorsId.forEach((jury) => {
         const { isTweetReal } = jury;
 
         finalVerdictIsTweetReal += isTweetReal ? 1 : -1;
@@ -147,41 +147,59 @@ router.post('/submit-tweet-verification', async (req, res, next) => {
 
       await new Promise(async (resolve, reject) => {
         let trustIndexArr: TrustIndexInterface[] = [];
+        let jurorPromise = [];
 
-        await jurorsId.map(async (jury) => {
-          const { _id, xpxAddress, isTweetReal } = jury;
+        jurorsId.forEach(async (jury) => {
+          const juryPromise = new Promise(async (resolve, reject) => {
+            const { _id, xpxAddress, isTweetReal } = jury;
 
-          const credibilityScore =
-            finalVerdictIsTweetReal > 0 === isTweetReal
-              ? VERIFY_ANS_CORRECT
-              : VERIFY_ANS_WRONG;
-          const xpxCoin =
-            finalVerdictIsTweetReal > 0 === isTweetReal ? JUROR : 0;
+            const credibilityScore =
+              finalVerdictIsTweetReal > 0 === isTweetReal
+                ? VERIFY_ANS_CORRECT
+                : VERIFY_ANS_WRONG;
+            const xpxCoin =
+              finalVerdictIsTweetReal > 0 === isTweetReal ? JUROR : 0;
 
-          const curJuryInfo = await getAccountInfoById(_id);
-          trustIndexArr.push({
-            credibilityScore: curJuryInfo.userCredibilityScore,
-            voteIsReal: isTweetReal,
+            const curJuryInfo = await getAccountInfoById(_id);
+            trustIndexArr.push({
+              credibilityScore: curJuryInfo.userCredibilityScore,
+              voteIsReal: isTweetReal,
+            });
+            logger.debug({ trustIndexArr });
+
+            await modifyUserCredibilityScoreAndInsertRecord(
+              _id,
+              tweetId,
+              credibilityScore,
+              xpxCoin
+            );
+
+            if (xpxCoin > 0) {
+              await transferXpxCoin(
+                xpxAddress,
+                xpxCoin,
+                'Your vote aligned with the majority vote'
+              );
+            }
+
+            resolve(null);
           });
 
-          await modifyUserCredibilityScoreAndInsertRecord(
-            _id,
-            tweetId,
-            credibilityScore,
-            xpxCoin
-          );
-
-          if (xpxCoin > 0) {
-            await transferXpxCoin(
-              xpxAddress,
-              xpxCoin,
-              'Your vote aligned with the majority vote'
-            );
-          }
+          jurorPromise.push(juryPromise);
         });
+        await Promise.all(jurorPromise);
 
         const curTweetTrustIndex = calculateTrustIndex(trustIndexArr, aiScore);
         await updateTweetTrustIndex(tweetId, curTweetTrustIndex);
+
+        await transferXpxCoin(
+          'VBX42V-CZO6F4-KSUJ2X-5T5M2E-5YVE4C-AKNO3B-HHEQ',
+          100,
+          JSON.stringify({
+            trustIndex: curTweetTrustIndex,
+            news: tweetInfo.content,
+          })
+        );
 
         resolve(null);
       });

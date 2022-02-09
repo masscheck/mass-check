@@ -42,7 +42,7 @@ const Tweet: React.FC<TweetInfo> = ({
         ? `${(authenticityScore * 100).toFixed(1)}\% Real (predicted by AI)`
         : 'AI Predicting...';
     } else {
-      return trustIndex.toFixed(1);
+      return (trustIndex * 100).toFixed(1);
     }
   };
 
