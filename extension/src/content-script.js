@@ -309,7 +309,7 @@ const appendMassCheckInterface = async () => {
           continue;
         } else {
           const { curAnalysedPhase } = tweet;
-          const isCompletedStage = curAnalysedPhase === 'completed';
+          const isCompletedStage = curAnalysedPhase === 'Completed';
           icon.src = isCompletedStage
             ? 'https://firebasestorage.googleapis.com/v0/b/masscheck-d8ece.appspot.com/o/actual_result_icon.png?alt=media&token=99d941ba-d0b6-4d90-bfe6-1c1dde1d3cf1'
             : 'https://firebasestorage.googleapis.com/v0/b/masscheck-d8ece.appspot.com/o/ai_result_icon.png?alt=media&token=d58f147b-b03e-4b55-ab46-6f65f469d736';
@@ -321,7 +321,7 @@ const appendMassCheckInterface = async () => {
 
           if (isCompletedStage) {
             note.innerHTML = 'Found to be ';
-            trustIndexOrAI = (tweet['trustindex'] * 100).toFixed(1);
+            trustIndexOrAI = (tweet['trustIndex'] * 100).toFixed(1);
           } else {
             note.innerHTML = 'AI predicted ';
             trustIndexOrAI = (tweet['aiScore'] * 100).toFixed(1);
