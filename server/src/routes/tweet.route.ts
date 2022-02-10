@@ -81,4 +81,18 @@ router.post('/retrieve-tweet-info', async (req, res, next) => {
   }
 });
 
+router.post('/ai-score', async (req, res, next) => {
+  const { tweet } = req.body;
+
+  try {
+    const aiScore = await getAIScore(tweet);
+
+    res.json({ aiScore });
+  } catch (err) {
+    logger.error(err);
+
+    res.sendStatus(500);
+  }
+});
+
 export default router;
