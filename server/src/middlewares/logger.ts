@@ -50,9 +50,7 @@ const logFormatConfig = [
 
 // Format: DD/MM/YYYY
 const getTodayDate = () => {
-  const todayDate = new Date();
-
-  return `${todayDate.getFullYear()}${todayDate.getMonth()}${todayDate.getDate()}`;
+  return new Date().toISOString().split('T')[0].replace(/-/g, '');
 };
 
 const transportsConfig =
