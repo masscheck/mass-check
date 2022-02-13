@@ -251,7 +251,7 @@ const appendMassCheckInterface = async () => {
   const hashedTweetIdList = [];
   for (let i = 0; i < tweets.length; i++) {
     const tweetContentNodes = tweets[i].childNodes;
-    let tweetContent = tweetContentNodes[1].innerText;
+    let tweetContent = tweetContentNodes[1].children[0].innerText;
     tweetContent = tweetContent.replace(/(\n\d+){2,3}/g, '');
     const hashedTweetContent = hashCode(tweetContent);
     hashedTweetIdList.push(hashedTweetContent);
@@ -277,7 +277,7 @@ const appendMassCheckInterface = async () => {
   for (let i = 0; i < tweets.length; i++) {
     const tweetContentNodes = tweets[i].childNodes;
     const tweetHandler = tweetContentNodes[0].innerText;
-    let tweetContent = tweetContentNodes[1].innerText;
+    let tweetContent = tweetContentNodes[1].children[0].innerText;
     tweetContent = tweetContent.replace(/(\n\d+){2,3}/g, '');
     const tweetHandlerSplitted = tweetHandler.split('\n');
     const hashedTweetContent = hashCode(tweetContent);

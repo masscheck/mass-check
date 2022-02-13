@@ -10,7 +10,7 @@ const calculateTrustIndex = (data: TrustIndexInterface[], aiScore: number) => {
   logger.verbose('User credibility score + vote', data);
 
   let totalCredibilityScore = 0;
-  let trustIndex = 0;
+  let userCredibilityScore = 0;
 
   data.map((element) => {
     totalCredibilityScore += element.credibilityScore;
@@ -18,17 +18,19 @@ const calculateTrustIndex = (data: TrustIndexInterface[], aiScore: number) => {
 
   data.map((element) => {
     let voteValue = element.voteIsReal ? 1 : 0;
-    trustIndex +=
+    userCredibilityScore +=
       voteValue * (element.credibilityScore / totalCredibilityScore);
   });
 
+  const trustIndex = userCredibilityScore * 0.7 + aiScore * 0.3
+
   logger.verbose('--- Result ---');
-  logger.verbose('User evaluation: ', totalCredibilityScore);
+  logger.verbose('User evaluation: ', userCredibilityScore);
   logger.verbose('AI Score: ', aiScore);
   logger.verbose('Trust Index: ', trustIndex);
   logger.verbose('Trust Index - Ended');
 
-  return trustIndex * 0.7 + aiScore * 0.3;
+  return trustIndex;
 };
 
 export { calculateTrustIndex, TrustIndexInterface };
